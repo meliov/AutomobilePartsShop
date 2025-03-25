@@ -1,0 +1,23 @@
+export const errors = {
+  errorTitle: 'Erreur',
+  error: 'Erreur',
+  notExist: "La page que vous recherchez n'existe pas.",
+  errorCode: "Code d'erreur",
+  goHome: "Retour à l'accueil",
+  suggestion: "Essayez de revenir à la page précédente ou de revenir à notre page d'accueil.",
+  contactSupport: 'Contacter le support',
+  additionalInfo: 'Informations supplémentaires',
+  fetchProducts: 'Impossible de charger les détails du produit!',
+  validation: {
+    required: 'Le champ est obligatoire',
+    invalidEmail: 'Email invalide',
+    invalidCardNumber: 'Numéro de carte invalide',
+    invalidExpiryDate: "Date d'expiration invalide",
+    invalidCVV: 'CVV invalide',
+    passwordMinLength: 'Le mot de passe doit contenir au moins 6 caractères',
+    passwordMismatch: 'Les mots de passe ne correspondent pas',
+  },
+  noImage: 'Image non disponible',
+  loginRequired: 'Email et mot de passe requis',
+  loginFailed: 'Échec de la connexion. Veuillez réessayer.',
+};

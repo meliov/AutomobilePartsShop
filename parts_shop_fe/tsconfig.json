@@ -1,0 +1,26 @@
+{
+  "extends": "./.quasar/tsconfig.json",
+  "compilerOptions": {
+    "typeRoots": [
+      "./src/types", "node_modules/@types"],
+    "allowSyntheticDefaultImports": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "baseUrl": "./",
+    "types": ["node", "@quasar/app-vite", "vite/client"],
+    "paths": {
+      "@/*": ["src/*"],
+      "#q-app/*": [".quasar/*"],
+      "#q-app/wrappers": ["node_modules/@quasar/app-vite/types/app-wrappers.d.ts"]
+    }
+  },
+  "include": ["src/**/*", ".quasar/**/*", "*.d.ts"],
+  "exclude": ["node_modules", "dist", "server"]
+}

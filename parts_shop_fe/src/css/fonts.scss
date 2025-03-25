@@ -1,0 +1,44 @@
+@font-face {
+  font-family: 'Open Sans Italic';
+  src: url('/fonts/Open_Sans/OpenSans-Italic-VariableFont_wdth,wght.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url('/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Lora Italic';
+  src: url('/fonts/Open_Sans/OpenSans-Italic-VariableFont_wdth,wght.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Lora';
+  src: url('/fonts/Lora/Lora-VariableFont_wght.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+html {
+  font-size: 20px;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Merriweather', serif;
+}

@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import 'fonts';
+@import 'q-header';
+@import 'q-pagination';
+@import 'q-dialog';
+@import 'q-item';
+@import 'q-card';
+@import 'q-btn';
+@import 'q-select';
+
+$light-lighter: #d1c9ad;
+
+:root {
+  --vh: 1vh;
+  --header-height: 54px;
+  --footer-height: 20px;
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --content-height: calc(100dvh - var(--header-height) - var(--footer-height));
+  --q-bg-light: #f7f7f7;
+  --q-bg-dark: #1d1d1d;
+  --q-bg-white: #ffffff;
+  --q-bg-black: #000000;
+  --q-bg-pale: #f9f9f9;
+  --q-light-lighter: #{$light-lighter};
+  --q-bg-light-lighter: #d1c9ad;
+}
+
+@supports (-webkit-touch-callout: none) {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100dvh;
+  height: -webkit-fill-available;
+  width: 100%;
+  overflow: hidden;
+  scroll-behavior: smooth;
+}
+
+html {
+  background-color: black;
+}
+
+.q-footer {
+  padding-bottom: var(--safe-area-inset-bottom);
+}
+
+.q-layout {
+  min-height: 100dvh;
+  height: 100dvh;
+
+  @supports not (height: 100dvh) {
+    min-height: 100vh;
+    height: 100vh;
+  }
+}
+
+body {
+  font-size: 100%;
+  height: -webkit-fill-available;
+}
+
+.body--light {
+  background: var(--q-light-page);
+}
+
+.body--dark {
+  background: var(--q-dark-page);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+@media screen and (max-width: 599px) {
+  :root {
+    --mobile-bottom-offset: 30px;
+
+    @supports (-webkit-touch-callout: none) {
+      /* Ios */
+      --content-height: calc(
+        100dvh - var(--header-height) - var(--footer-height) - var(--mobile-bottom-offset) - env(
+            safe-area-inset-bottom,
+            20px
+          )
+      );
+    }
+
+    @supports not (-webkit-touch-callout: none) {
+      /* Android */
+      --content-height: calc(
+        100dvh - var(--header-height) - var(--footer-height) - var(--mobile-bottom-offset)
+      );
+    }
+  }
+}
+
+.q-layout {
+  min-height: 100dvh;
+  height: 100dvh;
+
+  @supports not (height: 100dvh) {
+    min-height: 100vh;
+    height: 100vh;
+  }
+}
+
+.price-text {
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  height: 2.5rem;
+  line-height: 2.5rem;
+}
+
+.product-name {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
