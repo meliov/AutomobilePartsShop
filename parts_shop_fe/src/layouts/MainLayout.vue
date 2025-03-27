@@ -76,9 +76,9 @@ const menuItems = computed(() => {
     { label: t('main.home'), path: '/' },
     { label: t('main.products'), path: '/products' },
   ];
-  if (totalItems.value > 0) {
-    items.push({ label: t('main.cart'), path: '/cart' });
-  }
+  // if (totalItems.value > 0) {
+  //   items.push({ label: t('main.cart'), path: '/cart' });
+  // }
   // items.push({ label: userName.value.split(' ')[0] || t('main.userProfile'), path: '/profile' });
   return items;
 });

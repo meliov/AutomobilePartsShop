@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,14 +25,13 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<String> getCategories() {
-        return productRepository.findAll().stream().map(it -> it.getCategory()).collect(Collectors.toList());  // Assuming product categories are distinct
+    public Set<String> getCategories() {
+        return productRepository.findAll().stream().map(it -> it.getCategory()).collect(Collectors.toSet());  // Assuming product categories are distinct
     }
 
-    public List<Product> getProductsByCategory(String category, int page, int limit) {
-        // Use pagination, limit, and offset logic here
-        // Example of getting products by category
-        return productRepository.findByCategory(category);
+    public Page<Product> getProductsByCategory(String category, int page, int limit) {
+        Pageable pageable = PageRequest.of(page - 1, limit);
+        return productRepository.findByCategory(category, pageable);
     }
 
     public Page<Product> getProducts(int page, int limit, String search, Double minPrice, Double maxPrice, String sortBy, String sortOrder, String category) {

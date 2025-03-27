@@ -240,7 +240,7 @@ const fetchProduct = async () => {
       throw new Error('Failed to fetch product');
     }
 
-    const { data } = response.data;
+    const { data } = response;
 
     product.value = {
       id: data.id,

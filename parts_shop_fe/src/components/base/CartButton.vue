@@ -1,5 +1,5 @@
 <template>
-  <QButton
+  <q-btn
     flat
     :to="'/cart'"
     :text-color="textColor"
@@ -10,11 +10,10 @@
     <q-badge class="cart-badge" :class="{ 'blink-animation': isAnimating }">
       {{ totalItems }}
     </q-badge>
-  </QButton>
+  </q-btn>
 </template>
 
 <script lang="ts" setup>
-import QButton from './QButton.vue';
 
 defineProps({
   buttonSize: {

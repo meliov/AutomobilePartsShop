@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/products")
@@ -22,16 +23,39 @@ public class ProductController {
     }
 
     @GetMapping("/categories")
-    public ResponseEntity<List<String>> getCategories() {
+    public ResponseEntity<Set<String>> getCategories() {
         return new ResponseEntity<>(productService.getCategories(), HttpStatus.OK);
     }
 
     @GetMapping("/category/{category}")
-    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable String category,
-                                                               @RequestParam(defaultValue = "1") int page,
-                                                               @RequestParam(defaultValue = "10") int limit) {
-        List<Product> products = productService.getProductsByCategory(category, page, limit);
-        return new ResponseEntity<>(products, HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> getProductsByCategory(
+            @PathVariable String category,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int limit) {
+
+        Page<Product> productPage = productService.getProductsByCategory(category, page, limit);
+
+        if (productPage.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of(
+                            "status", "error",
+                            "error", Map.of(
+                                    "message", "Failed to fetch products in category",
+                                    "code", "CATEGORY_PRODUCTS_FETCH_ERROR"
+                            )
+                    ));
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("data", productPage.getContent());
+        response.put("meta", Map.of(
+                "total", productPage.getTotalElements(),
+                "page", page,
+                "limit", limit
+        ));
+
+        return ResponseEntity.ok(response);
     }
 //http://localhost:8080/api/products?page=1&limit=10&search=&sortBy=id&sortOrder=asc
 @GetMapping

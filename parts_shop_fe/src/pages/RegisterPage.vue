@@ -44,7 +44,7 @@
           </q-card-section>
           <div class="tw-flex tw-flex-col tw-gap-2">
             <QButton type="submit" label="Register" class="!tw-w-full !tw-py-2.5" />
-            <QButton secondary :to="HOME_PATH" label="Cancel" class="!tw-w-full !tw-py-2.5" />
+            <q-btn secondary label="Cancel" class="!tw-w-full !tw-py-2.5" @click="goHome()"/>
           </div>
         </q-form>
       </q-card>
@@ -90,5 +90,10 @@ const emailRules = (val: string) => {
 };
 const confirmPasswordRules = (val: string) => {
   return val === password.value || t('errors.validation.passwordMismatch');
+};
+
+const goHome = () => {
+  console.log('go home pls')
+  router.push(HOME_PATH);
 };
 </script>

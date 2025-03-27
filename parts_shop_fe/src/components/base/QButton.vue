@@ -21,7 +21,6 @@
   >
     <template v-if="icon || iconRight">
       <q-icon v-if="icon" :name="icon" />
-      <span>{{ label }}</span>
       <q-icon v-if="iconRight" :name="iconRight" />
     </template>
     <template v-else>
