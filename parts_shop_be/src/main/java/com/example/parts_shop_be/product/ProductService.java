@@ -1,10 +1,18 @@
 package com.example.parts_shop_be.product;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -16,8 +24,8 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<Product> getCategories() {
-        return productRepository.findAll();  // Assuming product categories are distinct
+    public List<String> getCategories() {
+        return productRepository.findAll().stream().map(it -> it.getCategory()).collect(Collectors.toList());  // Assuming product categories are distinct
     }
 
     public List<Product> getProductsByCategory(String category, int page, int limit) {
@@ -26,16 +34,26 @@ public class ProductService {
         return productRepository.findByCategory(category);
     }
 
-    public List<Product> getProducts(int page, int limit, String search, Double minPrice, Double maxPrice, String sortBy, String sortOrder, String category) {
-        // Apply filters and sorting
-        List<Product> products;
-        if (!category.equals("all")) {
-            products = productRepository.findByCategory(category);
-        } else {
-            products = productRepository.findByNameContainingIgnoreCase(search);
-        }
+    public Page<Product> getProducts(int page, int limit, String search, Double minPrice, Double maxPrice, String sortBy, String sortOrder, String category) {
+        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
 
-        return products;
+        Specification<Product> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (!search.isEmpty()) {
+                predicates.add(cb.like(cb.lower(root.get("name")), "%" + search.toLowerCase() + "%"));
+            }
+
+            if (!category.equals("all")) {
+                predicates.add(cb.equal(root.get("category"), category));
+            }
+
+            predicates.add(cb.between(root.get("price"), minPrice, maxPrice));
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        return productRepository.findAll(spec, pageable);
     }
 
     public Product getProduct(Long id) {

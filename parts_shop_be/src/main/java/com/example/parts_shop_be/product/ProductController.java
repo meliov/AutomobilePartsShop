@@ -1,11 +1,14 @@
 package com.example.parts_shop_be.product;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/products")
@@ -19,10 +22,8 @@ public class ProductController {
     }
 
     @GetMapping("/categories")
-    public ResponseEntity<List<Product>> getCategories() {
-        // Assuming categories are unique and can be fetched from the database
-        List<Product> categories = productService.getCategories();
-        return new ResponseEntity<>(categories, HttpStatus.OK);
+    public ResponseEntity<List<String>> getCategories() {
+        return new ResponseEntity<>(productService.getCategories(), HttpStatus.OK);
     }
 
     @GetMapping("/category/{category}")
@@ -32,19 +33,30 @@ public class ProductController {
         List<Product> products = productService.getProductsByCategory(category, page, limit);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
+//http://localhost:8080/api/products?page=1&limit=10&search=&sortBy=id&sortOrder=asc
+@GetMapping
+public ResponseEntity<Map<String, Object>> getProducts(
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "10") int limit,
+        @RequestParam(defaultValue = "") String search,
+        @RequestParam(defaultValue = "0") Double minPrice,
+        @RequestParam(defaultValue = "999999") Double maxPrice,
+        @RequestParam(defaultValue = "id") String sortBy,
+        @RequestParam(defaultValue = "asc") String sortOrder,
+        @RequestParam(defaultValue = "all") String category) {
 
-    @GetMapping
-    public ResponseEntity<List<Product>> getProducts(@RequestParam(defaultValue = "1") int page,
-                                                     @RequestParam(defaultValue = "10") int limit,
-                                                     @RequestParam(defaultValue = "") String search,
-                                                     @RequestParam(defaultValue = "0") Double minPrice,
-                                                     @RequestParam(defaultValue = "999999") Double maxPrice,
-                                                     @RequestParam(defaultValue = "id") String sortBy,
-                                                     @RequestParam(defaultValue = "asc") String sortOrder,
-                                                     @RequestParam(defaultValue = "all") String category) {
-        List<Product> products = productService.getProducts(page, limit, search, minPrice, maxPrice, sortBy, sortOrder, category);
-        return new ResponseEntity<>(products, HttpStatus.OK);
-    }
+    Page<Product> productPage = productService.getProducts(page, limit, search, minPrice, maxPrice, sortBy, sortOrder, category);
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("data", productPage.getContent());
+    response.put("meta", Map.of(
+            "total", productPage.getTotalElements(),
+            "page", page,
+            "limit", limit
+    ));
+
+    return ResponseEntity.ok(response);
+}
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {
