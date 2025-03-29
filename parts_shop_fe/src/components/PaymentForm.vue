@@ -7,50 +7,47 @@
   >
     <div class="col-12">
       <q-input
-        v-model="localPayment.cardDetails.cardNumber"
+        v-model="cardRef.cardDetails.cardNumber"
         :label="$t('checkout.cardNumber')"
         mask="#### #### #### ####"
         autofocus
-        lazy-rules
         :rules="[required, cardNumberRules]"
+        @keyup="emitValues()"
       />
     </div>
     <div class="col-6">
       <q-input
-        v-model="localPayment.cardDetails.expiry"
+        v-model="cardRef.cardDetails.expiry"
         label="MM/YY"
         mask="##/##"
-        lazy-rules
         :rules="[required, expiryRules]"
+        @keyup="emitValues()"
       />
     </div>
     <div class="col-6">
       <q-input
-        v-model="localPayment.cardDetails.cvv"
+        v-model="cardRef.cardDetails.cvv"
         label="CVV"
         mask="###"
-        lazy-rules
         :rules="[required, cvvRules]"
+        @keyup="emitValues()"
       />
     </div>
   </q-form>
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { PaymentDetails, QFormInstance } from '@/types';
+import {ref} from 'vue';
+import {useI18n} from 'vue-i18n';
+import {PaymentDetails, QFormInstance} from '@/types';
 
 const props = defineProps({
   paymentForm: {
     type: Object as () => PaymentDetails,
     required: true,
   },
-  paymentFormRef: {
-    type: Object as () => QFormInstance | null,
-    required: true,
-  },
 });
+const paymentFormRef = ref<QFormInstance|null>(null);
 
 const emit = defineEmits<{
   (event: 'payment-valid', value: boolean): void;
@@ -58,27 +55,23 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const cardRef = ref({
+  ...props.paymentForm,
+  cardDetails: {
+    cardNumber: props.paymentForm.cardDetails?.cardNumber || '',
+    expiry: props.paymentForm.cardDetails?.expiry || '',
+    cvv: props.paymentForm.cardDetails?.cvv || '',
+  },
+})
 
-const localPayment = computed({
-  get: () => {
-    return {
-      ...props.paymentForm,
-      cardDetails: {
-        cardNumber: props.paymentForm.cardDetails?.cardNumber || '',
-        expiry: props.paymentForm.cardDetails?.expiry || '',
-        cvv: props.paymentForm.cardDetails?.cvv || '',
-      },
-    };
-  },
-  set: (value: PaymentDetails) => {
-    emit('update:payment', value);
-  },
-});
+const emitValues = () =>{
+  validatePaymentForm()
+  emit('update:payment', cardRef.value)
+}
 
 const validatePaymentForm = () => {
-  if (props.paymentFormRef) {
-    props.paymentFormRef
-      .validate()
+  if (paymentFormRef.value) {
+    paymentFormRef.value.validate()
       .then((success: boolean) => {
         emit('payment-valid', success);
       })

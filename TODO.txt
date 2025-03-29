@@ -1,0 +1,11 @@
+//TODO
+    - 1 - add JWT authentication (google not yet)
+     -- 1.1 - adding mail sending about it
+     -- 1.2 - fixing current signup if problems found and find out how its done
+    - 2 - saving orders as objects
+     -- 2.1 - adding mail sending about it
+     -- 2.2 - add sms with it
+     -- 2.3 - add nalojen platej option for payment
+     -- 2.4 - decide what to do with card payment - leave it for 'budeshta realizaciq' probably
+    -3 - admin functionality for adding products/categories
+    -4 - adding review funcitonality - optional
