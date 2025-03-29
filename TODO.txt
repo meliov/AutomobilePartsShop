@@ -9,3 +9,4 @@
      -- 2.4 - decide what to do with card payment - leave it for 'budeshta realizaciq' probably
     -3 - admin functionality for adding products/categories
     -4 - adding review funcitonality - optional
+    -5- finalising complete website overview
