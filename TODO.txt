@@ -1,7 +1,10 @@
 //TODO
     - 1 - add JWT authentication (google not yet)
+     -- 1.0 - adapt this project to work with already implemented auth plus user functionality
      -- 1.1 - adding mail sending about it
      -- 1.2 - fixing current signup if problems found and find out how its done
+     -- 1.3 - improving validation plus error notifications
+     -- 1.4 - ADDING DTOs for product as well
     - 2 - saving orders as objects
      -- 2.1 - adding mail sending about it
      -- 2.2 - add sms with it

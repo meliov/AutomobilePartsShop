@@ -1,0 +1,7 @@
+package com.example.parts_shop_be.user;
+
+public enum UserGender {
+    MALE,
+    FEMALE,
+    NONE
+}
