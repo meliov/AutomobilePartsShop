@@ -5,18 +5,21 @@ import {
   API_USER_PATH,
   API_CHANGE_PASSWORD_PATH,
   API_PASSWORD_RESET_CONFIRM_PATH,
+  CHECK_EMAIL_PATH,
 } from '@/constants/routes';
 import { Token, User } from '@/types';
 import { storage } from '@/utils/storage';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import {QVueGlobals, useQuasar} from "quasar";
+import {CreateUserView} from "@/models/CreateUserView";
 
 export const useAuthStore = defineStore('auth', () => {
   const USER_EXPIRATION = 3600; // 1 hour in seconds
 
   const token = ref<Token | null>(storage.get('token'));
   const user = ref<User | null>(storage.get('user'));
-
+  const $q = useQuasar() as QVueGlobals;
   const fetchUser = async () => {
     try {
       if (!token.value || !token.value.data) {
@@ -66,12 +69,25 @@ export const useAuthStore = defineStore('auth', () => {
   };
 
   const register = async (name: string, email: string, password: string) => {
-    try {
-      await api.post(API_REGISTER_PATH, { name, email, password });
-      await login(email, password);
-    } catch (error) {
-      console.error('Registration failed:', error);
-    }
+
+      const val = await api.get<boolean>(
+        `${CHECK_EMAIL_PATH}/${email}`,
+      ).then(response => response.data)
+
+      if(val === true){
+        $q.notify({
+          color: 'negative',
+          position: 'bottom',
+          timeout: 3000,
+          message: 'User with this email already exists!',
+          icon: 'error',
+        });
+        throw new Error("User with this email already exists!")
+      }else{
+        const user: CreateUserView = {username: name, email: email, password: password } // can be done without it tho
+        await api.post(API_REGISTER_PATH, user);
+        // await login(email, password);
+      }
   };
 
   const logout = () => {
@@ -126,7 +142,13 @@ export const useAuthStore = defineStore('auth', () => {
       );
       return response.data.message;
     } catch (error) {
-      console.error('Failed to change password:', error);
+      $q.notify({
+        color: 'negative',
+        position: 'top',
+        timeout: 1000,
+        message: 'Failed to change password.',
+        icon: 'error',
+      });
       throw error;
     }
   };

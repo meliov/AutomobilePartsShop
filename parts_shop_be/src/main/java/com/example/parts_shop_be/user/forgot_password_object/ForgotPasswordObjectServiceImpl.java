@@ -36,11 +36,11 @@ public class ForgotPasswordObjectServiceImpl implements ForgotPasswordObjectServ
         String randomUrl = UUID.randomUUID().toString();
         String constructLink = externalLink + randomUrl;
 
-        String text = String.format("Hello %s,\nIf you initiated hixie (Activity Application) Password Change," +
+        String text = String.format("Hello %s,\nIf you initiated AutoShop (Activity Application) Password Change," +
                 " then click the link below ONLY IF THIS WAS YOU\n%s\nIf this was not you, DO NOT do anything.", user.getUsername(), constructLink);
 
         forgotPasswordObjectRepositoryObjectRepository.save(new ForgotPasswordObject(user, randomUrl, false, newPassword));
 
-        return emailServiceImpl.sendMail(user.getEmail(), "Hixie Forgot Password Confirmation", text);
+        return emailServiceImpl.sendMail(user.getEmail(), "AutoShop, Forgot Password Confirmation", text);
     }
 }

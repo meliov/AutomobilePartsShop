@@ -37,10 +37,10 @@ public class SignupObjectServiceImpl implements SignupObjectService {
         String randomUrl = UUID.randomUUID().toString();
         String constructLink = externalLink + randomUrl;
 
-        String text = String.format("Hello %s,\nIf you initiated hixie (Activity Application) registration," +
+        String text = String.format("Hello %s,\nIf you initiated AutoShop (Activity Application) registration," +
                 " then click the link below\n%s\nIf this was not you, don't do anything.", user.getUsername(), constructLink);
         signupObjectRepository.save(new SignupObject(user, randomUrl, false));
 
-        return emailServiceImpl.sendMail(user.getEmail(), "Hixie Signup Confirmation", text);
+        return emailServiceImpl.sendMail(user.getEmail(), "AutoShop Signup Confirmation", text);
     }
 }

@@ -79,8 +79,9 @@ public class UserServiceImpl implements UserService {
         user.setStatus(userStatus);
         user.setRegistrationDate(LocalDateTime.now());
         user.setGender(UserGender.NONE);
-        user.setSource(UserSource.NORMAL);
-
+        if(userDto.getSource() == null) {
+            user.setSource(UserSource.NORMAL);
+        }
         User newUser = userRepository.save(user);
         String link = hostAndPort + "/user/signup-confirmation/";
 
