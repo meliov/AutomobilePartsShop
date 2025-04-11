@@ -52,8 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthenticationEntryPoint authenticationEntryPoint;
     @Autowired
     private JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    //todo adjust
-    public static final String[] PUBLIC_URLS = {"/user/test", "/api/login", "/api/v1/token/refresh", "/user/email-exists/*", "/user/email-exists-pass-reset/*", "/user/register", "/user/signup-confirmation/*", "/user/reset-password", "/user/forgot-password-confirmation/*", "/products/*", "/products"};//, "/api/v1/user/all"
+    //todo check again there might be a bug
+    public static final String[] PUBLIC_URLS = {"/user/test", "/api/login", "/api/v1/token/refresh", "/user/email-exists/*", "/user/email-exists-pass-reset/*", "/user/register", "/user/signup-confirmation/*", "/user/reset-password", "/user/forgot-password-confirmation/*", "/products/*", "/products", "/category"};//, "/api/v1/user/all"
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

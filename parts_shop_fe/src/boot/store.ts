@@ -8,7 +8,7 @@ export default boot(() => {
   const userStore = useUserStore();
   const authStore = useAuthStore();
 
-  if (authStore.token) {
+  if (authStore.isLoggedIn) {
     authStore.fetchUser().catch(() => {
       authStore.logout();
     });

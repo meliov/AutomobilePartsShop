@@ -41,7 +41,7 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     history: createHistory('/'),
   });
-
+  //todo guard , requiresAuth is part of the router's props
   Router.beforeEach((to, from, next) => {
     if (to.meta.title) {
       document.title = `${to.meta.title} - ${PAGE_TITLE}`;
@@ -49,7 +49,7 @@ export default defineRouter(function (/* { store, ssrContext } */) {
       document.title = PAGE_TITLE;
     }
     const authStore = useAuthStore();
-    if (to.meta.requiresAuth && !authStore.token) {
+    if (to.meta.requiresAuth && !authStore.isLoggedIn) {
       next('/login');
     } else {
       next();

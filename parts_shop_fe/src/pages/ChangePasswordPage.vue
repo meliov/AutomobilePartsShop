@@ -115,7 +115,6 @@ const showOldPassword = ref(false);
 const showNewPassword = ref(false);
 const showConfirmPassword = ref(false);
 const success = ref(false);
-const token = ref<string | null>(null);
 const email = ref<string | null>(null);
 const isResetPassword = ref(false);
 
@@ -152,7 +151,7 @@ const handleSubmit = async () => {
   try {
     let message;
     if (isResetPassword.value) {
-      message = await authStore.resetPassword(email.value, token.value, newPassword.value);
+      message = await authStore.resetPassword(email.value, newPassword.value);
     } else {
       message = await authStore.changePassword(oldPassword.value, newPassword.value);
     }
@@ -196,10 +195,5 @@ const confirmPasswordRules = (val: string) => {
 
 onMounted(() => {
   email.value = route.query.email as string;
-  token.value = route.query.token as string;
-
-  if (token.value) {
-    isResetPassword.value = true;
-  }
 });
 </script>

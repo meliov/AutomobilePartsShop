@@ -68,7 +68,6 @@ const scrolling = ref(false);
 const position = ref(0);
 
 const userName = computed(() => authStore.user?.name || '');
-const isLoggedIn = computed(() => !!authStore.token);
 const totalItems = computed(() => cartStore.totalItems);
 
 const menuItems = computed(() => {
@@ -96,7 +95,7 @@ const mobileMenuItems = computed(() => {
   if (totalItems.value > 0) {
     items.push({ label: t('main.cart'), path: '/cart' });
   }
-  if (isLoggedIn.value) {
+  if (authStore.isLoggedIn) {
     items.push({ label: userName.value.split(' ')[0] || t('main.userProfile'), path: '/profile' });
   } else {
     items.push({ label: t('main.userProfile'), path: '/profile' });
@@ -109,7 +108,7 @@ const mobileMenuItems = computed(() => {
 //     { label: t('main.products'), path: '/products' },
 //     { label: t('main.cart'), path: '/cart' },
 //   ];
-//   if (isLoggedIn.value) {
+//   if (authStore.isLoggedIn) {
 //     items.push({ label: userName.value.split(' ')[0] || t('main.userProfile'), path: '/profile' });
 //   } else {
 //     items.push({ label: t('main.userProfile'), path: '/profile' });
