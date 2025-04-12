@@ -21,6 +21,7 @@ export default defineConfig((ctx) => {
         VITE_RATES_API_URL: process.env.VITE_RATES_API_URL,
         VITE_EMAIL_ADMIN: process.env.VITE_EMAIL_ADMIN,
         VITE_STORAGE_KEY: process.env.VITE_STORAGE_KEY,
+        API_REFRESH_TOKEN_PATH: process.env.API_REFRESH_TOKEN_PATH,
       },
       publicPath: '/',
       vueRouterMode: 'history',

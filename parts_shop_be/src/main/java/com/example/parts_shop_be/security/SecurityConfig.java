@@ -53,7 +53,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtAccessDeniedHandler jwtAccessDeniedHandler;
     //todo check again there might be a bug
-    public static final String[] PUBLIC_URLS = {"/user/test", "/api/login", "/api/v1/token/refresh", "/user/email-exists/*", "/user/email-exists-pass-reset/*", "/user/register", "/user/signup-confirmation/*", "/user/reset-password", "/user/forgot-password-confirmation/*", "/products/*", "/products", "/category"};//, "/api/v1/user/all"
+    public static final String[] PUBLIC_URLS = {
+            "/products/**","/rates**",
+            "/user/test", "/api/login", "/api/v1/token/refresh",
+            "/user/email-exists/*", "/user/email-exists-pass-reset/*",
+            "/user/register", "/user/signup-confirmation/*", "/user/reset-password",
+            "/user/forgot-password-confirmation/*",
+    };//, "/api/v1/user/all"
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
