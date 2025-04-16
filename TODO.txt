@@ -1,8 +1,14 @@
 //TODO
     - 1 - add JWT authentication (google not yet)  NTOE:  auth would be used only to review old orders or do admin stuff
      --0.99 -- added be authe for google and without google - X
-     -- 1.0 - adapt this project to work with already implemented auth plus user functionality
-      ---1.0.1 - adapt FE to work with current user + auth funcitons and tokens - you can reuse the gaims funcs or methodology
+     -- 1.0 - adapt this project to work with already implemented auth plus user functionality -
+      ---1.0.1 - adapt FE to work with current user + auth funcitons and tokens - you can reuse the gaims funcs or methodology - X
+      ---1.0.2 - rework fetching users to work with ID
+      ---1.0.3 - reroute to products when succesful login
+      ---1.0.4 - fix the label for user settings when logged in
+      ---1.0.5 - remove google auth
+      ---1.0.6 - restrcit login page when logged in
+      ---1.0.7 -
      -- 1.1 - adding mail sending about it
      -- 1.2 - fixing current signup if problems found and find out how its done
      -- 1.3 - improving validation plus error notifications
@@ -19,3 +25,19 @@
 
 
      //todo -- priority: auth, admin screen, orders
+      //todo -         --roles
+                           --now that you reviewd and stydied the axios auth, test it if it works - X
+
+
+      //todo - dokat ne si napravil tva nema cukashnishtodrugo :) --- X / DONE
+          -> purvo - taka, purv mahash google auth ot BE - nema polzvash tvoi lichni keyve za google i firebase ya??,
+          -> vtoro - triesh sichko na srbino che e pulna gomna, prenapisvash s gayms :)
+             -gotovo e chat gpt napravi nekvi promeni - tr samo da gi turish i da vidish dali bachkat. Btw ne moje sichko da e kato horata
+             -gleday da napravish purvonachalno pone 2 stranici da rabotqt - publichna i authenticated i posle adaptirai drugite
+             - 0. Remove all shit that he used for auth:)
+             - 1. Adekvaten axios interceptor v koito se attachvat tokenite v headura i se extractvat i zapazvat v local storage
+               2. Local storage funkciq za acess i refresh tokena, shte se vzimat vinagi bapravo ot tam, interceptora shte se griji te da sa up to date. Kato suotvetno za tiq yokeni shte ima get i set za storage
+               3. Router guard samo za zashtitenite stranici s isAuthenticated koito e basically get tokena ot local storage-kato v toq guard moje da se dobavi i logika za roli
+               4. mn vajno
+               Sled kato se napravi celoto tva nema da obrushtash vnimanie na gurmejkite ot srubino. Kato si napril tva, appa ti e zashtiten basically, single point of truth imash - interceptora, router  guarda sushto. Sledovatelno sichko koeto e polzval toi se maha
+

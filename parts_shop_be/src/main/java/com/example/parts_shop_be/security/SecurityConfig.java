@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthenticationEntryPoint authenticationEntryPoint;
     @Autowired
     private JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    //todo check again there might be a bug
+    //public urls are checked twice - once before authentication - where its permitted and once during auth
     public static final String[] PUBLIC_URLS = {
             "/products/**","/rates**",
             "/user/test", "/api/login", "/api/v1/token/refresh",

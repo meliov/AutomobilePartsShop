@@ -49,7 +49,7 @@ export default defineRouter(function (/* { store, ssrContext } */) {
       document.title = PAGE_TITLE;
     }
     const authStore = useAuthStore();
-    if (to.meta.requiresAuth && !authStore.isLoggedIn) {
+    if (to.meta.requiresAuth && !authStore.isLoggedIn()) {
       next('/login');
     } else {
       next();

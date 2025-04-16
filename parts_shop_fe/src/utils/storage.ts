@@ -1,3 +1,5 @@
+import {useAuthStore} from "@/stores/auth";
+
 const STORAGE_KEY = 'e-comm-shop';
 const CACHE_KEYS = ['cart', 'exchange_rates', 'products'] as const;
 const SETTINGS_KEYS = ['user_settings'] as const;
@@ -14,6 +16,11 @@ interface StorageValue {
   [key: string]: unknown;
 }
 
+/**
+ * storage - used for internal logic handling, its wrapper localStorage
+ *
+ * NOTE: for authentication is used plain localStorage
+ */
 export const storage = {
   get: (key: string) => {
     try {
@@ -104,6 +111,9 @@ export const storage = {
         delete data[key];
       });
 
+      //logging out
+      const autStore = useAuthStore()
+      autStore.logout()
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch (error) {
       console.error('Storage clear settings error:', error);

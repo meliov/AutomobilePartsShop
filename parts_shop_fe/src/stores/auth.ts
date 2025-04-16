@@ -5,23 +5,24 @@ import {
   API_USER_PATH,
   API_CHANGE_PASSWORD_PATH,
   API_PASSWORD_RESET_CONFIRM_PATH,
-  CHECK_EMAIL_PATH,
+  CHECK_EMAIL_PATH, PRODUCTS_PATH,
 } from '@/constants/routes';
 import { storage } from '@/utils/storage';
 import { defineStore } from 'pinia';
-import {computed, ref} from 'vue';
+import { ref} from 'vue';
 import {QVueGlobals, useQuasar} from "quasar";
 import {CreateUserView} from "@/models/CreateUserView";
+import {useRouter} from "vue-router";
+
 
 export const useAuthStore = defineStore('auth', () => {
   const $q = useQuasar() as QVueGlobals;
-
+  const router = useRouter();
   const USER_EXPIRATION = 3600; // 1 hour in seconds
   const user = ref(storage.get('user'));
-  const accessToken = ref(storage.get('accessToken'));
-  const refreshToken = ref(storage.get('refreshToken'));
 
-  const isLoggedIn =  computed(() => Boolean(accessToken.value));
+
+  const isLoggedIn =  () => Boolean(localStorage.getItem('accessToken'));
   const fetchUser = async () => {
     try {
 
@@ -43,15 +44,10 @@ export const useAuthStore = defineStore('auth', () => {
   const login = async (email: string, password: string) => {
     try {
       const response = await api.post(API_LOGIN_PATH, { email, password });
-      accessToken.value = {
-        timestamp: Date.now(),
-        version: '1.0',
-        expiration: USER_EXPIRATION,
-        data: response.data.token,
-      };
-      if (accessToken.value) {
-        storage.set('accessToken', accessToken.value);
-        await fetchUser();
+      console.log(isLoggedIn())
+      if (isLoggedIn()) {
+        await fetchUser()
+        await router.push(PRODUCTS_PATH)
       } else {
         throw new Error('Failed to retrieve token');
       }
@@ -84,8 +80,8 @@ export const useAuthStore = defineStore('auth', () => {
   };
 
   const logout = () => {
-    storage.remove('accessToken');
-    storage.remove('refreshToken');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     storage.remove('user');
   };
   const updateProfile = async (profileData: { name: string; email: string }) => {
@@ -148,8 +144,6 @@ export const useAuthStore = defineStore('auth', () => {
     updateProfile,
     changePassword,
     resetPassword,
-    accessToken,
-    refreshToken,
     isLoggedIn,
     user
   };

@@ -2,8 +2,6 @@ import { defineBoot } from '#q-app/wrappers';
 import axios, { type AxiosInstance, type InternalAxiosRequestConfig } from 'axios';
 import type { App } from 'vue';
 import { useRouter } from 'vue-router';
-import {storage} from "@/utils/storage";
-
 
 /**
  * DESCRIPTION OF THE WORKFLOW
@@ -11,7 +9,7 @@ import {storage} from "@/utils/storage";
  *
  * Attach Access Token to All Requests
  *
- * Read accessToken from storage.
+ * Read accessToken from localStorage.
  *
  * Add it to the Authorization header as:
  *
@@ -49,7 +47,7 @@ import {storage} from "@/utils/storage";
  *
  * If the login request returns Jwt-Token and Jwt-Refresh-Token in headers:
  *
- * Save both tokens to storage.
+ * Save both tokens to localStorage.
  *
  * If No Tokens Exist
  *
@@ -74,7 +72,7 @@ export default defineBoot(({ app }: { app: App }) => {
   // Request interceptor to attach access token
   api.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-      const accessToken = storage.get('accessToken');
+      const accessToken = localStorage.getItem('accessToken');
       if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;
       }
@@ -87,18 +85,17 @@ export default defineBoot(({ app }: { app: App }) => {
   api.interceptors.response.use(
     (response) => {
       // Update tokens from response headers if present
-      const newAccessToken = response.headers['Jwt-Token'];
-      const newRefreshToken = response.headers['Jwt-Refresh-Token'];
-
+      const newAccessToken = response.headers['jwt-token'];
+      const newRefreshToken = response.headers['jwt-refresh-token'];
       if (newAccessToken && newRefreshToken) {
-        storage.set('accessToken', newAccessToken);
-        storage.set('refreshToken', newRefreshToken);
+        localStorage.setItem('accessToken', newAccessToken);
+        localStorage.setItem('refreshToken', newRefreshToken);
       }
       return response;
     },
     async (error) => {
       const originalRequest = error.config;
-      const refreshToken = storage.get('refreshToken');
+      const refreshToken = localStorage.getItem('refreshToken');
 
       // Handle 401 errors
       if (error.response?.status === 401 && !originalRequest._retry) {
@@ -131,8 +128,8 @@ export default defineBoot(({ app }: { app: App }) => {
           const newRefreshToken = refreshResponse.headers['Jwt-Refresh-Token'];
 
           if (newAccessToken && newRefreshToken) {
-            storage.set('accessToken', newAccessToken);
-            storage.set('refreshToken', newRefreshToken);
+            localStorage.setItem('accessToken', newAccessToken);
+            localStorage.setItem('refreshToken', newRefreshToken);
           }
 
           // Update Authorization header for future requests
@@ -146,9 +143,9 @@ export default defineBoot(({ app }: { app: App }) => {
           return api(originalRequest);
         } catch (refreshError) {
           // Clear tokens and redirect to login on refresh failure
-          storage.remove('accessToken');
-          storage.remove('refreshToken');
-          storage.remove('user');
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+          localStorage.removeItem('user');
           router.push('/login');
           return Promise.reject(refreshError);
         } finally {
@@ -158,9 +155,9 @@ export default defineBoot(({ app }: { app: App }) => {
 
       // Redirect to login if unauthorized and no refresh token
       if (error.response?.status === 401 && !refreshToken) {
-        storage.remove('accessToken');
-        storage.remove('refreshToken');
-        storage.remove('user');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('user');
         await router.push('/login');
       }
 
@@ -169,7 +166,7 @@ export default defineBoot(({ app }: { app: App }) => {
   );
 
 
-  if (!storage.get('accessToken') && !storage.get('refreshToken')) {
+  if (!localStorage.getItem('accessToken') && !localStorage.getItem('refreshToken')) {
     // Handle initial state with no tokens, but basically just dont do anything
   }
 

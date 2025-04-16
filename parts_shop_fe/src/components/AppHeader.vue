@@ -51,14 +51,14 @@
         />
         <q-menu v-model="menuOpen" :color="color" class="tw-w-48 tw-rounded-lg tw-shadow-lg">
           <q-list class="!tw-p-2">
-            <q-item v-if="authStore.isLoggedIn" clickable class="!tw-px-2 !tw-py-0" @click="goToProfile">
+            <q-item v-if="authStore.isLoggedIn()" clickable class="!tw-px-2 !tw-py-0" @click="goToProfile">
               <q-item-section class="tw-font-bold">{{ userLabel }}</q-item-section>
             </q-item>
-            <q-separator v-if="authStore.isLoggedIn" tw-mx-2 />
-            <q-item v-if="authStore.isLoggedIn" clickable class="!tw-color-red-400" @click="logout">
+            <q-separator v-if="authStore.isLoggedIn()" tw-mx-2 />
+            <q-item v-if="authStore.isLoggedIn()" clickable class="!tw-color-red-400" @click="logout">
               <q-item-section>{{ $t('main.logout') }}</q-item-section>
             </q-item>
-            <q-item v-if="!authStore.isLoggedIn" clickable @click="goToLogin">
+            <q-item v-if="!authStore.isLoggedIn()" clickable @click="goToLogin">
               <q-item-section>{{ $t('main.login') }}</q-item-section>
             </q-item>
           </q-list>
@@ -132,8 +132,8 @@ const toggleMenu = () => {
 const darkMode = computed(() => userStore.settings.theme === 'dark');
 const scrolled = computed(() => props.scrollOffset > 40);
 const userLabel = computed(() => {
-  const label = authStore.isLoggedIn ? authStore.user?.name : props.userName || 'Guest';
-  return !isMobile.value ? label?.split(' ')[0] || '' : '';
+  const label = authStore.isLoggedIn() ? authStore.user?.name : props.userName || 'Guest';
+  return !isMobile.value ? label?.split(' ')[0] || '' : '';//todo
 });
 
 const themeStyles = computed(() => {
@@ -165,7 +165,7 @@ const themeStyles = computed(() => {
 });
 
 const goToProfile = () => {
-  if (authStore.isLoggedIn) {
+  if (authStore.isLoggedIn()) {
     router.push(PROFILE_PATH);
   } else {
     router.push(LOGIN_PATH);
