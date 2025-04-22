@@ -132,7 +132,7 @@ const toggleMenu = () => {
 const darkMode = computed(() => userStore.settings.theme === 'dark');
 const scrolled = computed(() => props.scrollOffset > 40);
 const userLabel = computed(() => {
-  const label = authStore.isLoggedIn() ? authStore.user?.name : props.userName || 'Guest';
+  const label = authStore.isLoggedIn() ? authStore.user?.username : 'Guest';
   return !isMobile.value ? label?.split(' ')[0] || '' : '';//todo
 });
 

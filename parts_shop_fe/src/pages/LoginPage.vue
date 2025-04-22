@@ -133,25 +133,25 @@ const handleLogin = async () => {
   }
 
   try {
-    const message = await authStore.login(email.value, password.value);
-    if (message) {
+    const loggedSuccessfully = await authStore.login(email.value, password.value);
+    if (loggedSuccessfully) {
       $q.notify({
         type: 'positive',
-        message: message,
+        message: t('login.successMessage'),
         position: 'top',
         timeout: 5000,
         icon: 'check',
       });
       email.value = '';
       password.value = '';
-      successMessage.value = message;
+      successMessage.value = t('login.successMessage');
       success.value = true;
       await router.push(PROFILE_PATH);
     }
   } catch (error) {
     let errorMsg = t('login.loginFailed');
     if (error instanceof AxiosError) {
-      errorMsg = error.response?.data?.error || error.message || errorMsg;
+      errorMsg = error.response?.data.message || error.message || errorMsg;
     } else if (error instanceof Error) {
       errorMsg = error.message || errorMsg;
     }

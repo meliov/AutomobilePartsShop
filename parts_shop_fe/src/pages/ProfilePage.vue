@@ -9,7 +9,7 @@
         <q-item class="tw-w-full tw-flex tw-flex-col tw-justify-between tw-gap-4 !tw-p-0">
           <q-item-section>
             <q-list>
-              <q-item-label class="tw-text-base">{{ user?.name }}</q-item-label>
+              <q-item-label class="tw-text-base">{{ user?.username }}</q-item-label>
               <q-item-label class="tw-text-xs">{{ user?.email }}</q-item-label>
             </q-list>
           </q-item-section>

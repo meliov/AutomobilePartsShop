@@ -80,7 +80,7 @@ const $q = useQuasar();
 const router = useRouter();
 const { t } = useI18n();
 
-const updatedName = ref(authStore.user?.name || '');
+const updatedName = ref(authStore.user?.username || '');
 const updatedEmail = ref(authStore.user?.email || '');
 const errorMessage = ref<string | null>(null);
 const success = ref(false);
@@ -92,7 +92,7 @@ const goBack = () => {
 const updateProfile = async () => {
   try {
     const message = await authStore.updateProfile({
-      name: updatedName.value,
+      username: updatedName.value,
       email: updatedEmail.value,
     });
     $q.notify({

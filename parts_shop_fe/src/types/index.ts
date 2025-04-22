@@ -92,16 +92,15 @@ export interface ThemeOption {
   label: string;
 }
 
-export interface Token {
-  timestamp: number;
-  version: string;
-  expiration: number | null;
-  data: string;
-}
+
 
 export interface User {
-  name: string;
-  email: string;
+     id: number,
+     email: string,
+     firstName: string,
+     lastName: string,
+     username: string,
+     profilePicture: string
 }
 
 export interface UserSettings {
