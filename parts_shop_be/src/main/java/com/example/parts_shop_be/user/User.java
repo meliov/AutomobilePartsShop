@@ -5,7 +5,6 @@ import com.example.parts_shop_be.utils.BaseEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 
 @Entity
@@ -35,10 +34,6 @@ public class User extends BaseEntity {
     @Lob
     @Column(columnDefinition = "LONGTEXT")
     private String profilePicture;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private UserSource source;
 
 
     public User(String firstName, String lastName, String username, String password, LocalDateTime registrationDate, UserStatus status, String email,  String profilePicture, UserGender userGender) {
@@ -142,11 +137,4 @@ public class User extends BaseEntity {
         this.profilePicture = profilePicture;
     }
 
-    public UserSource getSource() {
-        return source;
-    }
-
-    public void setSource(UserSource source) {
-        this.source = source;
-    }
 }
