@@ -62,12 +62,12 @@ declare module 'vue' {
 }
 
 const api = axios.create({ baseURL: import.meta.env.VITE_API_URL });
+const refreshUrl = import.meta.env.VITE_API_REFRESH_TOKEN_PATH;
 
 let isRefreshing = false;
 let failedRequestsQueue: Array<(token: string) => void> = [];
 
-export default defineBoot(({ app }: { app: App }) => {
-  const router = useRouter();
+export default defineBoot(({ app, router }: { app: App; router: ReturnType<typeof useRouter> }) => {
 
   // Request interceptor to attach access token
   api.interceptors.request.use(
@@ -112,10 +112,10 @@ export default defineBoot(({ app }: { app: App }) => {
         isRefreshing = true;
 
         try {
+          console.log('refreshing')
           // Make refresh request with refresh token as Bearer
-          const refreshResponse = await axios.post(
-            `${import.meta.env.VITE_API_REFRESH_TOKEN_PATH}`,
-            {},
+          const refreshResponse = await axios.get(
+            `${refreshUrl}`,
             {
               headers: {
                 Authorization: `Bearer ${refreshToken}`
@@ -124,8 +124,8 @@ export default defineBoot(({ app }: { app: App }) => {
           );
 
           // Update tokens from refresh response headers
-          const newAccessToken = refreshResponse.headers['Jwt-Token'];
-          const newRefreshToken = refreshResponse.headers['Jwt-Refresh-Token'];
+          const newAccessToken = refreshResponse.headers['jwt-token'];
+          const newRefreshToken = refreshResponse.headers['jwt-refresh-token'];
 
           if (newAccessToken && newRefreshToken) {
             localStorage.setItem('accessToken', newAccessToken);
@@ -142,11 +142,12 @@ export default defineBoot(({ app }: { app: App }) => {
           // Retry original request
           return api(originalRequest);
         } catch (refreshError) {
+          console.log('refreshError')
           // Clear tokens and redirect to login on refresh failure
           localStorage.removeItem('accessToken');
           localStorage.removeItem('refreshToken');
           localStorage.removeItem('user');
-          router.push('/login');
+          await router.push('/login');
           return Promise.reject(refreshError);
         } finally {
           isRefreshing = false;
@@ -155,6 +156,7 @@ export default defineBoot(({ app }: { app: App }) => {
 
       // Redirect to login if unauthorized and no refresh token
       if (error.response?.status === 401 && !refreshToken) {
+        console.info('invalid refresh token')
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('user');

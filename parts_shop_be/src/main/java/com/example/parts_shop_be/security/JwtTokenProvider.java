@@ -30,9 +30,9 @@ public class JwtTokenProvider {
                 .withIssuer("unan")
                 .withAudience("client")
                 .withIssuedAt(new Date())
-                .withSubject(userPrincipal.getUsername())
+                .withSubject(userPrincipal.getEmail())
                 .withArrayClaim("authorities", claims)
-                .withExpiresAt(new Date(System.currentTimeMillis() + 15 * 60 * 1000)) // 15 minutes (use 1 * 60 * 1000 for 1 minute testing)
+                .withExpiresAt(new Date(System.currentTimeMillis() + 45 * 60 * 1000)) // 45 minutes (use 1 * 60 * 1000 for 1 minute testing)
                 .sign(Algorithm.HMAC256(secret.getBytes()));
     }
 
@@ -41,7 +41,7 @@ public class JwtTokenProvider {
                 .withIssuer("unan")
                 .withAudience("client")
                 .withIssuedAt(new Date())
-                .withSubject(userPrincipal.getUsername())
+                .withSubject(userPrincipal.getEmail())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 15 * 24 * 60 * 60 * 1000)) // 15 days
                 .sign(Algorithm.HMAC256(secret.getBytes()));
     }

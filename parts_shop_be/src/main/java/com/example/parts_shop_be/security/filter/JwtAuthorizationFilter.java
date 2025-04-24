@@ -71,6 +71,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     ObjectMapper mapper = new ObjectMapper();
                     mapper.writeValue(outputStream, httpResponse);
                     outputStream.flush();
+                    logger.error(e.getMessage());
                 }
                 filterChain.doFilter(request, response);
             }

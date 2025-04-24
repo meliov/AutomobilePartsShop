@@ -54,8 +54,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtAccessDeniedHandler jwtAccessDeniedHandler;
     //public urls are checked twice - once before authentication - where its permitted and once during auth
     public static final String[] PUBLIC_URLS = {
-            "/products/**","/rates**",
-            "/user/test", "/api/login", "/api/v1/token/refresh",
+            "/products/**",
+            "/rates**",
+            "/user/test", "/api/login", "/api/token/refresh",
             "/user/email-exists/*", "/user/email-exists-pass-reset/*",
             "/user/register", "/user/signup-confirmation/*", "/user/reset-password",
             "/user/forgot-password-confirmation/*",

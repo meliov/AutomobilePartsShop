@@ -23,7 +23,7 @@ public class SecurityController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping("/api/v1/token/refresh")
+    @GetMapping("/api/token/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) {
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {

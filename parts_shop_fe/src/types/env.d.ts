@@ -10,6 +10,7 @@ declare namespace NodeJS {
 
 interface ImportMetaEnv {
   readonly VITE_API_URL: string;
+  readonly VITE_API_REFRESH_TOKEN_PATH: string;
   readonly VITE_GA_ID: string;
   readonly VUE_ROUTER_MODE: 'hash' | 'history' | 'abstract';
   readonly VUE_ROUTER_BASE: string;
