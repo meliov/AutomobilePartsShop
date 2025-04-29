@@ -43,7 +43,10 @@ export const useAuthStore = defineStore('auth', () => {
   const login = async (email: string, password: string) => {
     try {
       const response = await api.post(API_LOGIN_PATH, { email, password });
-      user.value = response.data as User;
+      storage.set('user', response.data as User, {
+        expiration: USER_EXPIRATION,
+        version: '1.0',
+      });
       if (isLoggedIn()) {
         await fetchUser()
       } else {
