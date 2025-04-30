@@ -9,7 +9,7 @@ import {
 } from '@/constants/routes';
 import {storage} from '@/utils/storage';
 import {defineStore} from 'pinia';
-import {ref} from 'vue';
+import {Ref, ref} from 'vue';
 import {QVueGlobals, useQuasar} from "quasar";
 import {CreateUserView} from "@/models/CreateUserView";
 import {User} from "@/types";
@@ -18,10 +18,11 @@ import {User} from "@/types";
 export const useAuthStore = defineStore('auth', () => {
   const $q = useQuasar() as QVueGlobals;
   const USER_EXPIRATION = 3600; // 1 hour in seconds
-  const user = ref(storage.get('user'));
+  //user must remain reff since there are other places which rely on it that its reactive
+  const user: Ref<User> = ref<User>(storage.get('user'));
 
 
-  const isLoggedIn =  () => Boolean(localStorage.getItem('accessToken'));
+  const isLoggedIn =  () => Boolean(storage.getItemData('accessToken'));
   const fetchUser = async () => {
     try {
 
@@ -29,8 +30,8 @@ export const useAuthStore = defineStore('auth', () => {
         return;
       }
 
-      const response = await api.get(`${API_USER_PATH}/${user.value.id}`);
-      user.value = response.data;
+      const response = await api.get(`${API_USER_PATH}/${(user.value as User | null)?.id}`);
+      user.value = response.data as User;
       storage.set('user', user.value, {
         expiration: USER_EXPIRATION,
         version: '1.0',
@@ -43,7 +44,8 @@ export const useAuthStore = defineStore('auth', () => {
   const login = async (email: string, password: string) => {
     try {
       const response = await api.post(API_LOGIN_PATH, { email, password });
-      storage.set('user', response.data as User, {
+      user.value = response.data as User;
+      storage.set('user', user.value, {
         expiration: USER_EXPIRATION,
         version: '1.0',
       });
@@ -81,8 +83,8 @@ export const useAuthStore = defineStore('auth', () => {
   };
 
   const logout = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
+    storage.remove('accessToken');
+    storage.remove('refreshToken');
     storage.remove('user');
   };
   const updateProfile = async (profileData: { username: string; email: string }) => {
@@ -90,6 +92,7 @@ export const useAuthStore = defineStore('auth', () => {
       const response = await api.put(API_USER_PATH, profileData);
       const updatedUser = response.data.user;
       user.value = {
+        ...user.value,
         username: updatedUser.username,
         email: updatedUser.email,
       };

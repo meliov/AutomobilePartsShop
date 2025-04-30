@@ -71,7 +71,37 @@ export const storage = {
       console.error('Storage write error:', error);
     }
   },
+  setItem: (key: string, value: string) => {
+    try {
+      const wrapper = localStorage.getItem(STORAGE_KEY) || '{}';
+      const data = JSON.parse(wrapper);
 
+      // Create a simple entry with the string value
+      data[key] = {
+        timestamp: Date.now(),
+        version: '1.0',
+        expiration: null,
+        data: value,
+      };
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (error) {
+      console.error('Storage write error:', error);
+    }
+  },
+
+  getItemData: (key: string) => {
+    try {
+      const wrapper = localStorage.getItem(STORAGE_KEY) || '{}';
+      const data = JSON.parse(wrapper);
+
+      // Return only the `data` property of the specified key
+      return data[key]?.data || null;
+    } catch (error) {
+      console.error('Storage read error:', error);
+      return null;
+    }
+  },
   remove: (key: string) => {
     try {
       const wrapper = localStorage.getItem(STORAGE_KEY) || '{}';

@@ -67,7 +67,7 @@ const scrollContainer = ref<ScrollAreaRef | null>(null);
 const scrolling = ref(false);
 const position = ref(0);
 
-const userName = computed(() => authStore.user?.name || '');
+const userName = computed(() => authStore.user?.username || '');
 const totalItems = computed(() => cartStore.totalItems);
 
 const menuItems = computed(() => {

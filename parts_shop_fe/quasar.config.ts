@@ -7,8 +7,8 @@ dotenv.config();
 
 export default defineConfig((ctx) => {
   return {
-    preFetch: true,
-    boot: ['i18n', 'store', 'ga', 'axios', 'theme', 'components', 'lightbox'],
+    preFetch: true, //axios must be prefetched
+    boot: ['i18n', 'axios', 'store', 'ga', 'theme', 'components', 'lightbox'],
     css: ['app.scss'],
     extras: ['material-icons'],
     set: false,

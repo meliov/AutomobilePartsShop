@@ -2,6 +2,7 @@ import { defineBoot } from '#q-app/wrappers';
 import axios, { type AxiosInstance, type InternalAxiosRequestConfig } from 'axios';
 import type { App } from 'vue';
 import { useRouter } from 'vue-router';
+import {storage} from "@/utils/storage";
 
 /**
  * DESCRIPTION OF THE WORKFLOW
@@ -9,7 +10,7 @@ import { useRouter } from 'vue-router';
  *
  * Attach Access Token to All Requests
  *
- * Read accessToken from localStorage.
+ * Read accessToken from storage.
  *
  * Add it to the Authorization header as:
  *
@@ -47,7 +48,7 @@ import { useRouter } from 'vue-router';
  *
  * If the login request returns Jwt-Token and Jwt-Refresh-Token in headers:
  *
- * Save both tokens to localStorage.
+ * Save both tokens to storage.
  *
  * If No Tokens Exist
  *
@@ -72,7 +73,7 @@ export default defineBoot(({ app, router }: { app: App; router: ReturnType<typeo
   // Request interceptor to attach access token
   api.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-      const accessToken = localStorage.getItem('accessToken');
+      const accessToken = storage.getItemData('accessToken');
       if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;
       }
@@ -88,14 +89,14 @@ export default defineBoot(({ app, router }: { app: App; router: ReturnType<typeo
       const newAccessToken = response.headers['jwt-token'];
       const newRefreshToken = response.headers['jwt-refresh-token'];
       if (newAccessToken && newRefreshToken) {
-        localStorage.setItem('accessToken', newAccessToken);
-        localStorage.setItem('refreshToken', newRefreshToken);
+        storage.setItem('accessToken', newAccessToken);
+        storage.setItem('refreshToken', newRefreshToken);
       }
       return response;
     },
     async (error) => {
       const originalRequest = error.config;
-      const refreshToken = localStorage.getItem('refreshToken');
+      const refreshToken = storage.getItemData('refreshToken');
 
       // Handle 401 errors
       if (error.response?.status === 401 && !originalRequest._retry) {
@@ -128,8 +129,8 @@ export default defineBoot(({ app, router }: { app: App; router: ReturnType<typeo
           const newRefreshToken = refreshResponse.headers['jwt-refresh-token'];
 
           if (newAccessToken && newRefreshToken) {
-            localStorage.setItem('accessToken', newAccessToken);
-            localStorage.setItem('refreshToken', newRefreshToken);
+            storage.setItem('accessToken', newAccessToken);
+            storage.setItem('refreshToken', newRefreshToken);
           }
 
           // Update Authorization header for future requests
@@ -144,9 +145,9 @@ export default defineBoot(({ app, router }: { app: App; router: ReturnType<typeo
         } catch (refreshError) {
           console.log('refreshError')
           // Clear tokens and redirect to login on refresh failure
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('refreshToken');
-          localStorage.removeItem('user');
+          storage.remove('accessToken');
+          storage.remove('refreshToken');
+          storage.remove('user');
           await router.push('/login');
           return Promise.reject(refreshError);
         } finally {
@@ -157,9 +158,9 @@ export default defineBoot(({ app, router }: { app: App; router: ReturnType<typeo
       // Redirect to login if unauthorized and no refresh token
       if (error.response?.status === 401 && !refreshToken) {
         console.info('invalid refresh token')
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('user');
+        storage.remove('accessToken');
+        storage.remove('refreshToken');
+        storage.remove('user');
         await router.push('/login');
       }
 
@@ -168,7 +169,7 @@ export default defineBoot(({ app, router }: { app: App; router: ReturnType<typeo
   );
 
 
-  if (!localStorage.getItem('accessToken') && !localStorage.getItem('refreshToken')) {
+  if (!storage.getItemData('accessToken') && !storage.getItemData('refreshToken')) {
     // Handle initial state with no tokens, but basically just dont do anything
   }
 
