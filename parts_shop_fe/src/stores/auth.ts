@@ -76,9 +76,27 @@ export const useAuthStore = defineStore('auth', () => {
         });
         throw new Error("User with this email already exists!")
       }else{
-        const user: CreateUserView = {username: name, email: email, password: password } // can be done without it tho
-        await api.post(API_REGISTER_PATH, user);
-        // await login(email, password);
+        try {
+          const user: CreateUserView = {username: name, email: email, password: password} // can be done without it tho
+          await api.post(API_REGISTER_PATH, user);
+          $q.notify({
+            color: 'positive',
+            position: 'bottom',
+            timeout: 7000,
+            message: 'User was created successfully! Confirmation email was sent to your email.',
+            icon: 'success',
+          });
+        }catch (e){
+          console.error('Registration failed:', e);
+          $q.notify({
+            color: 'negative',
+            position: 'bottom',
+            timeout: 3000,
+            message: 'Registration failed. Please try again.',
+            icon: 'error',
+          });
+          throw e;
+        }
       }
   };
 
