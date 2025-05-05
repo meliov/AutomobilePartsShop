@@ -18,9 +18,10 @@ import {User} from "@/types";
 export const useAuthStore = defineStore('auth', () => {
   const $q = useQuasar() as QVueGlobals;
   const USER_EXPIRATION = 3600; // 1 hour in seconds
-  //user must remain reff since there are other places which rely on it that its reactive
+  //user must remain reff since there are other places which rely on it that its reactive, used mainly to keep old logic intact
   const user: Ref<User> = ref<User>(storage.get('user'));
-
+  //used for cases where the real time user is needed
+  const getUserFromStorage = () => storage.get('user') as User
 
   const isLoggedIn =  () => Boolean(storage.getItemData('accessToken'));
   const fetchUser = async () => {
@@ -167,6 +168,7 @@ export const useAuthStore = defineStore('auth', () => {
     changePassword,
     resetPassword,
     isLoggedIn,
-    user
+    user,
+    getUserFromStorage
   };
 });

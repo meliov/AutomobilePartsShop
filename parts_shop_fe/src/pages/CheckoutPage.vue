@@ -115,6 +115,7 @@ import OrderConfirmationDialog from '@/components/OrderConfirmationDialog.vue';
 import { CART_PATH, ORDER_PATH } from '@/constants/routes';
 import OrderForm from '@/components/OrderForm.vue';
 import QButton from '@/components/base/QButton.vue';
+import {useAuthStore} from "@/stores/auth";
 
 const scrollToTop = inject('scrollToTop') as () => void;
 
@@ -122,6 +123,8 @@ const $q = useQuasar() as QVueGlobals;
 const cartStore = useCartStore();
 const orderStore = useOrderStore();
 const router = useRouter();
+const authStore = useAuthStore();
+
 
 const step = ref(1);
 const showDialog = ref(false);
@@ -241,6 +244,15 @@ onMounted(() => {
   orderStore.loadOrder();
   validateForm();
   scrollToTop();
+  if (authStore.getUserFromStorage()) {
+    const user = authStore.getUserFromStorage();
+    orderForm.shipping = {
+      firstName: user.firstName || '',
+      lastName: user.lastName || '',
+      email: user.email || '',
+      address: user.address || '',
+    };
+  }
 });
 </script>
 
