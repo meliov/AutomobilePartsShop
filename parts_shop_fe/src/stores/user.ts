@@ -78,6 +78,8 @@ export const useUserStore = defineStore('user', () => {
 
   watch(() => settings.value.language, setLanguage);
 
+  const isDarkMode = () => storage.get('user_settings')?.theme === 'dark';
+
   return {
     settings,
     languageOptions,
@@ -90,5 +92,6 @@ export const useUserStore = defineStore('user', () => {
     loadSettings,
     getStoredLanguage,
     clearSettings,
+    isDarkMode
   };
 });

@@ -1,8 +1,6 @@
 import {api} from '@/boot/axios';
 import {
-  API_CHANGE_PASSWORD_PATH,
   API_LOGIN_PATH,
-  API_PASSWORD_RESET_CONFIRM_PATH,
   API_REGISTER_PATH,
   API_USER_PATH,
   CHECK_EMAIL_PATH,
@@ -127,37 +125,6 @@ export const useAuthStore = defineStore('auth', () => {
       throw error;
     }
   };
-  const changePassword = async (oldPassword: string, newPassword: string) => {
-    try {
-      const response = await api.put(
-        API_CHANGE_PASSWORD_PATH,
-        { oldPassword, newPassword },
-      );
-      return response.data.message;
-    } catch (error) {
-      $q.notify({
-        color: 'negative',
-        position: 'top',
-        timeout: 1000,
-        message: 'Failed to change password.',
-        icon: 'error',
-      });
-      throw error;
-    }
-  };
-
-  const resetPassword = async (email: string | null, newPassword: string) => {
-    try {
-      const response = await api.post(API_PASSWORD_RESET_CONFIRM_PATH, {
-        email,
-        newPassword,
-      });
-      return response.data.message;
-    } catch (error) {
-      console.error('Failed to reset password:', error);
-      throw error;
-    }
-  };
 
   return {
     login,
@@ -165,8 +132,6 @@ export const useAuthStore = defineStore('auth', () => {
     logout,
     fetchUser,
     updateProfile,
-    changePassword,
-    resetPassword,
     isLoggedIn,
     user,
     getUserFromStorage

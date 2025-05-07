@@ -8,4 +8,5 @@ export const login = {
   errorMessage: 'An error occurred. Please try again.',
   successMessage: 'Successfully logged in!',
   goHome: 'Home',
+  forgotPassword: 'Forgot Password?',
 };

@@ -6,14 +6,14 @@
           {{ t('login.title') }}
         </h4>
         <q-form class="!tw-w-full" @submit.prevent="handleLogin">
-          <q-card-section v-if="success">
+          <q-card-section v-if="authStore.isLoggedIn()">
             <div class="tw-w-full tw-flex tw-justify-center tw-items-center">
               {{ t('login.successMessage') }}
             </div>
           </q-card-section>
 
           <q-card-section
-            v-if="!success"
+            v-if="!authStore.isLoggedIn()"
             class="tw-flex tw-flex-col tw-gap-4 tw-w-full !tw-p-0 tw-mb-4"
           >
             <q-input
@@ -47,7 +47,16 @@
 
           <div class="tw-flex tw-flex-col tw-gap-2">
             <QButton
-              v-if="!success"
+              v-if="!authStore.isLoggedIn()"
+              primary
+              flat
+              :text-color="color"
+              :label="t('login.forgotPassword')"
+              class="!tw-w-full !tw-py-2.5"
+              @click="goToResetPassword"
+            />
+            <QButton
+              v-if="!authStore.isLoggedIn()"
               type="submit"
               :disabled="!isValid"
               :label="t('login.login')"
@@ -55,14 +64,14 @@
             />
             <div class="tw-flex tw-items-center tw-justify-center">{{ t('login.or') }}</div>
             <QButton
-              v-if="!success"
+              v-if="!authStore.isLoggedIn()"
               secondary
               :label="t('login.createAccount')"
               class="!tw-w-full !tw-py-2.5"
               @click="goToRegister"
             />
             <QButton
-              v-if="success"
+              v-if="authStore.isLoggedIn()"
               secondary
               :label="t('login.goHome')"
               class="!tw-w-full !tw-py-2.5"
@@ -80,10 +89,11 @@ import { computed, ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useI18n } from 'vue-i18n';
 import QButton from '@/components/base/QButton.vue';
-import { HOME_PATH, PROFILE_PATH, REGISTER_PATH } from '@/constants/routes';
+import {HOME_PATH, PASSWORD_CHANGE_PATH, PROFILE_PATH, REGISTER_PATH} from '@/constants/routes';
 import { useQuasar } from 'quasar';
 import { AxiosError } from 'axios';
 import { useRouter } from 'vue-router';
+import {useUserStore} from "@/stores/user";
 
 const authStore = useAuthStore();
 const { t } = useI18n();
@@ -92,7 +102,6 @@ const router = useRouter();
 
 const email = ref('');
 const password = ref('');
-const success = ref(false);
 const successMessage = ref('');
 const showPassword = ref(false);
 const errorMessage = ref<string | null>(null);
@@ -114,6 +123,9 @@ const goToRegister = () => {
   router.push(REGISTER_PATH);
 };
 
+const goToResetPassword = () => {
+  router.push(`${PASSWORD_CHANGE_PATH}`);
+};
 const togglePassword = () => {
   showPassword.value = !showPassword.value;
 };
@@ -145,7 +157,6 @@ const handleLogin = async () => {
       email.value = '';
       password.value = '';
       successMessage.value = t('login.successMessage');
-      success.value = true;
       await router.push(PROFILE_PATH);
     }
   } catch (error) {
@@ -165,6 +176,9 @@ const handleLogin = async () => {
     });
   }
 };
+const userStore = useUserStore();
+const darkMode = computed(() => userStore.settings.theme === 'dark');//todo do not take out and reeuse stuff, this retard made it impossible to actually make it singletone
+const color = computed(() => (darkMode.value ? 'white' : 'black')); //todo MORE LIKE NOT TO DO - this whole codebase is shit initally, so dont refactor it and waste time, make it possibly the shittest but working
 
 const required = (val: string) => !!val || t('errors.validation.required');
 const emailRules = (val: string) => {

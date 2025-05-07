@@ -1,10 +1,7 @@
 package com.example.parts_shop_be.user.service;
 
 import com.example.parts_shop_be.user.UserStatus;
-import com.example.parts_shop_be.user.dto.ClientUserDto;
-import com.example.parts_shop_be.user.dto.CreateUserDto;
-import com.example.parts_shop_be.user.dto.ResetPasswordDto;
-import com.example.parts_shop_be.user.dto.UpdateUserDto;
+import com.example.parts_shop_be.user.dto.*;
 import com.example.parts_shop_be.utils.exception.UserAlreadyPresentException;
 import com.example.parts_shop_be.utils.exception.UserNotFoundException;
 
@@ -30,4 +27,6 @@ public interface UserService {
 
     Boolean confirmUserResetPassword(String randomUrl);
 
+
+    boolean updatePassword(ChangePasswordDto changePasswordDto) throws UserNotFoundException;
 }

@@ -1,9 +1,6 @@
 package com.example.parts_shop_be.user;
 
-import com.example.parts_shop_be.user.dto.ClientUserDto;
-import com.example.parts_shop_be.user.dto.CreateUserDto;
-import com.example.parts_shop_be.user.dto.ResetPasswordDto;
-import com.example.parts_shop_be.user.dto.UpdateUserDto;
+import com.example.parts_shop_be.user.dto.*;
 import com.example.parts_shop_be.user.service.UserService;
 import com.example.parts_shop_be.utils.exception.UserAlreadyPresentException;
 import com.example.parts_shop_be.utils.exception.UserNotFoundException;
@@ -121,6 +118,19 @@ class UserController {
         return ResponseEntity.ok(
                 userService.updateUser(updateUserDto)
         );
+    }
+
+    //remains adding dtos for change and reset pass and methods as well, FE is done regarding this
+    @PostMapping("/password-change")
+    public ResponseEntity<Object> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
+        logger.debug("in changePassword for user:" + changePasswordDto.getId());
+        try {
+            return ResponseEntity.ok(
+                    userService.updatePassword(changePasswordDto)
+            );
+        } catch (UserNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

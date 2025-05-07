@@ -100,6 +100,8 @@ import { useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { useRouter, useRoute } from 'vue-router';
 import { AxiosError } from 'axios';
+import {api} from "@/boot/axios";
+import {API_CHANGE_PASSWORD_PATH, API_PASSWORD_RESET_PATH} from "@/constants/routes";
 
 const authStore = useAuthStore();
 const $q = useQuasar();
@@ -116,7 +118,7 @@ const showNewPassword = ref(false);
 const showConfirmPassword = ref(false);
 const success = ref(false);
 const email = ref<string | null>(null);
-const isResetPassword = ref(false);
+const isResetPassword = ref(!authStore.isLoggedIn());
 
 const toggleCurrentPassword = () => {
   showOldPassword.value = !showOldPassword.value;
@@ -151,9 +153,9 @@ const handleSubmit = async () => {
   try {
     let message;
     if (isResetPassword.value) {
-      message = await authStore.resetPassword(email.value, newPassword.value);
+      message = await resetPassword(email.value, newPassword.value);
     } else {
-      message = await authStore.changePassword(oldPassword.value, newPassword.value);
+      message = await changePassword(oldPassword.value, newPassword.value);
     }
     if (message) {
       $q.notify({
@@ -178,6 +180,38 @@ const handleSubmit = async () => {
       timeout: 5000,
       icon: 'error',
     });
+  }
+};
+
+const changePassword = async (oldPassword: string, newPassword: string) => {
+  try {
+    const response = await api.post(
+      API_CHANGE_PASSWORD_PATH,
+      { oldPassword, newPassword },
+    );
+    return response.data.message;
+  } catch (error) {
+    $q.notify({
+      color: 'negative',
+      position: 'top',
+      timeout: 1000,
+      message: 'Failed to change password.',
+      icon: 'error',
+    });
+    throw error;
+  }
+};
+
+const resetPassword = async (email: string | null, newPassword: string) => {
+  try {
+    const response = await api.post(API_PASSWORD_RESET_PATH, {
+      email,
+      newPassword,
+    });
+    return response.data.message;
+  } catch (error) {
+    console.error('Failed to reset password:', error);
+    throw error;
   }
 };
 

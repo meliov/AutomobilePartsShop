@@ -1,10 +1,7 @@
 package com.example.parts_shop_be.user.service;
 
 import com.example.parts_shop_be.user.*;
-import com.example.parts_shop_be.user.dto.ClientUserDto;
-import com.example.parts_shop_be.user.dto.CreateUserDto;
-import com.example.parts_shop_be.user.dto.ResetPasswordDto;
-import com.example.parts_shop_be.user.dto.UpdateUserDto;
+import com.example.parts_shop_be.user.dto.*;
 import com.example.parts_shop_be.user.forgot_password_object.ForgotPasswordObject;
 import com.example.parts_shop_be.user.forgot_password_object.ForgotPasswordObjectService;
 import com.example.parts_shop_be.user.signup_object.SignupObject;
@@ -14,16 +11,12 @@ import com.example.parts_shop_be.utils.exception.UserNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -153,6 +146,25 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             throw new RuntimeException("confirmUserSignup went wrong:\n" + e.getMessage());
         }
+    }
+
+    @Override
+    @Transactional
+    public boolean updatePassword(ChangePasswordDto changePasswordDto) throws UserNotFoundException {
+        // Fetch the user by ID
+        User user = userRepository.findById(changePasswordDto.getId())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        // Validate the old password
+        if (!passwordEncoder.matches(changePasswordDto.getOldPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("Old password is incorrect");
+        }
+
+        // Update the password
+        user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+        userRepository.save(user);
+
+        return true;
     }
 
 }

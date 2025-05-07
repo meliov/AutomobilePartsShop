@@ -50,7 +50,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: '',
         component: loadPage('ChangePasswordPage'),
-        meta: { requiresAuth: true, title: 'Change password' },
+        meta: { requiresAuth: false, title: 'Change password' },
       },
     ],
   },
