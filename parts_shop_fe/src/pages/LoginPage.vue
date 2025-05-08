@@ -53,7 +53,7 @@
               :text-color="color"
               :label="t('login.forgotPassword')"
               class="!tw-w-full !tw-py-2.5"
-              @click="goToResetPassword"
+              @click="goToCheckEmail"
             />
             <QButton
               v-if="!authStore.isLoggedIn()"
@@ -85,14 +85,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { useAuthStore } from '@/stores/auth';
-import { useI18n } from 'vue-i18n';
+import {computed, ref} from 'vue';
+import {useAuthStore} from '@/stores/auth';
+import {useI18n} from 'vue-i18n';
 import QButton from '@/components/base/QButton.vue';
-import {HOME_PATH, PASSWORD_CHANGE_PATH, PROFILE_PATH, REGISTER_PATH} from '@/constants/routes';
-import { useQuasar } from 'quasar';
-import { AxiosError } from 'axios';
-import { useRouter } from 'vue-router';
+import { EMAIL_CHECK_PATH, HOME_PATH, PROFILE_PATH, REGISTER_PATH} from '@/constants/routes';
+import {useQuasar} from 'quasar';
+import {AxiosError} from 'axios';
+import {useRouter} from 'vue-router';
 import {useUserStore} from "@/stores/user";
 
 const authStore = useAuthStore();
@@ -123,8 +123,8 @@ const goToRegister = () => {
   router.push(REGISTER_PATH);
 };
 
-const goToResetPassword = () => {
-  router.push(`${PASSWORD_CHANGE_PATH}`);
+const goToCheckEmail = () => {
+  router.push(`${EMAIL_CHECK_PATH}`);
 };
 const togglePassword = () => {
   showPassword.value = !showPassword.value;

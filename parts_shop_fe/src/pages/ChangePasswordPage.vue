@@ -94,21 +94,22 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
-import { useAuthStore } from '@/stores/auth';
-import { useQuasar } from 'quasar';
-import { useI18n } from 'vue-i18n';
-import { useRouter, useRoute } from 'vue-router';
-import { AxiosError } from 'axios';
+import {onMounted, ref} from 'vue';
+import {useQuasar} from 'quasar';
+import {useI18n} from 'vue-i18n';
+import {useRoute, useRouter} from 'vue-router';
+import {AxiosError} from 'axios';
 import {api} from "@/boot/axios";
-import {API_CHANGE_PASSWORD_PATH, API_PASSWORD_RESET_PATH} from "@/constants/routes";
+import {API_CHANGE_PASSWORD_PATH, API_PASSWORD_RESET_PATH, HOME_PATH} from "@/constants/routes";
+// import {useAuthStore} from "@/stores/auth";
 
-const authStore = useAuthStore();
+
 const $q = useQuasar();
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 
+// const authStore = useAuthStore();
 const oldPassword = ref('');
 const newPassword = ref('');
 const confirmPassword = ref('');
@@ -118,7 +119,11 @@ const showNewPassword = ref(false);
 const showConfirmPassword = ref(false);
 const success = ref(false);
 const email = ref<string | null>(null);
-const isResetPassword = ref(!authStore.isLoggedIn());
+const isResetPassword = ref(route.query.email != null && route.query.email !== '' && route.query.email !== undefined);
+console.log('hello', isResetPassword.value);
+console.log(route.query.email)
+
+
 
 const toggleCurrentPassword = () => {
   showOldPassword.value = !showOldPassword.value;
@@ -204,11 +209,24 @@ const changePassword = async (oldPassword: string, newPassword: string) => {
 
 const resetPassword = async (email: string | null, newPassword: string) => {
   try {
-    const response = await api.post(API_PASSWORD_RESET_PATH, {
-      email,
-      newPassword,
+    console.log('email', email);
+    console.log('newPassword', newPassword);
+    const response = await api.post<boolean>(API_PASSWORD_RESET_PATH, {
+      email: email,
+      password: newPassword,
     });
-    return response.data.message;
+    if(response) {
+       await router.replace({ path: HOME_PATH })
+      $q.notify({
+        color: 'positive',
+        position: 'right',
+        timeout: 10000,
+        message: "Confirmation email sent. Please check your inbox.",
+        icon: 'check',
+      });
+    }else{
+      throw new Error();
+    }
   } catch (error) {
     console.error('Failed to reset password:', error);
     throw error;

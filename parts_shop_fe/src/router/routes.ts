@@ -1,5 +1,6 @@
-import type { RouteRecordRaw } from 'vue-router';
+import type {RouteRecordRaw} from 'vue-router';
 import MainLayout from 'layouts/MainLayout.vue';
+import {EMAIL_CHECK_PATH, LOGIN_PATH} from "@/constants/routes";
 
 const loadPage = (page: string) => () =>
   import(`pages/${page}.vue`).catch((err) => {
@@ -50,7 +51,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: '',
         component: loadPage('ChangePasswordPage'),
-        meta: { requiresAuth: false, title: 'Change password' },
+        meta: { requiresAuth: true, title: 'Change password' },
       },
     ],
   },
@@ -62,11 +63,10 @@ const routes: RouteRecordRaw[] = [
       {
         path: '',
         component: loadPage('PasswordResetPage'),
-        meta: { requiresAuth: false, title: 'Reset Password' },
+        meta: { requiresAuth: true, title: 'Reset Password' },
       },
     ],
   },
-
   {
     path: '/reset-password',
     component: MainLayout,
@@ -74,11 +74,30 @@ const routes: RouteRecordRaw[] = [
       {
         path: '',
         component: loadPage('ChangePasswordPage'),
-        meta: { requiresAuth: false, title: 'Reset Password' },
+        meta:  { title: 'Reset Password' },
+        beforeEnter: (to, from, next) => {
+          if (to.query.email === null || to.query.email === undefined) {
+            next(LOGIN_PATH); // Redirect to the home page
+          } else {
+            to.meta.requiresAuth = true;
+            next();
+          }
+        }
       },
     ],
   },
-
+  {
+    path: EMAIL_CHECK_PATH,
+    component: MainLayout,
+    children: [
+      {
+        path: '',
+        component: loadPage('CheckEmail'),
+        meta: { requiresAuth: false, title: 'Check Email' },
+        props: true
+      },
+    ],
+  },
   {
     path: '/cart',
     component: MainLayout,

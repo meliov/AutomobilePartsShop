@@ -3,7 +3,7 @@ import {
   API_LOGIN_PATH,
   API_REGISTER_PATH,
   API_USER_PATH,
-  CHECK_EMAIL_PATH,
+  CHECK_EMAIL_PATH_API,
 } from '@/constants/routes';
 import {storage} from '@/utils/storage';
 import {defineStore} from 'pinia';
@@ -62,7 +62,7 @@ export const useAuthStore = defineStore('auth', () => {
   const register = async (name: string, email: string, password: string) => {
 
       const val = await api.get<boolean>(
-        `${CHECK_EMAIL_PATH}/${email}`,
+        `${CHECK_EMAIL_PATH_API}/${email}`,
       ).then(response => response.data)
 
       if(val === true){
