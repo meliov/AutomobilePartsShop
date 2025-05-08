@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import {ref} from "vue";
 import {useI18n} from "vue-i18n";
-import {CHECK_EMAIL_PATH_API, PASSWORD_CHANGE_PATH} from "@/constants/routes";
+import {CHECK_EMAIL_PATH_API, PASSWORD_RESET_PATH} from "@/constants/routes";
 import {useRouter} from "vue-router";
 import {api} from "@/boot/axios";
 import {QVueGlobals, useQuasar} from "quasar";
@@ -49,7 +49,7 @@ const handleSubmit = async () => {
     ).then(response => response.data)
 
     if (exists) {
-      await router.push({path: PASSWORD_CHANGE_PATH, query: {email: email.value}});
+      await router.push({path: PASSWORD_RESET_PATH, query: {email: email.value}});
     } else {
       $q.notify({
         type: 'negative',

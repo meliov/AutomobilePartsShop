@@ -116,7 +116,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new UserNotFoundException("User already exists");
         }
-        user.setStatus(UserStatus.CHANGE_PASSWORD);
+//        user.setStatus(UserStatus.CHANGE_PASSWORD);
         User updatedUser = userRepository.save(user);
 
         String link = hostAndPort + "/user/forgot-password-confirmation/";

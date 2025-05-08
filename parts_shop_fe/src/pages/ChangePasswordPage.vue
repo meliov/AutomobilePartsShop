@@ -101,7 +101,7 @@ import {useRoute, useRouter} from 'vue-router';
 import {AxiosError} from 'axios';
 import {api} from "@/boot/axios";
 import {API_CHANGE_PASSWORD_PATH, API_PASSWORD_RESET_PATH, HOME_PATH} from "@/constants/routes";
-// import {useAuthStore} from "@/stores/auth";
+import {useAuthStore} from "@/stores/auth";
 
 
 const $q = useQuasar();
@@ -109,7 +109,7 @@ const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 
-// const authStore = useAuthStore();
+const authStore = useAuthStore();
 const oldPassword = ref('');
 const newPassword = ref('');
 const confirmPassword = ref('');
@@ -120,8 +120,6 @@ const showConfirmPassword = ref(false);
 const success = ref(false);
 const email = ref<string | null>(null);
 const isResetPassword = ref(route.query.email != null && route.query.email !== '' && route.query.email !== undefined);
-console.log('hello', isResetPassword.value);
-console.log(route.query.email)
 
 
 
@@ -156,25 +154,15 @@ const handleSubmit = async () => {
   }
 
   try {
-    let message;
     if (isResetPassword.value) {
-      message = await resetPassword(email.value, newPassword.value);
+      await resetPassword(email.value, newPassword.value);
     } else {
-      message = await changePassword(oldPassword.value, newPassword.value);
+      await changePassword(oldPassword.value, newPassword.value);
     }
-    if (message) {
-      $q.notify({
-        type: 'positive',
-        message: message,
-        position: 'top',
-        timeout: 5000,
-        icon: 'check',
-      });
       oldPassword.value = '';
       newPassword.value = '';
       confirmPassword.value = '';
       success.value = true;
-    }
   } catch (error) {
     const axiosError = error as AxiosError<{ error: string }>;
     errorMessage.value = axiosError.response?.data?.error || t('changePassword.errorMessage') as string;
@@ -189,28 +177,38 @@ const handleSubmit = async () => {
 };
 
 const changePassword = async (oldPassword: string, newPassword: string) => {
-  try {
-    const response = await api.post(
+ await api.post(
       API_CHANGE_PASSWORD_PATH,
-      { oldPassword, newPassword },
-    );
-    return response.data.message;
-  } catch (error) {
-    $q.notify({
-      color: 'negative',
-      position: 'top',
-      timeout: 1000,
-      message: 'Failed to change password.',
-      icon: 'error',
+      { id: authStore.getUserFromStorage().id, oldPassword: oldPassword, newPassword: newPassword }
+    ).then(r => {
+      if (r.data) {
+        $q.notify({
+          color: 'positive',
+          position: 'right',
+          timeout: 3000,
+          message: "Password changed successfully.",
+          icon: 'check',
+        });
+        return r.data;
+      } else {
+        throw new Error('Failed to change password.');
+      }
+    }).catch(error => {
+      console.log(error)
+      $q.notify({
+        color: 'negative',
+        position: 'top',
+        timeout: 5000,
+        message: error.response.data || 'An error occurred while changing the password.',
+        icon: 'error',
+      });
+      throw error;
     });
-    throw error;
-  }
+
 };
 
 const resetPassword = async (email: string | null, newPassword: string) => {
   try {
-    console.log('email', email);
-    console.log('newPassword', newPassword);
     const response = await api.post<boolean>(API_PASSWORD_RESET_PATH, {
       email: email,
       password: newPassword,
