@@ -102,7 +102,19 @@ export interface User {
      username: string,
      profilePicture: string,
      address: string,
+     cardDetails: CardDetails | null,
 }
+
+export interface CardDetails {
+    cardNumber: string,
+    expiry: string,
+    cvv: string,
+}
+
+// cardNumber: string,
+//   cardHolderName: string,
+//   expirationDate: string,
+//   cvv: string,
 
 export interface UserSettings {
   language: MessageLanguages;

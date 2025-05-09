@@ -18,14 +18,13 @@ public class ClientUserDto {
     private String registrationDate;
 
     private String updateDate;
-    private String profilePicture;
-
-    public String getProfilePicture() {
-        return profilePicture;
+    private CardDetailsDto cardDetailsDto;
+    public CardDetailsDto getCardDetailsDto() {
+        return cardDetailsDto;
     }
 
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
+    public void setCardDetailsDto(CardDetailsDto cardDetailsDto) {
+        this.cardDetailsDto = cardDetailsDto;
     }
 
     public ClientUserDto() {
@@ -97,17 +96,6 @@ public class ClientUserDto {
         this.updateDate = updateDate;
     }
 
-    public Double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Double weight) {
-        if (weight == null) {
-            this.weight = 0.0;
-        } else {
-            this.weight = weight;
-        }
-    }
 
     @Override
     public String toString() {

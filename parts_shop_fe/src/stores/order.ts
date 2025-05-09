@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { IOrderForm, OrderDetails } from '@/types';
 import { storage } from '@/utils/storage';
+import {useAuthStore} from "@/stores/auth";
 
 export const useOrderStore = defineStore('order', () => {
   const orderForm = ref<IOrderForm>({
@@ -44,6 +45,17 @@ export const useOrderStore = defineStore('order', () => {
     const storedOrder = storage.get('orderForm');
     if (storedOrder) {
       orderForm.value = storedOrder;
+    }else{
+      const authStore = useAuthStore();
+      if (authStore.getUserFromStorage()) {
+        const user = authStore.getUserFromStorage();
+        orderForm.value.shipping = {
+          firstName: user.firstName || '',
+          lastName: user.lastName || '',
+          email: user.email || '',
+          address: user.address || '',
+        };
+      }
     }
   };
 

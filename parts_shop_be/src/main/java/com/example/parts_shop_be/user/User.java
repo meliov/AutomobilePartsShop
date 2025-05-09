@@ -31,12 +31,60 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String email;
 
-    @Lob
-    @Column(columnDefinition = "LONGTEXT")
-    private String profilePicture;
+    @Embedded
+    private CardDetails cardDetails;
 
+    @Embeddable
+    public class CardDetails {
+        private String cardNumber;
+        private String cardHolderName;
+        private String expirationDate;
+        private String cvv;
 
-    public User(String firstName, String lastName, String username, String password, LocalDateTime registrationDate, UserStatus status, String email,  String profilePicture, UserGender userGender) {
+        public CardDetails(String cardNumber, String cardHolderName, String expirationDate, String cvv) {
+            this.cardNumber = cardNumber;
+            this.cardHolderName = cardHolderName;
+            this.expirationDate = expirationDate;
+            this.cvv = cvv;
+        }
+
+        public CardDetails() {
+        }
+
+        public String getCardNumber() {
+            return cardNumber;
+        }
+
+        public void setCardNumber(String cardNumber) {
+            this.cardNumber = cardNumber;
+        }
+
+        public String getCardHolderName() {
+            return cardHolderName;
+        }
+
+        public void setCardHolderName(String cardHolderName) {
+            this.cardHolderName = cardHolderName;
+        }
+
+        public String getExpirationDate() {
+            return expirationDate;
+        }
+
+        public void setExpirationDate(String expirationDate) {
+            this.expirationDate = expirationDate;
+        }
+
+        public String getCvv() {
+            return cvv;
+        }
+
+        public void setCvv(String cvv) {
+            this.cvv = cvv;
+        }
+    }
+
+    public User(String firstName, String lastName, String username, String password, LocalDateTime registrationDate, UserStatus status, String email, UserGender userGender) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
@@ -44,14 +92,13 @@ public class User extends BaseEntity {
         this.registrationDate = registrationDate;
         this.status = status;
         this.email = email;
-
-        this.profilePicture = profilePicture;
         this.gender = userGender;
     }
 
     public User() {
 
     }
+
 
     public User(Long id) {
         super(id);
@@ -129,12 +176,12 @@ public class User extends BaseEntity {
         this.email = email;
     }
 
-    public String getProfilePicture() {
-        return profilePicture;
+
+    public CardDetails getCardDetails() {
+        return cardDetails;
     }
 
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
+    public void setCardDetails(CardDetails cardDetails) {
+        this.cardDetails = cardDetails;
     }
-
 }

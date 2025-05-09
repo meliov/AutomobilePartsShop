@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(updateUserDto.getFirstName());
         user.setGender(updateUserDto.getGender());
         user.setLastName(updateUserDto.getLastName());
-        user.setProfilePicture(updateUserDto.getProfilePicture());
+        user.setCardDetails(modelMapper.map(updateUserDto.getCardDetailsDto(), User.CardDetails.class));
         user.setUpdateDate(LocalDateTime.now());
         if (updateUserDto.getPassword() != null && updateUserDto.getPassword().length() >= 8) {
             user.setPassword(passwordEncoder.encode(updateUserDto.getPassword()));

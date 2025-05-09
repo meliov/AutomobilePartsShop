@@ -14,26 +14,83 @@ public class UpdateUserDto {
     private String email;
 
     private UserGender gender;
-    private Double weight;
 
     private String password;
-    private String profilePicture;
+
+    private CardDetailsDto cardDetailsDto;
 
     public UpdateUserDto() {
     }
 
 
-    public UpdateUserDto(Long id, String firstName, String lastName, String username, String password, String email, Double weightKg, String profilePicture, UserGender userGender) {
+    public UpdateUserDto(Long id, String firstName, String lastName, String username, String password, String email, UserGender userGender, CardDetailsDto cardDetailsDto) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.weight = weightKg;
-        this.profilePicture = profilePicture;
         this.gender = userGender;
         this.username = username;
         this.password = password;
+        this.cardDetailsDto = cardDetailsDto;
     }
+
+    public CardDetailsDto getCardDetailsDto() {
+        return cardDetailsDto;
+    }
+
+    public void setCardDetailsDto(CardDetailsDto cardDetailsDto) {
+        this.cardDetailsDto = cardDetailsDto;
+    }
+
+    class CardDetailsDto {
+        private String cardNumber;
+        private String cardHolderName;
+        private String expirationDate;
+        private String cvv;
+
+        public CardDetailsDto(String cardNumber, String cardHolderName, String expirationDate, String cvv) {
+            this.cardNumber = cardNumber;
+            this.cardHolderName = cardHolderName;
+            this.expirationDate = expirationDate;
+            this.cvv = cvv;
+        }
+
+        public CardDetailsDto() {
+        }
+
+        public String getCardNumber() {
+            return cardNumber;
+        }
+
+        public void setCardNumber(String cardNumber) {
+            this.cardNumber = cardNumber;
+        }
+
+        public String getCardHolderName() {
+            return cardHolderName;
+        }
+
+        public void setCardHolderName(String cardHolderName) {
+            this.cardHolderName = cardHolderName;
+        }
+
+        public String getExpirationDate() {
+            return expirationDate;
+        }
+
+        public void setExpirationDate(String expirationDate) {
+            this.expirationDate = expirationDate;
+        }
+
+        public String getCvv() {
+            return cvv;
+        }
+
+        public void setCvv(String cvv) {
+            this.cvv = cvv;
+        }
+    }
+
 
     public Long getId() {
         return id;
@@ -67,21 +124,6 @@ public class UpdateUserDto {
         this.email = email;
     }
 
-    public Double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Double weightKg) {
-        this.weight = weightKg;
-    }
-
-    public String getProfilePicture() {
-        return profilePicture;
-    }
-
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
-    }
 
     public UserGender getGender() {
         return gender;

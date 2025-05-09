@@ -103,19 +103,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, inject, reactive, watch } from 'vue';
-import { useQuasar } from 'quasar';
-import { useCartStore } from '../stores/cart';
-import { useOrderStore } from '../stores/order';
-import type { QVueGlobals } from 'quasar';
-import { useRouter } from 'vue-router';
-import { IOrderForm, OrderDetails } from '@/types';
-import { formatPrice } from '@/utils/currency';
+import {computed, inject, onMounted, reactive, ref, watch} from 'vue';
+import type {QVueGlobals} from 'quasar';
+import {useQuasar} from 'quasar';
+import {useCartStore} from '../stores/cart';
+import {useOrderStore} from '../stores/order';
+import {useRouter} from 'vue-router';
+import {IOrderForm, OrderDetails} from '@/types';
+import {formatPrice} from '@/utils/currency';
 import OrderConfirmationDialog from '@/components/OrderConfirmationDialog.vue';
-import { CART_PATH, ORDER_PATH } from '@/constants/routes';
+import {CART_PATH, ORDER_PATH} from '@/constants/routes';
 import OrderForm from '@/components/OrderForm.vue';
 import QButton from '@/components/base/QButton.vue';
-import {useAuthStore} from "@/stores/auth";
 
 const scrollToTop = inject('scrollToTop') as () => void;
 
@@ -123,7 +122,6 @@ const $q = useQuasar() as QVueGlobals;
 const cartStore = useCartStore();
 const orderStore = useOrderStore();
 const router = useRouter();
-const authStore = useAuthStore();
 
 
 const step = ref(1);
@@ -204,23 +202,11 @@ const viewCart = () => {
 };
 
 const shippingValid = (valid: boolean) => {
+  console.log('isShippingValid', valid);
   isShippingValid.value = valid;
 };
 const paymentValid = (valid: boolean) => {
   isPaymentValid.value = valid;
-};
-
-const validateForm = () => {
-  isShippingValid.value =
-    !!orderForm.shipping.firstName &&
-    !!orderForm.shipping.lastName &&
-    !!orderForm.shipping.email &&
-    !!orderForm.shipping.address;
-  isPaymentValid.value =
-    !!orderForm.payment?.method &&
-    !!orderForm.payment.cardDetails?.cardNumber &&
-    !!orderForm.payment.cardDetails.expiry &&
-    !!orderForm.payment.cardDetails.cvv;
 };
 
 watch(
@@ -235,24 +221,13 @@ watch(
         cvv: '',
       },
     };
-    validateForm();
   },
   { deep: true, immediate: true },
 );
 
 onMounted(() => {
   orderStore.loadOrder();
-  validateForm();
   scrollToTop();
-  if (authStore.getUserFromStorage()) {
-    const user = authStore.getUserFromStorage();
-    orderForm.shipping = {
-      firstName: user.firstName || '',
-      lastName: user.lastName || '',
-      email: user.email || '',
-      address: user.address || '',
-    };
-  }
 });
 </script>
 

@@ -11,6 +11,7 @@
         reactive-rules
         autofocus
         :rules="[required]"
+        @keyup="validateShippingForm"
       />
     </div>
     <div class="col-12 col-sm-6">
@@ -19,6 +20,7 @@
         :label="$t('checkout.lastName')"
         reactive-rules
         :rules="[required]"
+        @keyup="validateShippingForm"
       />
     </div>
     <div class="col-12">
@@ -26,23 +28,23 @@
         v-model="localShipping.email"
         :label="$t('checkout.email')"
         type="email"
-        lazy-rules
         :rules="[required, emailRules]"
+        @keyup="validateShippingForm"
       />
     </div>
     <div class="col-12">
       <q-input
         v-model="localShipping.address"
         :label="$t('checkout.address')"
-        lazy-rules
         :rules="[required]"
+        @keyup="validateShippingForm"
       />
     </div>
   </q-form>
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
+import {computed, nextTick, onMounted} from 'vue';
 import { useI18n } from 'vue-i18n';
 import { QFormInstance, ShippingDetails } from '@/types';
 
@@ -78,28 +80,20 @@ const emailRules = (val: string) => {
 };
 
 const validateShippingForm = async () => {
-  if (props.shippingFormRef) {
-    try {
+
       const firstNameValid = !!localShipping.value?.firstName;
       const lastNameValid = !!localShipping.value?.lastName;
       const emailValid = emailRules(localShipping.value?.email) === true;
       const addressValid = !!localShipping.value?.address;
 
       const formValid = firstNameValid && lastNameValid && emailValid && addressValid;
-
-      if (formValid) {
-        await props.shippingFormRef.validate();
-      } else {
-        emit('shipping-valid', false);
-        return;
-      }
-
-      emit('shipping-valid', formValid);
-    } catch {
-      emit('shipping-valid', false);
-    }
-  } else {
-    emit('shipping-valid', false);
-  }
+      console.log('validateShippingForm', formValid)
+      emit('shipping-valid', formValid)
 };
+
+//initial validaiton
+onMounted(async () => {
+  await nextTick(); // Wait for reactivity to stabilize
+  await validateShippingForm();
+});
 </script>

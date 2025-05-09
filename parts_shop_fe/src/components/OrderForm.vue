@@ -132,11 +132,13 @@ const localStep = computed({
 const localOrderForm = computed({
   get: () => props.orderForm,
   set: (value: IOrderForm) => {
+    console.log('localOrderForm')
     emit('update:orderForm', value);
   },
 });
 
 const handleShippingValidation = (valid: boolean) => {
+  console.log('handleShippingValidation', valid);
   isShippingValid.value = valid;
   emit('shipping-valid', valid);
 };
