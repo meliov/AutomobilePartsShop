@@ -104,9 +104,9 @@ export const useAuthStore = defineStore('auth', () => {
     storage.remove('refreshToken');
     storage.remove('user');
   };
-  const updateProfile = async (profileData: { username: string; email: string }) => {
+  const updateProfile = async (profileData: User) => {
     try {
-      const response = await api.put(API_USER_PATH, profileData);
+      const response = await api.put(API_USER_PATH, profileData);//updateUSerDtoMatch
       const updatedUser = response.data.user;
       user.value = {
         ...user.value,
@@ -125,7 +125,6 @@ export const useAuthStore = defineStore('auth', () => {
       throw error;
     }
   };
-
   return {
     login,
     register,

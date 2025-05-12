@@ -34,6 +34,38 @@
               :rules="[required, emailRules]"
               class="tw-w-full"
             />
+            <q-input
+              v-model="updatedFirstName"
+              :label="$t('profile.firstName')"
+              type="text"
+              dense
+              lazy-rules
+              :rules="[required]"
+              class="tw-w-full"
+            />
+            <q-input
+              v-model="updatedLastName"
+              :label="$t('profile.lastName')"
+              type="text"
+              dense
+              lazy-rules
+              :rules="[required]"
+              class="tw-w-full"
+            />
+            <q-input
+              v-model="updatedAddress"
+              :label="$t('profile.address')"
+              type="text"
+              dense
+              lazy-rules
+              :rules="[required]"
+              class="tw-w-full"
+            />
+            <CardDetailsForm
+
+              v-model="updatedCardDetails"
+              @valid="isCardDetailsValid = $event"
+            />
           </q-card-section>
 
           <div v-if="errorMessage" class="tw-text-red-500 tw-mb-4">{{ errorMessage }}</div>
@@ -74,6 +106,7 @@ import QButton from '@/components/base/QButton.vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { AxiosError } from 'axios';
+import CardDetailsForm from "@/components/card/CardDetailsForm.vue";
 
 const authStore = useAuthStore();
 const $q = useQuasar();
@@ -82,6 +115,11 @@ const { t } = useI18n();
 
 const updatedName = ref(authStore.user?.username || '');
 const updatedEmail = ref(authStore.user?.email || '');
+const updatedFirstName = ref(authStore.user?.firstName || '');
+const updatedLastName = ref(authStore.user?.lastName || '');
+const updatedAddress = ref(authStore.user?.address || '');
+const updatedCardDetails = ref(authStore.user?.cardDetails || { cardNumber: '', expiry: '', cvv: '' });
+const isCardDetailsValid = ref(false);
 const errorMessage = ref<string | null>(null);
 const success = ref(false);
 
@@ -91,10 +129,21 @@ const goBack = () => {
 
 const updateProfile = async () => {
   try {
+    if (authStore.user?.cardDetails && !isCardDetailsValid.value) {
+      errorMessage.value = t('errors.validation.invalidCardDetails');
+      return;
+    }
+
     const message = await authStore.updateProfile({
+      id: authStore.user?.id,
       username: updatedName.value,
       email: updatedEmail.value,
+      firstName: updatedFirstName.value,
+      lastName: updatedLastName.value,
+      address: updatedAddress.value,
+      cardDetails: updatedCardDetails.value,
     });
+
     $q.notify({
       type: 'positive',
       message: message,
@@ -106,7 +155,7 @@ const updateProfile = async () => {
   } catch (error) {
     const axiosError = error as AxiosError<{ error: string }>;
     errorMessage.value =
-      axiosError.response?.data?.error || 'Failed to change password. Please try again.';
+      axiosError.response?.data?.error || 'Failed to update profile. Please try again.';
     $q.notify({
       type: 'negative',
       message: errorMessage.value,
