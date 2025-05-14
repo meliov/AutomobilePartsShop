@@ -12,7 +12,7 @@ export const common = {
   currencyLabel: {
     USD: 'US Dollar',
     EUR: 'Euro',
-    RSD: 'Serbian Dinar',
+    BGN: 'Bulgarian Lev',
   },
   welcome: 'Welcome',
   yes: 'Yes',

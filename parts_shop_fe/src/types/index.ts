@@ -84,7 +84,7 @@ export interface LanguageOption {
   label: string;
 }
 
-export type Currency = 'USD' | 'EUR' | 'RSD';
+export type Currency = 'USD' | 'EUR' | 'BGN';
 
 export type Theme = 'light' | 'dark';
 

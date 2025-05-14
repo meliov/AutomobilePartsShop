@@ -11,7 +11,7 @@ export const languages: LanguageOption[] = [
 export const currencies: CurrencyOption[] = [
   { value: 'USD', label: 'US Dollar' },
   { value: 'EUR', label: 'Euro' },
-  { value: 'RSD', label: 'Serbian Dinar' },
+  { value: 'BGN', label: 'Bulgarian Lev' },
 ];
 
 export const i18nConfig = {
