@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import {ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import {useI18n} from 'vue-i18n';
 import {PaymentDetails, QFormInstance} from '@/types';
 
@@ -92,6 +92,7 @@ const validatePaymentForm = () => {
   }
 };
 
+
 const required = (val: string) => !!val || t('errors.validation.required');
 const cardNumberRules = (val: string) =>
   /^\d{16}$/.test(val.replace(/\s+/g, '')) || t('errors.validation.invalidCardNumber');
@@ -117,4 +118,8 @@ const cvvRules = (val: string) => {
   }
   return true;
 };
+
+onMounted(() => {
+  validatePaymentForm()
+})
 </script>

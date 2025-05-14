@@ -30,6 +30,33 @@ export const useOrderStore = defineStore('order', () => {
     storeOrder();
   };
 
+  const loadPayment = () => {
+    const authStore = useAuthStore();
+    if (authStore.getUserFromStorage()) {
+      const user = authStore.getUserFromStorage();
+      orderForm.value.payment = {
+        method: 'card',
+        cardDetails: {
+          cardNumber: user.cardDetails?.cardNumber || '',
+          cardHolderName: user.cardDetails?.cardHolderName || '',
+          expirationDate: user.cardDetails?.expirationDate || '',
+          cvv: user.cardDetails?.cvv || '',
+        },
+      };
+    } else {
+      orderForm.value.payment = {
+        method: 'card',
+        cardDetails: {
+          cardNumber: '',
+          cardHolderName: '',
+          expirationDate: '',
+          cvv: '',
+        },
+      };
+    }
+    storeOrder()
+
+  }
   const setPaymentForm = (paymentData: IOrderForm['payment']) => {
     orderForm.value.payment = paymentData ?? {
       method: 'card',
@@ -111,5 +138,6 @@ export const useOrderStore = defineStore('order', () => {
     storeOrder,
     addOrderToHistory,
     loadOrderHistory,
+    loadPayment
   };
 });

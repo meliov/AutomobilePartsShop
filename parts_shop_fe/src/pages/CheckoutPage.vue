@@ -183,6 +183,7 @@ const nextStep = () => {
   if (step.value === 1 && isShippingValid.value) {
     orderStore.setShippingForm(orderForm.shipping);
     step.value++;
+    orderStore.loadPayment()
     scrollToTop();
   } else if (step.value === 2 && isPaymentValid.value) {
     orderStore.setPaymentForm(orderForm.payment);
