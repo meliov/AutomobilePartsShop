@@ -1,8 +1,10 @@
 package com.example.parts_shop_be.user.dto;
 
 import com.example.parts_shop_be.user.UserGender;
+import com.example.parts_shop_be.user.card_details.CardDetailsDto;
 
 public class ClientUserDto {
+
     private Long id;
 
     private String email;
@@ -12,21 +14,9 @@ public class ClientUserDto {
 
     private String username;
 
-    private Double weight;
+    private String address;
 
-    private UserGender gender;
-    private String registrationDate;
-
-    private String updateDate;
-    private CardDetailsDto cardDetailsDto;
-    public CardDetailsDto getCardDetailsDto() {
-        return cardDetailsDto;
-    }
-
-    public void setCardDetailsDto(CardDetailsDto cardDetailsDto) {
-        this.cardDetailsDto = cardDetailsDto;
-    }
-
+    private CardDetailsDto cardDetails;
     public ClientUserDto() {
     }
 
@@ -71,31 +61,21 @@ public class ClientUserDto {
         this.username = username;
     }
 
-    public String getRegistrationDate() {
-        return registrationDate;
+    public String getAddress() {
+        return address;
     }
 
-    public void setRegistrationDate(String registrationDate) {
-        this.registrationDate = registrationDate;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public UserGender getGender() {
-        return gender;
+    public CardDetailsDto getCardDetails() {
+        return cardDetails;
     }
 
-    public void setGender(UserGender gender) {
-        this.gender = gender;
+    public void setCardDetails(CardDetailsDto cardDetails) {
+        this.cardDetails = cardDetails;
     }
-
-
-    public String getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(String updateDate) {
-        this.updateDate = updateDate;
-    }
-
 
     @Override
     public String toString() {

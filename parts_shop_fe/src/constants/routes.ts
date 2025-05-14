@@ -35,5 +35,8 @@ export const API_REGISTER_PATH = '/user/register';
 export const CHECK_EMAIL_PATH_API = '/user/email-exists';
 export const API_LOGIN_PATH = '/api/login';
 export const API_USER_PATH = '/user/get';
+export const API_CARD_DETAILS_UPDATE_PATH = '/user/update-card-details';
+export const API_USER_UPDATE_PATH = '/user/update';
 export const API_CHANGE_PASSWORD_PATH = '/user/password-change';
 export const API_PASSWORD_RESET_PATH = '/user/reset-password';
+

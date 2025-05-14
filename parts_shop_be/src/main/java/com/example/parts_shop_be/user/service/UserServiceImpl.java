@@ -1,6 +1,8 @@
 package com.example.parts_shop_be.user.service;
 
 import com.example.parts_shop_be.user.*;
+import com.example.parts_shop_be.user.card_details.CardDetails;
+import com.example.parts_shop_be.user.card_details.CardDetailsDto;
 import com.example.parts_shop_be.user.dto.*;
 import com.example.parts_shop_be.user.forgot_password_object.ForgotPasswordObject;
 import com.example.parts_shop_be.user.forgot_password_object.ForgotPasswordObjectService;
@@ -42,16 +44,24 @@ public class UserServiceImpl implements UserService {
     public ClientUserDto updateUser(UpdateUserDto updateUserDto) {
         User user = userRepository.findById(updateUserDto.getId()).get();
         user.setFirstName(updateUserDto.getFirstName());
-        user.setGender(updateUserDto.getGender());
         user.setLastName(updateUserDto.getLastName());
-        user.setCardDetails(modelMapper.map(updateUserDto.getCardDetailsDto(), User.CardDetails.class));
         user.setUpdateDate(LocalDateTime.now());
-        if (updateUserDto.getPassword() != null && updateUserDto.getPassword().length() >= 8) {
-            user.setPassword(passwordEncoder.encode(updateUserDto.getPassword()));
-        }
+        user.setAddress(updateUserDto.getAddress());
         user.setUsername(updateUserDto.getUsername());
 
         return modelMapper.map(userRepository.save(user), ClientUserDto.class);
+    }
+
+    @Override
+    public ClientUserDto updateUserCardDetails(Long userId, CardDetailsDto cardDetailsDto) throws UserNotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        user.setCardDetails(modelMapper.map(cardDetailsDto, CardDetails.class));
+
+        User updatedUser = userRepository.save(user);
+
+        return modelMapper.map(updatedUser, ClientUserDto.class);
     }
 
     @Override
@@ -71,7 +81,6 @@ public class UserServiceImpl implements UserService {
         user.setLastName("");
         user.setStatus(userStatus);
         user.setRegistrationDate(LocalDateTime.now());
-        user.setGender(UserGender.NONE);
 
         User newUser = userRepository.save(user);
         String link = hostAndPort + "/user/signup-confirmation/";

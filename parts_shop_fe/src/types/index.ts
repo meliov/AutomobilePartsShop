@@ -34,9 +34,10 @@ export interface OrderDetails {
 }
 
 export interface CardDetails {
-  cardNumber: string;
-  expiry: string;
-  cvv: string;
+  cardNumber: string,
+  cardHolderName: string,
+  expirationDate: string,
+  cvv: string,
 }
 
 export interface QFormInstance extends ComponentPublicInstance {
@@ -103,17 +104,22 @@ export interface User {
      address: string,
      cardDetails: CardDetails | null,
 }
-
-export interface CardDetails {
-    cardNumber: string,
-    expiry: string,
-    cvv: string,
+export interface UpdateUserDto {
+     id: number,
+     email: string,
+     firstName: string,
+     lastName: string,
+     username: string,
+     address: string,
 }
 
-// cardNumber: string,
-//   cardHolderName: string,
-//   expirationDate: string,
-//   cvv: string,
+export interface UpdateCardDetailsDto {
+  cardNumber: string,
+  cardHolderName: string,
+  expirationDate: string,
+  cvv: string,
+}
+
 
 export interface UserSettings {
   language: MessageLanguages;

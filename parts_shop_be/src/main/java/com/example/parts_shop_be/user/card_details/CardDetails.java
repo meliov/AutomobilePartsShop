@@ -1,19 +1,13 @@
-package com.example.parts_shop_be.user.dto;
+package com.example.parts_shop_be.user.card_details;
 
-class CardDetailsDto {
+public class CardDetails {
     private String cardNumber;
     private String cardHolderName;
     private String expirationDate;
     private String cvv;
 
-    public CardDetailsDto(String cardNumber, String cardHolderName, String expirationDate, String cvv) {
-        this.cardNumber = cardNumber;
-        this.cardHolderName = cardHolderName;
-        this.expirationDate = expirationDate;
-        this.cvv = cvv;
-    }
 
-    public CardDetailsDto() {
+    public CardDetails() {
     }
 
     public String getCardNumber() {

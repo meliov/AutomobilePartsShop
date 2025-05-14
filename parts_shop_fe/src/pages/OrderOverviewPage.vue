@@ -116,9 +116,19 @@
                   <q-item v-if="orderStore.orderForm.payment?.method === 'card'">
                     <q-item-section>
                       <q-item-label>
+                        {{ $t('checkout.cardHolderName') }}:
+                        <span class="tw-text-xs">{{
+                            orderStore.orderForm.payment?.cardDetails?.cardHolderName
+                          }}</span>
+                      </q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-item v-if="orderStore.orderForm.payment?.method === 'card'">
+                    <q-item-section>
+                      <q-item-label>
                         {{ $t('checkout.expiry') }}:
                         <span class="tw-text-xs">{{
-                          orderStore.orderForm.payment?.cardDetails?.expiry
+                          orderStore.orderForm.payment?.cardDetails?.expirationDate
                         }}</span>
                       </q-item-label>
                     </q-item-section>

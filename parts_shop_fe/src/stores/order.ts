@@ -16,7 +16,8 @@ export const useOrderStore = defineStore('order', () => {
       method: 'card',
       cardDetails: {
         cardNumber: '',
-        expiry: '',
+        cardHolderName: '',
+        expirationDate: '',
         cvv: '',
       },
     },
@@ -77,7 +78,8 @@ export const useOrderStore = defineStore('order', () => {
         method: 'card',
         cardDetails: {
           cardNumber: '',
-          expiry: '',
+          cardHolderName: '',
+          expirationDate: '',
           cvv: '',
         },
       },

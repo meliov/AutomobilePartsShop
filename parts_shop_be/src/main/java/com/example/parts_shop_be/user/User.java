@@ -1,6 +1,8 @@
 package com.example.parts_shop_be.user;
 
 
+import com.example.parts_shop_be.user.card_details.CardDetails;
+import com.example.parts_shop_be.user.card_details.CardDetailsConverter;
 import com.example.parts_shop_be.utils.BaseEntity;
 
 import javax.persistence.*;
@@ -26,65 +28,15 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
-    @Enumerated(EnumType.STRING)
-    private UserGender gender;
     @Column(nullable = false)
     private String email;
 
-    @Embedded
+    @Convert(converter = CardDetailsConverter.class)
     private CardDetails cardDetails;
 
-    @Embeddable
-    public class CardDetails {
-        private String cardNumber;
-        private String cardHolderName;
-        private String expirationDate;
-        private String cvv;
+    private String address;
 
-        public CardDetails(String cardNumber, String cardHolderName, String expirationDate, String cvv) {
-            this.cardNumber = cardNumber;
-            this.cardHolderName = cardHolderName;
-            this.expirationDate = expirationDate;
-            this.cvv = cvv;
-        }
-
-        public CardDetails() {
-        }
-
-        public String getCardNumber() {
-            return cardNumber;
-        }
-
-        public void setCardNumber(String cardNumber) {
-            this.cardNumber = cardNumber;
-        }
-
-        public String getCardHolderName() {
-            return cardHolderName;
-        }
-
-        public void setCardHolderName(String cardHolderName) {
-            this.cardHolderName = cardHolderName;
-        }
-
-        public String getExpirationDate() {
-            return expirationDate;
-        }
-
-        public void setExpirationDate(String expirationDate) {
-            this.expirationDate = expirationDate;
-        }
-
-        public String getCvv() {
-            return cvv;
-        }
-
-        public void setCvv(String cvv) {
-            this.cvv = cvv;
-        }
-    }
-
-    public User(String firstName, String lastName, String username, String password, LocalDateTime registrationDate, UserStatus status, String email, UserGender userGender) {
+    public User(String firstName, String lastName, String username, String password, LocalDateTime registrationDate, UserStatus status, String email, String address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
@@ -92,7 +44,7 @@ public class User extends BaseEntity {
         this.registrationDate = registrationDate;
         this.status = status;
         this.email = email;
-        this.gender = userGender;
+        this.address = address;
     }
 
     public User() {
@@ -160,13 +112,6 @@ public class User extends BaseEntity {
         this.status = status;
     }
 
-    public UserGender getGender() {
-        return gender;
-    }
-
-    public void setGender(UserGender gender) {
-        this.gender = gender;
-    }
 
     public String getEmail() {
         return email;
@@ -183,5 +128,13 @@ public class User extends BaseEntity {
 
     public void setCardDetails(CardDetails cardDetails) {
         this.cardDetails = cardDetails;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

@@ -6,6 +6,7 @@ export const checkout = {
   address: 'Address',
   payment: 'Payment',
   cardNumber: 'Card Number',
+  cardHolderName: 'Card Holder Name',
   orderSummary: 'Order Summary',
   qty: 'Qty',
   total: 'Total',

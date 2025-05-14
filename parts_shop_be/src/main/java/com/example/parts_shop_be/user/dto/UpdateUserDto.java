@@ -13,83 +13,25 @@ public class UpdateUserDto {
 
     private String email;
 
-    private UserGender gender;
+    private String address;
 
-    private String password;
-
-    private CardDetailsDto cardDetailsDto;
 
     public UpdateUserDto() {
     }
 
 
-    public UpdateUserDto(Long id, String firstName, String lastName, String username, String password, String email, UserGender userGender, CardDetailsDto cardDetailsDto) {
+    public UpdateUserDto(Long id, String firstName, String lastName, String username, String address, String email) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.gender = userGender;
         this.username = username;
-        this.password = password;
-        this.cardDetailsDto = cardDetailsDto;
+        this.address = address;
     }
 
-    public CardDetailsDto getCardDetailsDto() {
-        return cardDetailsDto;
-    }
 
-    public void setCardDetailsDto(CardDetailsDto cardDetailsDto) {
-        this.cardDetailsDto = cardDetailsDto;
-    }
 
-    class CardDetailsDto {
-        private String cardNumber;
-        private String cardHolderName;
-        private String expirationDate;
-        private String cvv;
 
-        public CardDetailsDto(String cardNumber, String cardHolderName, String expirationDate, String cvv) {
-            this.cardNumber = cardNumber;
-            this.cardHolderName = cardHolderName;
-            this.expirationDate = expirationDate;
-            this.cvv = cvv;
-        }
-
-        public CardDetailsDto() {
-        }
-
-        public String getCardNumber() {
-            return cardNumber;
-        }
-
-        public void setCardNumber(String cardNumber) {
-            this.cardNumber = cardNumber;
-        }
-
-        public String getCardHolderName() {
-            return cardHolderName;
-        }
-
-        public void setCardHolderName(String cardHolderName) {
-            this.cardHolderName = cardHolderName;
-        }
-
-        public String getExpirationDate() {
-            return expirationDate;
-        }
-
-        public void setExpirationDate(String expirationDate) {
-            this.expirationDate = expirationDate;
-        }
-
-        public String getCvv() {
-            return cvv;
-        }
-
-        public void setCvv(String cvv) {
-            this.cvv = cvv;
-        }
-    }
 
 
     public Long getId() {
@@ -125,13 +67,6 @@ public class UpdateUserDto {
     }
 
 
-    public UserGender getGender() {
-        return gender;
-    }
-
-    public void setGender(UserGender gender) {
-        this.gender = gender;
-    }
 
     public String getUsername() {
         return username;
@@ -141,11 +76,11 @@ public class UpdateUserDto {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getAddress() {
+        return address;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

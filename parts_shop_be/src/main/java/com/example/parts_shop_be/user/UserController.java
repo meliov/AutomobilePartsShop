@@ -1,5 +1,6 @@
 package com.example.parts_shop_be.user;
 
+import com.example.parts_shop_be.user.card_details.CardDetailsDto;
 import com.example.parts_shop_be.user.dto.*;
 import com.example.parts_shop_be.user.service.UserService;
 import com.example.parts_shop_be.utils.exception.UserAlreadyPresentException;
@@ -112,11 +113,19 @@ class UserController {
         );
     }
 
-    @PostMapping("/update")
-    public ResponseEntity<Object> updateUser(@RequestBody UpdateUserDto updateUserDto) {
+    @PutMapping("/update")
+    public ResponseEntity<ClientUserDto> updateUser(@RequestBody UpdateUserDto updateUserDto) {
         logger.debug("in updateUser for user:" + updateUserDto.getEmail());
         return ResponseEntity.ok(
                 userService.updateUser(updateUserDto)
+        );
+    }
+
+    @PutMapping("/update-card-details/{userId}")
+    public ResponseEntity<ClientUserDto> updateUserCardDetails(@PathVariable Long userId, @RequestBody CardDetailsDto cardDetailsDto) throws UserNotFoundException {
+        logger.debug("in updateUserCardDetails for user:" + userId);
+        return ResponseEntity.ok(
+                userService.updateUserCardDetails(userId, cardDetailsDto)
         );
     }
 

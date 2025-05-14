@@ -1,5 +1,5 @@
 <template>
-  <q-form ref="cardFormRef" greedy  @submit.prevent="submit">
+  <q-form greedy @submit="submit">
     <div class="col-12">
       <q-input
         v-model="cardDetails.cardNumber"
@@ -12,7 +12,16 @@
     </div>
     <div class="col-6">
       <q-input
-        v-model="cardDetails.expiry"
+        v-model="cardDetails.cardHolderName"
+        :label="$t('profile.cardHolderName')"
+        :rules="[required, cardHolderNameRules]"
+        dense
+        lazy-rules
+      />
+    </div>
+    <div class="col-6">
+      <q-input
+        v-model="cardDetails.expirationDate"
         :label="$t('profile.expiry')"
         mask="##/##"
         :rules="[required, expiryRules]"
@@ -32,17 +41,17 @@
     </div>
     <q-btn
       type="submit"
-      :label="$t('profile.validateCardDetails')"
-      class="tw-mt-4"
+      :label="$t('profile.updateCard')"
+      class="!tw-w-full !tw-py-2.5"
       color="primary"
     />
   </q-form>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { CardDetails } from '@/types';
+import {ref} from 'vue';
+import {useI18n} from 'vue-i18n';
+import {CardDetails} from '@/types';
 
 const props = defineProps({
   modelValue: {
@@ -51,21 +60,20 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['update:modelValue', 'valid']);
+const emit = defineEmits<{
+  (event: 'update:modelValue', value: CardDetails): void;
+}>();
 const { t } = useI18n();
 
-const cardFormRef = ref();
 
-const cardDetails = ref({
-  cardNumber: props.modelValue.cardNumber || '',
-  expiry: props.modelValue.expiry || '',
-  cvv: props.modelValue.cvv || '',
-});
+const cardDetails = ref({ ...props.modelValue });
 
 const required = (val: string) => !!val || t('errors.validation.required');
 
 const cardNumberRules = (val: string) =>
   /^\d{16}$/.test(val.replace(/\s+/g, '')) || t('errors.validation.invalidCardNumber');
+const cardHolderNameRules = (val: string) =>
+  /^[a-zA-Z\s]+$/.test(val) || t('errors.validation.invalidCardHolderName');
 
 const expiryRules = (val: string) => {
   const [month, year] = val.split('/').map(Number);
@@ -86,8 +94,8 @@ const cvvRules = (val: string) =>
   /^\d{3}$/.test(val) || t('errors.validation.invalidCVV');
 
 const submit = () => {
-  // Only called if form is valid
+  // console.log('Card details submitted:', cardDetails.value);
   emit('update:modelValue', cardDetails.value);
-  emit('valid');
 };
+
 </script>

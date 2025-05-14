@@ -17,7 +17,15 @@
     </div>
     <div class="col-6">
       <q-input
-        v-model="cardRef.cardDetails.expiry"
+        v-model="cardRef.cardDetails.cardHolderName"
+        :label="$t('checkout.cardHolderName')"
+        :rules="[required, cardHolderNameRules]"
+        @keyup="emitValues()"
+      />
+    </div>
+    <div class="col-6">
+      <q-input
+        v-model="cardRef.cardDetails.expirationDate"
         label="MM/YY"
         mask="##/##"
         :rules="[required, expiryRules]"
@@ -58,8 +66,9 @@ const { t } = useI18n();
 const cardRef = ref({
   ...props.paymentForm,
   cardDetails: {
-    cardNumber: props.paymentForm.cardDetails?.cardNumber || '',
-    expiry: props.paymentForm.cardDetails?.expiry || '',
+    cardNumber:  props.paymentForm.cardDetails?.cardNumber || '',
+    cardHolderName:  props.paymentForm.cardDetails?.cardHolderName || '',
+    expirationDate: props.paymentForm.cardDetails?.expirationDate || '',
     cvv: props.paymentForm.cardDetails?.cvv || '',
   },
 })
@@ -86,6 +95,8 @@ const validatePaymentForm = () => {
 const required = (val: string) => !!val || t('errors.validation.required');
 const cardNumberRules = (val: string) =>
   /^\d{16}$/.test(val.replace(/\s+/g, '')) || t('errors.validation.invalidCardNumber');
+const cardHolderNameRules = (val: string) =>
+  /^[a-zA-Z\s]+$/.test(val) || t('errors.validation.invalidCardHolderName');
 const expiryRules = (val: string) => {
   const [month, year] = val.split('/').map(Number);
   if (!month || !year) return t('errors.validation.invalidExpiryDate');

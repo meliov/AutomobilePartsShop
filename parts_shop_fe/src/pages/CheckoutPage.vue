@@ -140,7 +140,8 @@ const orderForm = reactive<IOrderForm>({
     method: 'card',
     cardDetails: {
       cardNumber: '',
-      expiry: '',
+      cardHolderName: '',
+      expirationDate: '',
       cvv: '',
     },
   },

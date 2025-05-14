@@ -1,8 +1,10 @@
 import {api} from '@/boot/axios';
 import {
+  API_CARD_DETAILS_UPDATE_PATH,
   API_LOGIN_PATH,
   API_REGISTER_PATH,
   API_USER_PATH,
+  API_USER_UPDATE_PATH,
   CHECK_EMAIL_PATH_API,
 } from '@/constants/routes';
 import {storage} from '@/utils/storage';
@@ -10,7 +12,7 @@ import {defineStore} from 'pinia';
 import {Ref, ref} from 'vue';
 import {QVueGlobals, useQuasar} from "quasar";
 import {CreateUserView} from "@/models/CreateUserView";
-import {User} from "@/types";
+import {UpdateCardDetailsDto, UpdateUserDto, User} from "@/types";
 
 
 export const useAuthStore = defineStore('auth', () => {
@@ -30,6 +32,7 @@ export const useAuthStore = defineStore('auth', () => {
       }
 
       const response = await api.get(`${API_USER_PATH}/${(user.value as User | null)?.id}`);
+      console.log("Fetched user data:", response.data);
       user.value = response.data as User;
       storage.set('user', user.value, {
         expiration: USER_EXPIRATION,
@@ -104,15 +107,11 @@ export const useAuthStore = defineStore('auth', () => {
     storage.remove('refreshToken');
     storage.remove('user');
   };
-  const updateProfile = async (profileData: User) => {
+  const updateProfile = async (profileData: UpdateUserDto) => {
     try {
-      const response = await api.put(API_USER_PATH, profileData);//updateUSerDtoMatch
-      const updatedUser = response.data.user;
-      user.value = {
-        ...user.value,
-        username: updatedUser.username,
-        email: updatedUser.email,
-      };
+      const response = await api.put(API_USER_UPDATE_PATH, profileData);//updateUSerDtoMatch
+      user.value = response.data as User;
+
       storage.set('user', {
         ...user.value,
         timestamp: Date.now(),
@@ -125,6 +124,24 @@ export const useAuthStore = defineStore('auth', () => {
       throw error;
     }
   };
+
+  const updateUserCard = async (cardData: UpdateCardDetailsDto) => {
+    try {
+      const response = await api.put(`${API_CARD_DETAILS_UPDATE_PATH}/${getUserFromStorage().id}`, cardData);
+      user.value = response.data as User;
+      storage.set('user', {
+        ...user.value,
+        timestamp: Date.now(),
+        version: '1.0',
+        expiration: USER_EXPIRATION,
+      });
+      return response.data.message;
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+      throw error;
+    }
+  };
+
   return {
     login,
     register,
@@ -133,6 +150,7 @@ export const useAuthStore = defineStore('auth', () => {
     updateProfile,
     isLoggedIn,
     user,
-    getUserFromStorage
+    getUserFromStorage,
+    updateUserCard
   };
 });

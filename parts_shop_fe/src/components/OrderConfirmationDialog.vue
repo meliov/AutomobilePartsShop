@@ -22,7 +22,7 @@
               {{ form.payment && form.payment.cardDetails?.cardNumber.slice(-4) }}
             </p>
             <p class="q-mb-none">
-              {{ $t('checkout.expiry') }}: {{ form.payment?.cardDetails?.expiry }}
+              {{ $t('checkout.expiry') }}: {{ form.payment?.cardDetails?.expirationDate }}
             </p>
           </div>
 

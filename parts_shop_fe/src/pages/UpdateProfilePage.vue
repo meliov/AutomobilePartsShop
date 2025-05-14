@@ -5,7 +5,7 @@
         <h4 class="tw-text-3xl tw-text-center tw-mb-8 tw-font-semibold tw-font-serif">
           {{ $t('profile.title') }}
         </h4>
-        <q-form class="!tw-w-full" @submit.prevent="updateProfile">
+        <q-form greedy class="!tw-w-full" @submit.prevent="updateProfile">
           <q-card-section v-if="success">
             <div class="tw-w-full tw-flex tw-justify-center tw-items-center">
               {{ t('profile.successMessage') }}
@@ -61,11 +61,6 @@
               :rules="[required]"
               class="tw-w-full"
             />
-            <CardDetailsForm
-
-              v-model="updatedCardDetails"
-              @valid="isCardDetailsValid = $event"
-            />
           </q-card-section>
 
           <div v-if="errorMessage" class="tw-text-red-500 tw-mb-4">{{ errorMessage }}</div>
@@ -88,9 +83,18 @@
               v-if="success"
               secondary
               :label="$t('profile.goBack')"
-              class="!tw-w-full !tw-py-2.5"
+              class="!tw-w-full !tw-py-2.5 q-mb-lg"
               @click="goBack"
             />
+            <q-expansion-item
+              v-if="!success"
+              v-model="isCardDetailsVisible"
+              :label="$t('profile.cardDetails')"
+              expand-separator
+              class="q-mt-lg"
+            >
+              <CardDetailsForm v-model:model-value="updatedCardDetails"/>
+            </q-expansion-item>
           </div>
         </q-form>
       </q-card>
@@ -99,7 +103,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import {ref, watch} from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useQuasar } from 'quasar';
 import QButton from '@/components/base/QButton.vue';
@@ -107,6 +111,7 @@ import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { AxiosError } from 'axios';
 import CardDetailsForm from "@/components/card/CardDetailsForm.vue";
+import {CardDetails} from "@/types";
 
 const authStore = useAuthStore();
 const $q = useQuasar();
@@ -118,22 +123,52 @@ const updatedEmail = ref(authStore.user?.email || '');
 const updatedFirstName = ref(authStore.user?.firstName || '');
 const updatedLastName = ref(authStore.user?.lastName || '');
 const updatedAddress = ref(authStore.user?.address || '');
-const updatedCardDetails = ref(authStore.user?.cardDetails || { cardNumber: '', expiry: '', cvv: '' });
-const isCardDetailsValid = ref(false);
+const updatedCardDetails = ref(authStore.user?.cardDetails || {
+    cardNumber: '',
+    cardHolderName: '',
+    expirationDate: '',
+    cvv: '123',
+},);
 const errorMessage = ref<string | null>(null);
 const success = ref(false);
-
+const isCardDetailsVisible = ref(false);
 const goBack = () => {
   router.back();
 };
 
+const updateCardDetails = async (cardDetails: CardDetails) => {
+    try {
+      const message = await authStore.updateUserCard({
+        ...cardDetails
+      }).then(() => {
+        return "Card details updated successfully";
+      });
+      success.value = true;
+      $q.notify({
+        type: 'positive',
+        message: message,
+        position: 'top',
+        timeout: 5000,
+        icon: 'check',
+      })
+    }catch (error) {
+      const axiosError = error as AxiosError<{ error: string }>;
+      errorMessage.value =
+        axiosError.response?.data?.error || 'Failed to update card details. Please try again.';
+      $q.notify({
+        type: 'negative',
+        message: errorMessage.value,
+        position: 'top',
+        timeout: 5000,
+        icon: 'error',
+      });
+
+  }
+};
+
+
 const updateProfile = async () => {
   try {
-    if (authStore.user?.cardDetails && !isCardDetailsValid.value) {
-      errorMessage.value = t('errors.validation.invalidCardDetails');
-      return;
-    }
-
     const message = await authStore.updateProfile({
       id: authStore.user?.id,
       username: updatedName.value,
@@ -141,7 +176,6 @@ const updateProfile = async () => {
       firstName: updatedFirstName.value,
       lastName: updatedLastName.value,
       address: updatedAddress.value,
-      cardDetails: updatedCardDetails.value,
     });
 
     $q.notify({
@@ -171,4 +205,12 @@ const emailRules = (val: string) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(val) ? true : t('errors.validation.invalidEmail');
 };
+
+watch(() => updatedCardDetails.value, async () =>{
+  console.log('updatedCardDetails', updatedCardDetails.value);
+  await updateCardDetails(updatedCardDetails.value);
+})
+
 </script>
+
+
