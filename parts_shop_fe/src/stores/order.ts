@@ -139,7 +139,6 @@ export const useOrderStore = defineStore('order', () => {
         total: order.total,
         shippingAddress: `${order.shippingAddress}`,
         paymentMethod: order.paymentMethod,
-        trackingNumber: '',
       }).then(r => r.data);
       if (savedOrder) {
         $q.notify({ type: 'positive', message: 'Order saved successfully!' });

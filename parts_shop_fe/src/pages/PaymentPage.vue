@@ -20,7 +20,7 @@
 
     <!-- Total Price -->
     <div class="q-gutter-md">
-      <div class="text-subtitle1 text-weight-bold">{{ $t('orderOverview.total') }}</div>
+      <div class="text-subtitle1 text-weight-bold">{{ $t('orderOverview') }}</div>
       <div class="text-subtitle1 text-weight-bold">{{ formatPrice(totalPrice) }}</div>
     </div>
 

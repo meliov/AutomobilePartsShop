@@ -209,7 +209,7 @@ const isDark = computed(() => $q.dark.isActive);
 const color = computed(() => ($q.dark.isActive ? 'white' : 'black'));
 const text = computed(() => ($q.dark.isActive ? 'black' : 'white'));
 const totalPrice = computed(() =>
-  cartStore.items.reduce((total, item) => total + item.price * item.quantity, 0),
+  cartStore.items.reduce((total, item) => total + (item.discountedPrice ?? item.price) * item.quantity, 0),
 );
 
 const submitOrder = () => {
@@ -224,7 +224,7 @@ const submitOrder = () => {
       date: new Date().toISOString(),
       shippingAddress: `${orderStore.orderForm.shipping.address}`,
       paymentMethod: orderStore.orderForm.payment.method,
-      trackingNumber: '',
+      trackingNumber: 0,
     };
     console.log('mangava tu')
     console.log(orderDetails)

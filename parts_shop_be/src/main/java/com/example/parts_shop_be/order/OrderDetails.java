@@ -10,8 +10,13 @@ import java.util.List;
 @Entity
 public class OrderDetails extends BaseEntity {
 
-
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "order_product",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"order_id", "product_id"})
+    )
     private List<Product> items;
 
     private Double total;
@@ -22,7 +27,7 @@ public class OrderDetails extends BaseEntity {
 
     private String paymentMethod;
 
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "tracking_number", unique = true)
     private Long trackingNumber;
 
     public List<Product> getItems() {

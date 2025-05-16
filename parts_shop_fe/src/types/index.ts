@@ -29,7 +29,7 @@ export interface OrderDetails {
   date: string;
   shippingAddress: string;
   paymentMethod: string;
-  trackingNumber?: string;
+  trackingNumber?: number;
 }
 
 export interface CardDetails {

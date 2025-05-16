@@ -235,26 +235,24 @@ const fetchProduct = async () => {
       }
     }
 
-    const response = await api.get(`${baseUrl}${PRODUCTS_PATH}/${slug}`);
-    if (response.status !== 200) {
+    const response = await api.get<Promise<Product>>(`${baseUrl}${PRODUCTS_PATH}/${slug}`).then(r => r.data).catch(() =>{
       throw new Error('Failed to fetch product');
-    }
+    });
 
-    const { data } = response;
 
-    product.value = {
-      id: data.id,
-      name: data.name,
-      title: data.title || data.name,
-      price: Number(data.price),
-      description: data.description,
-      image: data.image,
-      additionalImages: data.additionalImages || [],
-      category: data.category,
-      discount: data.discount || 0,
-      discountedPrice: data.price - (data.price * (data.discount || 10)) / 100,
-      quantity: data.quantity || 0,
-      rating: data.rating || { rate: 0, count: 0 },
+    product.value = <Product>{
+      id: response.id,
+      name: response.name,
+      title: response.title || response.name,
+      price: Number(response.price),
+      description: response.description,
+      image: response.image,
+      additionalImages: response.additionalImages || [],
+      category: response.category,
+      discount: response.discount || false,
+      discountedPrice: response.discountedPrice,
+      quantity: response.quantity || 0,
+      rating: response.rating || { rate: 0, count: 0 },
     };
 
     productCache.setViewedCache(product.value);

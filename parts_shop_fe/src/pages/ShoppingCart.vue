@@ -55,7 +55,7 @@
                 {{ item.name || item.title }}
               </q-item-label>
               <q-item-label caption class="!tw-text-xs" :class="isDark && '!tw-text-white'">
-                {{ formatPrice(item.price) }} {{ $t('cart.each') }}
+                {{ formatPrice(item.discountedPrice ?? item.price) }} {{ $t('cart.each') }}
               </q-item-label>
 
               <div
@@ -85,7 +85,7 @@
                   </q-btn-group>
                 </div>
                 <div class="text-subtitle1 text-weight-bold mobile-price">
-                  {{ $t('cart.total') }}: {{ formatPrice(item.price * item.quantity) }}
+                  {{ $t('cart.total') }}: {{ formatPrice((item.discountedPrice ?? item.price) * item.quantity) }}
                 </div>
               </div>
             </q-item-section>

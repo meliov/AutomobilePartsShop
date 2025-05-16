@@ -38,7 +38,8 @@ public class OrderDetailsService {
             }
             return existingProduct;
         }).collect(Collectors.toList());
-
+        Long max = orderDetailsRepository.findMaxTrackingNumber();
+        orderDetails.setTrackingNumber(max == null ? 1 : max + 1);
         orderDetails.setItems(updatedProducts);
         OrderDetails savedOrder = orderDetailsRepository.save(orderDetails);
         return modelMapper.map(savedOrder, OrderDetailsDto.class);
