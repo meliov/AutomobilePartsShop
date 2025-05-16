@@ -27,7 +27,4 @@ public class OrderDetailsController {
         List<OrderDetailsDto> orders = orderDetailsService.getAllOrders();
         return ResponseEntity.ok(orders);
     }
-
-    //todo - tracking number, products quantity when bought and filter out if quantity is 0
-    // - also in admin page - add categories, change(like quantity), delete, create items
 }

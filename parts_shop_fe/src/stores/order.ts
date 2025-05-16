@@ -143,6 +143,7 @@ export const useOrderStore = defineStore('order', () => {
       if (savedOrder) {
         $q.notify({ type: 'positive', message: 'Order saved successfully!' });
         addOrderToHistory(savedOrder); // Optionally add to local history
+        setLastOrder(savedOrder)
       } else {
         $q.notify({ type: 'negative', message: 'Failed to save the order.' });
       }
@@ -165,6 +166,13 @@ export const useOrderStore = defineStore('order', () => {
       $q.notify({ type: 'negative', message: 'An error occurred while fetching orders.' });
     }
   };
+
+  const getLastOrder = () => storage.get('lastOrder') as OrderDetails
+  const setLastOrder = (order: OrderDetails) => storage.set('lastOrder', order, {
+      version: '1.0',
+    });
+
+
   return {
     orderForm,
     orderHistory,
@@ -178,5 +186,6 @@ export const useOrderStore = defineStore('order', () => {
     loadPayment,
     saveOrder,
     fetchOrders,
+    getLastOrder
   };
 });

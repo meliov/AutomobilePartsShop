@@ -226,8 +226,6 @@ const submitOrder = () => {
       paymentMethod: orderStore.orderForm.payment.method,
       trackingNumber: 0,
     };
-    console.log('mangava tu')
-    console.log(orderDetails)
      orderStore.saveOrder(orderDetails)
 
     cartStore.clearCart();

@@ -7,7 +7,7 @@
     <h5 class="tw-text-center tw-mb-8">{{ $t('thankYou.title') }}</h5>
 
     <div class="tw-text-left tw-w-full tw-px-4 tw-text-base tw-font-serif">
-      {{ $t('thankYou.orderNumber') }}: <strong>#123456</strong>
+      {{ $t('thankYou.orderNumber') }}: <strong>{{lastOrder?.trackingNumber }}</strong>
     </div>
 
     <div class="tw-text-xs tw-mb-4 tw-pl-4">
@@ -16,7 +16,7 @@
       </p>
       <p>
         <span>
-          {{ $t('thankYou.orderNumberMessage', { orderNumber: '#123456' }) }}
+          {{ $t('thankYou.orderNumberMessage', { orderNumber: lastOrder?.trackingNumber }) }}
         </span>
       </p>
       <p>
@@ -36,10 +36,16 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
 import { QVueGlobals } from 'quasar';
-import { computed } from 'vue';
+import {computed, ref} from 'vue';
 import PageInfoText from '@/components/base/PageInfoText.vue';
+import {useOrderStore} from "@/stores/order";
 
 const $q = useQuasar() as QVueGlobals;
 const color = computed(() => ($q.dark.isActive ? 'white' : 'black'));
 const text = computed(() => ($q.dark.isActive ? 'black' : 'white'));
+const orderStore = useOrderStore();
+const lastOrder = ref(orderStore.getLastOrder());
+console.log('test')
+console.log(lastOrder.value)
+
 </script>
