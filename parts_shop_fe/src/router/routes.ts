@@ -1,6 +1,6 @@
 import type {RouteRecordRaw} from 'vue-router';
 import MainLayout from 'layouts/MainLayout.vue';
-import {EMAIL_CHECK_PATH, LOGIN_PATH} from "@/constants/routes";
+import {EMAIL_CHECK_PATH, LOGIN_PATH, ORDERS_PATH} from "@/constants/routes";
 
 const loadPage = (page: string) => () =>
   import(`pages/${page}.vue`).catch((err) => {
@@ -150,6 +150,18 @@ const routes: RouteRecordRaw[] = [
     component: MainLayout,
     children: [{ path: '', component: loadPage('ErrorPage'), meta: { title: 'Not Found' } }],
   },
+  {
+    path: ORDERS_PATH,
+    component: MainLayout,
+    children: [
+      {
+        path: ':id',
+        component: loadPage('OrderDetailsComponent'),
+        props: true,
+        meta: { title: 'Order Details' },
+      },
+    ],
+  }
 ];
 
 export default routes;

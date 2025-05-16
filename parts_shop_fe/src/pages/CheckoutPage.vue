@@ -152,7 +152,6 @@ const orderDetails = reactive<OrderDetails>({
   items: cartStore.items,
   total: cartStore.totalPrice,
   date: new Date().toISOString(),
-  status: 'Pending',
   shippingAddress: `${orderForm.shipping.address}`,
   paymentMethod: orderForm.payment.method,
   trackingNumber: '',

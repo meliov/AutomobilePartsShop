@@ -76,6 +76,7 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyPresentException("User already exists");
         }
         var user = modelMapper.map(userDto, User.class);
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setFirstName("");
         user.setLastName("");

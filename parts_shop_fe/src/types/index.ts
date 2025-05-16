@@ -27,7 +27,6 @@ export interface OrderDetails {
   items: Product[];
   total: number;
   date: string;
-  status: string;
   shippingAddress: string;
   paymentMethod: string;
   trackingNumber?: string;

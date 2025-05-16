@@ -107,23 +107,23 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
-import { useAuthStore } from '@/stores/auth';
-import { useProductStore } from '@/stores/products';
-import { useRouter } from 'vue-router';
-import { formatPrice } from '@/utils/currency';
+import {computed} from 'vue';
+import {useAuthStore} from '@/stores/auth';
+import {useProductStore} from '@/stores/products';
+import {useRouter} from 'vue-router';
+import {formatPrice} from '@/utils/currency';
 import QButton from '@/components/base/QButton.vue';
 import {
-  PRODUCTS_PATH,
+  HOME_PATH,
   ORDER_DETAILS_PATH,
   PASSWORD_CHANGE_PATH,
+  PRODUCTS_PATH,
   PROFILE_UPDATE_PATH,
-  HOME_PATH,
 } from '@/constants/routes';
-import { useOrderStore } from '@/stores/order';
-import { formatDate } from '@/utils/date';
-import { useImageStore } from '@/stores/images';
-import { useI18n } from 'vue-i18n';
+import {useOrderStore} from '@/stores/order';
+import {formatDate} from '@/utils/date';
+import {useImageStore} from '@/stores/images';
+import {useI18n} from 'vue-i18n';
 
 const baseUrl = import.meta.env.VITE_API_URL.replace(/\/$/, '');
 
@@ -136,7 +136,12 @@ const { t } = useI18n();
 
 const user = computed(() => authStore.user);
 const viewedItems = computed(() => productCache.getViewedCache()?.products || []);
+
+orderStore.fetchOrders();
+orderStore.loadOrderHistory()
+
 const orderHistory = computed(() => orderStore.orderHistory);
+
 
 const logout = () => {
   try {

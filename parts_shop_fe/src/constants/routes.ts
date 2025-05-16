@@ -40,3 +40,7 @@ export const API_USER_UPDATE_PATH = '/user/update';
 export const API_CHANGE_PASSWORD_PATH = '/user/password-change';
 export const API_PASSWORD_RESET_PATH = '/user/reset-password';
 
+export const API_ORDER_SAVE = '/orders/save';
+
+export const API_ORDER_GET = '/orders/get';
+

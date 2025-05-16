@@ -3,6 +3,9 @@ import { ref } from 'vue';
 import { IOrderForm, OrderDetails } from '@/types';
 import { storage } from '@/utils/storage';
 import {useAuthStore} from "@/stores/auth";
+import {api} from "@/boot/axios";
+import {QVueGlobals, useQuasar} from "quasar";
+import {API_ORDER_GET, API_ORDER_SAVE} from "@/constants/routes";
 
 export const useOrderStore = defineStore('order', () => {
   const orderForm = ref<IOrderForm>({
@@ -24,7 +27,7 @@ export const useOrderStore = defineStore('order', () => {
   });
 
   const orderHistory = ref<OrderDetails[]>([]);
-
+  const $q = useQuasar() as QVueGlobals;
   const setShippingForm = (shippingData: IOrderForm['shipping']) => {
     orderForm.value.shipping = shippingData;
     storeOrder();
@@ -128,6 +131,41 @@ export const useOrderStore = defineStore('order', () => {
     }
   };
 
+
+  const saveOrder = async (order: OrderDetails) => {
+    try {
+      const savedOrder = await api.post<Promise<OrderDetails>>(API_ORDER_SAVE, {
+        items: order.items,
+        total: order.total,
+        shippingAddress: `${order.shippingAddress}`,
+        paymentMethod: order.paymentMethod,
+        trackingNumber: '',
+      }).then(r => r.data);
+      if (savedOrder) {
+        $q.notify({ type: 'positive', message: 'Order saved successfully!' });
+        addOrderToHistory(savedOrder); // Optionally add to local history
+      } else {
+        $q.notify({ type: 'negative', message: 'Failed to save the order.' });
+      }
+    } catch (error) {
+      console.error('Error saving order:', error);
+      $q.notify({ type: 'negative', message: 'An error occurred while saving the order.' });
+    }
+  };
+
+  const fetchOrders = async () => {
+    try {
+      const response = await api.get(API_ORDER_GET);
+      if (response.status <= 400) {
+        orderHistory.value = response.data as OrderDetails[];
+      } else {
+        $q.notify({ type: 'negative', message: 'Failed to fetch orders.' });
+      }
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      $q.notify({ type: 'negative', message: 'An error occurred while fetching orders.' });
+    }
+  };
   return {
     orderForm,
     orderHistory,
@@ -138,6 +176,8 @@ export const useOrderStore = defineStore('order', () => {
     storeOrder,
     addOrderToHistory,
     loadOrderHistory,
-    loadPayment
+    loadPayment,
+    saveOrder,
+    fetchOrders,
   };
 });

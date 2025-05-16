@@ -188,13 +188,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
-import { useQuasar } from 'quasar';
-import { useOrderStore } from '../stores/order';
-import { formatPrice } from '@/utils/currency';
-import { useCartStore } from '../stores/cart';
-import { useRouter } from 'vue-router';
-import { THANK_YOU_PATH } from '@/constants/routes';
+import {computed, onMounted, ref} from 'vue';
+import {useQuasar} from 'quasar';
+import {useOrderStore} from '../stores/order';
+import {formatPrice} from '@/utils/currency';
+import {useCartStore} from '../stores/cart';
+import {useRouter} from 'vue-router';
+import {THANK_YOU_PATH} from '@/constants/routes';
+import {OrderDetails} from "@/types";
 
 const $q = useQuasar();
 const orderStore = useOrderStore();
@@ -216,10 +217,24 @@ const submitOrder = () => {
   // Simulate order submission
   setTimeout(() => {
     console.log('Order submitted:', orderStore.orderForm);
+    const orderDetails: OrderDetails = {
+      id: 0,
+      items: cartStore.items,
+      total: cartStore.totalPrice,
+      date: new Date().toISOString(),
+      shippingAddress: `${orderStore.orderForm.shipping.address}`,
+      paymentMethod: orderStore.orderForm.payment.method,
+      trackingNumber: '',
+    };
+    console.log('mangava tu')
+    console.log(orderDetails)
+     orderStore.saveOrder(orderDetails)
+
     cartStore.clearCart();
     orderStore.clearOrderForm();
     isSubmitting.value = false;
     router.push(THANK_YOU_PATH);
+
   }, 5000);
 };
 
