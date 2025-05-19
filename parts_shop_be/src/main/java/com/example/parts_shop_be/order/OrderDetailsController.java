@@ -16,15 +16,23 @@ public class OrderDetailsController {
     @Autowired
     private OrderDetailsService orderDetailsService;
 
-    @PostMapping("/save")
-    public ResponseEntity<OrderDetailsDto> createOrder(@RequestBody CreateOrderDetailsDto createOrderDetailsDto) {
-        OrderDetailsDto orderDetailsDto = orderDetailsService.createOrder(createOrderDetailsDto);
+    @PostMapping("/save/{userId}")
+    public ResponseEntity<OrderDetailsDto> createOrder(@RequestBody CreateOrderDetailsDto createOrderDetailsDto, @PathVariable Long userId) {
+        OrderDetailsDto orderDetailsDto = orderDetailsService.createOrder(createOrderDetailsDto, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(orderDetailsDto);
     }
 
+    //will be used for admin page
     @GetMapping("/get")
     public ResponseEntity<List<OrderDetailsDto>> getAllOrders() {
         List<OrderDetailsDto> orders = orderDetailsService.getAllOrders();
         return ResponseEntity.ok(orders);
     }
+
+    @GetMapping("/get/{userId}")
+    public ResponseEntity<List<OrderDetailsDto>> getUserOrders( @PathVariable Long userId) {
+        List<OrderDetailsDto> orders = orderDetailsService.getUserOrders(userId);
+        return ResponseEntity.ok(orders);
+    }
+
 }

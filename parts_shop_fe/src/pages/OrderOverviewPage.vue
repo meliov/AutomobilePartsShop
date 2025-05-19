@@ -233,7 +233,7 @@ const submitOrder = () => {
     isSubmitting.value = false;
     router.push(THANK_YOU_PATH);
 
-  }, 5000);
+  });
 };
 
 onMounted(() => {

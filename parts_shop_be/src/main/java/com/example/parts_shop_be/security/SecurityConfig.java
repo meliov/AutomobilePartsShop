@@ -60,6 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/user/email-exists/*", "/user/email-exists-pass-reset/*",
             "/user/register", "/user/signup-confirmation/*", "/user/reset-password",
             "/user/forgot-password-confirmation/*",
+            "/orders/save/**"
     };//, "/api/v1/user/all"
 
     @Override

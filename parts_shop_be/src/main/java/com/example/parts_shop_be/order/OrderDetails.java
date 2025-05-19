@@ -1,6 +1,7 @@
 package com.example.parts_shop_be.order;
 
 import com.example.parts_shop_be.product.Product;
+import com.example.parts_shop_be.user.User;
 import com.example.parts_shop_be.utils.BaseEntity;
 
 import javax.persistence.*;
@@ -26,6 +27,9 @@ public class OrderDetails extends BaseEntity {
     private String shippingAddress;
 
     private String paymentMethod;
+
+    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    private User user;
 
     @Column(name = "tracking_number", unique = true)
     private Long trackingNumber;
@@ -78,6 +82,13 @@ public class OrderDetails extends BaseEntity {
         this.trackingNumber = trackingNumber;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     // Getters and Setters
 }

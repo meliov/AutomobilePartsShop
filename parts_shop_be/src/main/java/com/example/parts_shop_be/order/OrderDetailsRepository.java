@@ -4,8 +4,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 interface OrderDetailsRepository extends JpaRepository<OrderDetails, Long> {
     @Query("SELECT MAX(o.trackingNumber) FROM OrderDetails o")
     Long findMaxTrackingNumber();
+
+    List<OrderDetails> findByUserId(Long userId);
 }

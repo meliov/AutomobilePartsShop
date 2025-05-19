@@ -4,6 +4,8 @@ import com.example.parts_shop_be.order.dto.CreateOrderDetailsDto;
 import com.example.parts_shop_be.order.dto.OrderDetailsDto;
 import com.example.parts_shop_be.product.Product;
 import com.example.parts_shop_be.product.ProductService;
+import com.example.parts_shop_be.user.User;
+import com.example.parts_shop_be.user.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,11 +27,23 @@ public class OrderDetailsService {
     @Autowired
     private ProductService productsService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Transactional
-    public OrderDetailsDto createOrder(CreateOrderDetailsDto createOrderDetailsDto) {
+    public OrderDetailsDto createOrder(CreateOrderDetailsDto createOrderDetailsDto, Long userId) {
         OrderDetails orderDetails = modelMapper.map(createOrderDetailsDto, OrderDetails.class);
         orderDetails.setDate(LocalDateTime.now());
 
+        if(userId != null) {
+            User user = userRepository.findById(userId).orElseGet(() -> null);
+
+            if (user != null) {
+                orderDetails.setUser(user);
+            }else{
+                throw new RuntimeException("User not found");
+            }
+        }
         // Update product quantities
         List<Product> updatedProducts = createOrderDetailsDto.getItems().stream().map(product -> {
             Product existingProduct = productsService.getProduct(product.getId());
@@ -47,6 +61,12 @@ public class OrderDetailsService {
 
     public List<OrderDetailsDto> getAllOrders() {
         return orderDetailsRepository.findAll().stream()
+                .map(order -> modelMapper.map(order, OrderDetailsDto.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<OrderDetailsDto> getUserOrders(Long userId) {
+        return orderDetailsRepository.findByUserId(userId).stream()
                 .map(order -> modelMapper.map(order, OrderDetailsDto.class))
                 .collect(Collectors.toList());
     }

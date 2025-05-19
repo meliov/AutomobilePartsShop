@@ -134,7 +134,8 @@ export const useOrderStore = defineStore('order', () => {
 
   const saveOrder = async (order: OrderDetails) => {
     try {
-      const savedOrder = await api.post<Promise<OrderDetails>>(API_ORDER_SAVE, {
+      const authStore = useAuthStore();
+      const savedOrder = await api.post<Promise<OrderDetails>>(`${API_ORDER_SAVE}/${authStore.getUserFromStorage()?.id}`, {
         items: order.items,
         total: order.total,
         shippingAddress: `${order.shippingAddress}`,
@@ -155,7 +156,8 @@ export const useOrderStore = defineStore('order', () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await api.get(API_ORDER_GET);
+      const authStore = useAuthStore();
+      const response = await api.get(`${API_ORDER_GET}/${authStore.getUserFromStorage()?.id}`);
       if (response.status <= 400) {
         orderHistory.value = response.data as OrderDetails[];
       } else {
