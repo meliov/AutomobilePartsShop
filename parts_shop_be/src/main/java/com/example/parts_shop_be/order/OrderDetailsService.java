@@ -49,13 +49,12 @@ public class OrderDetailsService {
             }
         }
         // Update product quantities
-        List<Product> updatedProducts = createOrderDetailsDto.getItems().stream().map(product -> {
+      createOrderDetailsDto.getItems().forEach(product -> {
             Product existingProduct = productsService.getProduct(product.getId());
             if (existingProduct != null) {
                 existingProduct.setQuantity(existingProduct.getQuantity() - product.getQuantity());
             }
-            return existingProduct;
-        }).collect(Collectors.toList());
+        });
         Long max = orderDetailsRepository.findMaxTrackingNumber();
         orderDetails.setTrackingNumber(max == null ? 1 : max + 1);
         OrderDetails savedOrder = orderDetailsRepository.save(orderDetails);
