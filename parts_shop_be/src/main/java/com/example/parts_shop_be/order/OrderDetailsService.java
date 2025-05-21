@@ -6,6 +6,8 @@ import com.example.parts_shop_be.product.Product;
 import com.example.parts_shop_be.product.ProductService;
 import com.example.parts_shop_be.user.User;
 import com.example.parts_shop_be.user.UserRepository;
+import com.example.parts_shop_be.utils.email.EmailService;
+import com.example.parts_shop_be.utils.email.EmailServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,8 @@ public class OrderDetailsService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private EmailService emailServiceImpl;
     @Transactional
     public OrderDetailsDto createOrder(CreateOrderDetailsDto createOrderDetailsDto, Long userId) {
         OrderDetails orderDetails = modelMapper.map(createOrderDetailsDto, OrderDetails.class);
@@ -56,6 +60,13 @@ public class OrderDetailsService {
         orderDetails.setTrackingNumber(max == null ? 1 : max + 1);
         orderDetails.setItems(updatedProducts);
         OrderDetails savedOrder = orderDetailsRepository.save(orderDetails);
+
+        // Send email notification
+        if (createOrderDetailsDto.getEmail() != null) {
+            String emailContent = "Your order with tracking number " + orderDetails.getTrackingNumber() + " has been created successfully.\nIt is expected to arrive in 3-5 business days.";
+            emailServiceImpl.sendMail(createOrderDetailsDto.getEmail(), "Order Confirmation", emailContent);
+        }
+
         return modelMapper.map(savedOrder, OrderDetailsDto.class);
     }
 

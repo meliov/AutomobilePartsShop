@@ -132,14 +132,15 @@ export const useOrderStore = defineStore('order', () => {
   };
 
 
-  const saveOrder = async (order: OrderDetails) => {
+  const saveOrder = async (order: OrderDetails, email: string) => {
     try {
       const authStore = useAuthStore();
-      const savedOrder = await api.post<Promise<OrderDetails>>(`${API_ORDER_SAVE}/${authStore.getUserFromStorage()?.id}`, {
+      const savedOrder = await api.post<Promise<OrderDetails>>(`${API_ORDER_SAVE}/${authStore.getUserFromStorage()?.id ? authStore.getUserFromStorage().id : null}`, {
         items: order.items,
         total: order.total,
         shippingAddress: `${order.shippingAddress}`,
         paymentMethod: order.paymentMethod,
+        email: email,
       }).then(r => r.data);
       if (savedOrder) {
         $q.notify({ type: 'positive', message: 'Order saved successfully!' });

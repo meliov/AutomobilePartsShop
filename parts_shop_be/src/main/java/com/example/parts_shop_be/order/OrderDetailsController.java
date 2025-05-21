@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/orders")
@@ -17,8 +19,9 @@ public class OrderDetailsController {
     private OrderDetailsService orderDetailsService;
 
     @PostMapping("/save/{userId}")
-    public ResponseEntity<OrderDetailsDto> createOrder(@RequestBody CreateOrderDetailsDto createOrderDetailsDto, @PathVariable Long userId) {
-        OrderDetailsDto orderDetailsDto = orderDetailsService.createOrder(createOrderDetailsDto, userId);
+    public ResponseEntity<OrderDetailsDto> createOrder(@RequestBody CreateOrderDetailsDto createOrderDetailsDto, @PathVariable String userId) {
+        Long parsedUserId = "null".equals(userId) ? null : Long.valueOf(userId);
+        OrderDetailsDto orderDetailsDto = orderDetailsService.createOrder(createOrderDetailsDto, parsedUserId);
         return ResponseEntity.status(HttpStatus.CREATED).body(orderDetailsDto);
     }
 

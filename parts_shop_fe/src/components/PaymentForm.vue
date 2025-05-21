@@ -1,7 +1,6 @@
 <template>
   <q-form
     ref="paymentFormRef"
-    greedy
     class="row q-col-gutter-md payment-form"
     @submit.prevent="validatePaymentForm"
   >

@@ -15,6 +15,7 @@ public class CreateOrderDetailsDto {
 
     private String paymentMethod;
 
+    private String email;
 
     public List<Product> getItems() {
         return items;
@@ -48,4 +49,11 @@ public class CreateOrderDetailsDto {
         this.paymentMethod = paymentMethod;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

@@ -226,7 +226,7 @@ const submitOrder = () => {
       paymentMethod: orderStore.orderForm.payment.method,
       trackingNumber: 0,
     };
-     orderStore.saveOrder(orderDetails)
+     orderStore.saveOrder(orderDetails, orderStore.orderForm.shipping.email)
 
     cartStore.clearCart();
     orderStore.clearOrderForm();
