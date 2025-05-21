@@ -221,15 +221,6 @@ const fetchProducts = async (category = 'all') => {
 
     const cacheKey = buildCacheKey(params);
 
-    const cached = productCache.getCache(cacheKey);
-
-    if (cached?.meta && cached?.data) {
-      products.value = cached.data;
-      meta.value = cached.meta;
-      $q.loading.hide();
-      return;
-    }
-
     const queryParams = new URLSearchParams({
       page: currentPage.value.toString(),
       limit: itemsPerPage.toString(),

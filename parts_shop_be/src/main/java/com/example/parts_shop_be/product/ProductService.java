@@ -49,6 +49,9 @@ public class ProductService {
             }
 
             predicates.add(cb.between(root.get("price"), minPrice, maxPrice));
+            predicates.add(cb.greaterThanOrEqualTo(root.get("quantity"), 1));
+
+            predicates.add(cb.between(root.get("price"), minPrice, maxPrice));
 
             return cb.and(predicates.toArray(new Predicate[0]));
         };

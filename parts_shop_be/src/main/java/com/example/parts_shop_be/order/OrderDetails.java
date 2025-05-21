@@ -1,5 +1,6 @@
 package com.example.parts_shop_be.order;
 
+import com.example.parts_shop_be.order.order_product.OrderProductConverter;
 import com.example.parts_shop_be.product.Product;
 import com.example.parts_shop_be.user.User;
 import com.example.parts_shop_be.utils.BaseEntity;
@@ -11,13 +12,8 @@ import java.util.List;
 @Entity
 public class OrderDetails extends BaseEntity {
 
-    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "order_product",
-            joinColumns = @JoinColumn(name = "order_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id"),
-            uniqueConstraints = @UniqueConstraint(columnNames = {"order_id", "product_id"})
-    )
+    @Convert(converter = OrderProductConverter.class)
+    @Column(length = 10000)
     private List<Product> items;
 
     private Double total;

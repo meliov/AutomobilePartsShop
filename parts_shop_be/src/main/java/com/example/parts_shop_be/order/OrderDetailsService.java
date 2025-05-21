@@ -58,12 +58,11 @@ public class OrderDetailsService {
         }).collect(Collectors.toList());
         Long max = orderDetailsRepository.findMaxTrackingNumber();
         orderDetails.setTrackingNumber(max == null ? 1 : max + 1);
-        orderDetails.setItems(updatedProducts);
         OrderDetails savedOrder = orderDetailsRepository.save(orderDetails);
 
         // Send email notification
         if (createOrderDetailsDto.getEmail() != null) {
-            String emailContent = "Your order with tracking number " + orderDetails.getTrackingNumber() + " has been created successfully.\nIt is expected to arrive in 3-5 business days.";
+            String emailContent = "Your order with tracking number " + orderDetails.getTrackingNumber() + " has been created successfully.";
             emailServiceImpl.sendMail(createOrderDetailsDto.getEmail(), "Order Confirmation", emailContent);
         }
 
