@@ -5,6 +5,7 @@ import com.example.parts_shop_be.order.dto.OrderDetailsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.Option;
@@ -18,6 +19,7 @@ public class OrderDetailsController {
     @Autowired
     private OrderDetailsService orderDetailsService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/save/{userId}")
     public ResponseEntity<OrderDetailsDto> createOrder(@RequestBody CreateOrderDetailsDto createOrderDetailsDto, @PathVariable String userId) {
         Long parsedUserId = "null".equals(userId) ? null : Long.valueOf(userId);
@@ -25,7 +27,7 @@ public class OrderDetailsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(orderDetailsDto);
     }
 
-    //will be used for admin page
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/get")
     public ResponseEntity<List<OrderDetailsDto>> getAllOrders() {
         List<OrderDetailsDto> orders = orderDetailsService.getAllOrders();

@@ -6,6 +6,7 @@ import com.example.parts_shop_be.user.card_details.CardDetailsDto;
 import com.example.parts_shop_be.user.dto.*;
 import com.example.parts_shop_be.user.forgot_password_object.ForgotPasswordObject;
 import com.example.parts_shop_be.user.forgot_password_object.ForgotPasswordObjectService;
+import com.example.parts_shop_be.user.role.UserRole;
 import com.example.parts_shop_be.user.signup_object.SignupObject;
 import com.example.parts_shop_be.user.signup_object.SignupObjectService;
 import com.example.parts_shop_be.utils.exception.UserAlreadyPresentException;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -82,6 +84,7 @@ public class UserServiceImpl implements UserService {
         user.setLastName("");
         user.setStatus(userStatus);
         user.setRegistrationDate(LocalDateTime.now());
+        user.setRoles(List.of(UserRole.USER));
 
         User newUser = userRepository.save(user);
         String link = hostAndPort + "/user/signup-confirmation/";

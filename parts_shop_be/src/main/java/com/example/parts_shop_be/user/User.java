@@ -3,10 +3,13 @@ package com.example.parts_shop_be.user;
 
 import com.example.parts_shop_be.user.card_details.CardDetails;
 import com.example.parts_shop_be.user.card_details.CardDetailsConverter;
+import com.example.parts_shop_be.user.role.RoleConverter;
+import com.example.parts_shop_be.user.role.UserRole;
 import com.example.parts_shop_be.utils.BaseEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Entity
@@ -35,6 +38,9 @@ public class User extends BaseEntity {
     private CardDetails cardDetails;
 
     private String address;
+
+    @Convert(converter = RoleConverter.class)
+    private List<UserRole> roles;
 
     public User(String firstName, String lastName, String username, String password, LocalDateTime registrationDate, UserStatus status, String email, String address) {
         this.firstName = firstName;
@@ -136,5 +142,13 @@ public class User extends BaseEntity {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public List<UserRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<UserRole> roles) {
+        this.roles = roles;
     }
 }
