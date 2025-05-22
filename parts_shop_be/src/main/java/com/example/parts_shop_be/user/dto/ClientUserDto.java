@@ -2,6 +2,9 @@ package com.example.parts_shop_be.user.dto;
 
 import com.example.parts_shop_be.user.UserGender;
 import com.example.parts_shop_be.user.card_details.CardDetailsDto;
+import com.example.parts_shop_be.user.role.UserRole;
+
+import java.util.List;
 
 public class ClientUserDto {
 
@@ -16,6 +19,7 @@ public class ClientUserDto {
 
     private String address;
 
+    private List<UserRole> roles;
     private CardDetailsDto cardDetails;
     public ClientUserDto() {
     }
@@ -75,6 +79,14 @@ public class ClientUserDto {
 
     public void setCardDetails(CardDetailsDto cardDetails) {
         this.cardDetails = cardDetails;
+    }
+
+    public List<UserRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<UserRole> roles) {
+        this.roles = roles;
     }
 
     @Override

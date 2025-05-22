@@ -108,6 +108,7 @@ export interface User {
      username: string,
      address: string,
      cardDetails: CardDetails | null,
+     roles: string[] | null,
 }
 export interface UpdateUserDto {
      id: number,
