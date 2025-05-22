@@ -1,6 +1,7 @@
 package com.example.parts_shop_be.product;
 
 
+import com.example.parts_shop_be.category.Category;
 import com.example.parts_shop_be.product.rating.Rating;
 import com.example.parts_shop_be.utils.BaseEntity;
 
@@ -25,9 +26,9 @@ public class Product extends BaseEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
-    @Column(nullable = false)
-    private String category;
-
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
     private String image;
     private String title;
     private Boolean discount;
@@ -43,20 +44,6 @@ public class Product extends BaseEntity {
     private Rating rating;
 
     public Product() {}
-
-    public Product(String name, Double price, int quantity, String description, String category, String image, String title, Boolean discount, Double discountedPrice, List<String> additionalImages, Rating rating) {
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
-        this.description = description;
-        this.category = category;
-        this.image = image;
-        this.title = title;
-        this.discount = discount;
-        this.discountedPrice = discountedPrice;
-        this.additionalImages = additionalImages;
-        this.rating = rating;
-    }
 
     public String getName() {
         return name;
@@ -90,13 +77,6 @@ public class Product extends BaseEntity {
         this.description = description;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
 
     public String getImage() {
         return image;
@@ -144,6 +124,14 @@ public class Product extends BaseEntity {
 
     public void setRating(Rating rating) {
         this.rating = rating;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     // Getters and Setters

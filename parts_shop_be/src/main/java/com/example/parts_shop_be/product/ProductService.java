@@ -1,5 +1,6 @@
 package com.example.parts_shop_be.product;
 
+import com.example.parts_shop_be.category.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,18 +21,11 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
+    private final CategoryRepository categoryRepository;
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
-    }
-
-    public Set<String> getCategories() {
-        return productRepository.findAll().stream().map(it -> it.getCategory()).collect(Collectors.toSet());  // Assuming product categories are distinct
-    }
-
-    public Page<Product> getProductsByCategory(String category, int page, int limit) {
-        Pageable pageable = PageRequest.of(page - 1, limit);
-        return productRepository.findByCategory(category, pageable);
+        this.categoryRepository =categoryRepository;
     }
 
     public Page<Product> getProducts(int page, int limit, String search, Double minPrice, Double maxPrice, String sortBy, String sortOrder, String category) {
@@ -45,7 +39,8 @@ public class ProductService {
             }
 
             if (!category.equals("all")) {
-                predicates.add(cb.equal(root.get("category"), category));
+                Long categoryId = categoryRepository.findByName(category).getId();
+                predicates.add(cb.equal(root.get("category"), categoryId));
             }
 
             predicates.add(cb.between(root.get("price"), minPrice, maxPrice));

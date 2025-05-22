@@ -4,7 +4,7 @@ import com.example.parts_shop_be.security.filter.AuthenticationEntryPoint;
 import com.example.parts_shop_be.security.filter.JwtAccessDeniedHandler;
 import com.example.parts_shop_be.security.filter.JwtAuthenticationFilter;
 import com.example.parts_shop_be.security.filter.JwtAuthorizationFilter;
-import com.example.parts_shop_be.user.role.UserRole;
+
 import com.example.parts_shop_be.user.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //public urls are checked twice - once before authentication - where its permitted and once during auth
     public static final String[] PUBLIC_URLS = {
             "/products/**",
+            "/categories/**",
             "/rates**",
             "/user/test", "/api/login", "/api/token/refresh",
             "/user/email-exists/*", "/user/email-exists-pass-reset/*",

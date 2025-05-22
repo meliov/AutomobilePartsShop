@@ -237,9 +237,9 @@ const fetchProducts = async (category = 'all') => {
       queryParams.append('maxPrice', filters.value.maxPrice.toString());
     }
 
-    const url = `${import.meta.env.VITE_API_URL}${PRODUCTS_PATH}${
-      category !== 'all' ? `${CATEGORY_PATH}/${category}` : ''
-    }?${queryParams}`;
+    const url = `${import.meta.env.VITE_API_URL}${
+      category !== 'all' ? `${CATEGORY_PATH}/${category}` : PRODUCTS_PATH
+    }?${queryParams}`;//
 
     const response: AxiosResponse<ProductResponse> = await api.get(url);
 
