@@ -7,12 +7,18 @@ export type ProductRating = {
   count: number;
 };
 
+export type Category = {
+  id: number;
+  name: number;
+};
+
+
 export interface Product {
   id: number;
   name: string;
   description: string;
   image: string;
-  category: string;
+  category: Category;
   price: number;
   quantity: number;
   title?: string;

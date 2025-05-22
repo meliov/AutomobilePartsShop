@@ -19,7 +19,7 @@
         <span class="tw-text-3xl tw-mt-4 tw-font-semibold tw-font-serif tw-mr-4">
           {{ product?.name }}
         </span>
-        <span class="tw-text-base">{{ product?.category }}</span>
+        <span class="tw-text-base">{{ product?.category.name }}</span>
       </div>
 
       <q-separator />
