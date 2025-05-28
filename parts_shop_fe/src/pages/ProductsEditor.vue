@@ -14,7 +14,7 @@
       <q-btn class="q-mt-md" icon="add" color="primary" @click="openProductDialog" />
       <q-card-section v-if="selectedProduct">
         <q-input v-model="selectedProduct.name" label="Name" />
-        <q-input v-model="selectedProduct.description" label="Description" />
+        <q-input v-model="selectedProduct.description" label="Description" autogrow />
         <q-input v-model.number="selectedProduct.price" label="Price" type="number" />
         <q-input v-model.number="selectedProduct.quantity" label="Quantity" type="number" />
         <q-select
@@ -29,14 +29,14 @@
         <q-btn class="q-mt-md" label="Save" color="primary" @click="saveProduct" />
         <q-btn class="q-mt-md" label="Delete" color="primary" @click="deleteProduct" />
       </q-card-section>
-      <q-dialog v-model="isProductDialogOpen">
-        <q-card>
+      <q-dialog v-model="isProductDialogOpen" >
+        <q-card style="width: 35vh">
           <q-card-section>
             <div class="text-h6">Create Product</div>
           </q-card-section>
           <q-card-section>
             <q-input v-model="dialogProduct.name" label="Name" />
-            <q-input v-model="dialogProduct.description" label="Description" />
+            <q-input v-model="dialogProduct.description" label="Description"  autogrow/>
             <q-input v-model.number="dialogProduct.price" label="Price" type="number" />
             <q-input v-model.number="dialogProduct.quantity" label="Quantity" type="number" />
             <q-select
@@ -47,6 +47,7 @@
               emit-value
               map-options
               label="Category"
+              autogrow
             />
           </q-card-section>
           <q-card-actions align="right">
@@ -105,7 +106,8 @@ function closeProductDialog() {
 }
 
 function emitProduct() {
-  selectedProduct.value = { ...dialogProduct.value, id: -1 };
+  dialogProduct.value = { ...dialogProduct.value, category: categories.value.find(it => it.id === dialogProduct.value.category) || null };
+  selectedProduct.value = null
   isProductDialogOpen.value = false;
   saveProduct();
 }
@@ -148,14 +150,14 @@ function selectProduct(product: Product) {
 
 async function saveProduct() {
   try {
-    if (selectedProduct.value) {
       let response;
-      if (selectedProduct.value.id) {
+      if (selectedProduct.value?.id) {
+
         // Update existing product
-        response = await api.put(`${API_BASE_URL}/products/update/${selectedProduct.value.id}`, selectedProduct.value);
+        response = await api.put(`${API_BASE_URL}/products/update/${selectedProduct.value.id}`, {...selectedProduct.value, category: categories.value.find(it => it.id === (selectedProduct.value!.category?.id ? selectedProduct.value!.category?.id : selectedProduct.value!.category))});
       } else {
         // Create new product
-        response = await api.post(`${API_BASE_URL}/products/create`, selectedProduct.value);
+        response = await api.post(`${API_BASE_URL}/products/create`, dialogProduct.value);
         products.value.push(response.data);
       }
       if (response.status >= 400) {
@@ -165,7 +167,6 @@ async function saveProduct() {
         selectedProduct.value = null;
         $q.notify({ type: 'positive', message: 'Product saved successfully' });
       }
-    }
   } catch (error) {
     console.error('Error saving product:', error);
     $q.notify({ type: 'negative', message: 'Error saving product' });
@@ -178,7 +179,7 @@ async function deleteProduct() {
       $q.notify({ type: 'negative', message: 'Error deleting product' });
     } else {
       await fetchProducts();
-      // $q.notify({ type: 'positive', message: 'Product deleted successfully' });
+      $q.notify({ type: 'positive', message: 'Product deleted successfully' });
     }
   } catch (error) {
     console.error('Error deleting product:', error);

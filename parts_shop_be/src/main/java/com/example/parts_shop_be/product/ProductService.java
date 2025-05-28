@@ -75,6 +75,12 @@ public class ProductService {
             existingProduct.setCategory(updatedProduct.getCategory());
             existingProduct.setPrice(updatedProduct.getPrice());
             existingProduct.setDescription(updatedProduct.getDescription());
+            existingProduct.setImage(updatedProduct.getImage());
+            existingProduct.setTitle(updatedProduct.getTitle());
+            existingProduct.setDiscount(updatedProduct.getDiscount());
+            existingProduct.setDiscountedPrice(updatedProduct.getDiscountedPrice());
+            existingProduct.setRating(updatedProduct.getRating());
+            existingProduct.setQuantity(updatedProduct.getQuantity());
             return productRepository.save(existingProduct);
         }
         return null;
