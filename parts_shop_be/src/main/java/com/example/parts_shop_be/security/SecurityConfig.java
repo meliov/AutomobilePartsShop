@@ -78,11 +78,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and().
                 csrf().disable().
                 sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers(PUBLIC_URLS).permitAll()
-                .anyRequest().authenticated().and().
-                //for future roles based authorization
-                //.antMatchers("/admin/**").hasRole("ADMIN") // Only ADMIN can access /admin routes
-                //            .antMatchers("/user/**").hasAnyRole("USER", "ADMIN") // USER and ADMIN can access /user routes
+                .authorizeRequests().antMatchers(PUBLIC_URLS).permitAll().and()
+                .authorizeRequests().anyRequest().authenticated().and().
                 exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).accessDeniedHandler(jwtAccessDeniedHandler).and().
                 addFilter(jwtAuthenticationFilter).
                 addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);

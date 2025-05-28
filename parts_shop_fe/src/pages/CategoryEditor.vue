@@ -15,7 +15,7 @@
       <q-card-section v-if="selectedCategory">
         <q-input v-model="selectedCategory.name" label="Edit Category Name" />
         <q-btn class="q-mt-md" label="Save" color="primary" @click="saveCategory" />
-        <q-btn class="q-mt-md" label="Save" color="primary" @click="deleteCategory" />
+        <q-btn class="q-mt-md" label="Delete" color="primary" @click="deleteCategory" />
       </q-card-section>
     </q-card>
   </q-page>
@@ -25,7 +25,9 @@
 import {onMounted, ref} from 'vue';
 import {Category} from "@/types";
 import {api} from '@/boot/axios';
+import {QVueGlobals, useQuasar} from "quasar";
 const API_BASE_URL = import.meta.env.VITE_API_URL.replace(/\/$/, '');
+const $q = useQuasar() as QVueGlobals;
 
 const categories = ref<Category[]>([]);
 
@@ -33,11 +35,12 @@ async function fetchCategories() {
   try {
     const response = await api.get(`${API_BASE_URL}/categories/get-all`);
     categories.value = response.data;
+    // $q.notify({ type: 'positive', message: 'Categories fetched successfully!' });
   } catch (error) {
     console.error('Error fetching categories:', error);
+    $q.notify({ type: 'negative', message: 'Failed to fetch categories.' });
   }
 }
-
 const selectedCategory = ref<Category|null>(null);
 
 async function saveCategory() {
@@ -46,31 +49,34 @@ async function saveCategory() {
       if (selectedCategory.value.id) {
         // Update existing category
         await api.put(`${API_BASE_URL}/categories/update/${selectedCategory.value.id}`, selectedCategory.value);
+        $q.notify({ type: 'positive', message: 'Category updated successfully!' });
       } else {
         // Create new category
         const response = await api.post(`${API_BASE_URL}/categories/create`, selectedCategory.value);
         categories.value.push(response.data);
+        $q.notify({ type: 'positive', message: 'Category created successfully!' });
       }
       await fetchCategories();
       selectedCategory.value = null;
     }
   } catch (error) {
     console.error('Error saving category:', error);
+    $q.notify({ type: 'negative', message: 'Failed to save category.' });
   }
 }
-
 async function deleteCategory() {
   try {
     if (selectedCategory.value?.id) {
       await api.delete(`${API_BASE_URL}/categories/delete/${selectedCategory.value.id}`);
       await fetchCategories();
       selectedCategory.value = null;
+      $q.notify({ type: 'positive', message: 'Category deleted successfully!' });
     }
   } catch (error) {
     console.error('Error deleting category:', error);
+    $q.notify({ type: 'negative', message: 'Failed to delete category.' });
   }
 }
-
 function selectCategory(category: Category) {
   selectedCategory.value = { ...category }; // shallow copy
 }

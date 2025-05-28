@@ -3,7 +3,7 @@
     <q-card>
       <q-card-section>
         <div class="text-h6">Products</div>
-        <q-list bordered>
+        <q-list bordered style="max-height: 300px; overflow-y: auto;">
           <q-item v-for="product in products" :key="product.id" clickable @click="selectProduct(product)">
             <q-item-section>{{ product.name }}</q-item-section>
           </q-item>
@@ -37,31 +37,42 @@
 import {onMounted, ref} from 'vue';
 import {Category, Product} from "@/types";
 import {api} from '@/boot/axios';
+import {QVueGlobals, useQuasar} from "quasar";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL.replace(/\/$/, '');
 
 const categories = ref<Category[]>([]);
 const products = ref<Product[]>([]);
 const selectedProduct = ref<Product | null>(null);
-
+const $q = useQuasar() as QVueGlobals;
 async function fetchCategories() {
   try {
     const response = await api.get(`${API_BASE_URL}/categories/get-all`);
-    categories.value = response.data;
+    if (response.status >= 400) {
+      $q.notify({ type: 'negative', message: 'Error fetching categories' });
+    } else {
+      categories.value = response.data;
+      // $q.notify({ type: 'positive', message: 'Categories fetched successfully' });
+    }
   } catch (error) {
     console.error('Error fetching categories:', error);
+    $q.notify({ type: 'negative', message: 'Error fetching categories' });
   }
 }
-
 async function fetchProducts() {
   try {
     const response = await api.get(`${API_BASE_URL}/products/get-all`);
-    products.value = response.data; // Adjusted to match the paginated response structure
+    if (response.status >= 400) {
+      $q.notify({ type: 'negative', message: 'Error fetching products' });
+    } else {
+      products.value = response.data;
+      $q.notify({ type: 'positive', message: 'Products fetched successfully' });
+    }
   } catch (error) {
     console.error('Error fetching products:', error);
+    $q.notify({ type: 'negative', message: 'Error fetching products' });
   }
 }
-
 function selectProduct(product: Product) {
   selectedProduct.value = { ...product }; // shallow copy
 }
@@ -69,31 +80,42 @@ function selectProduct(product: Product) {
 async function saveProduct() {
   try {
     if (selectedProduct.value) {
+      let response;
       if (selectedProduct.value.id) {
         // Update existing product
-        await api.put(`${API_BASE_URL}/products/update/${selectedProduct.value.id}`, selectedProduct.value);
+        response = await api.put(`${API_BASE_URL}/products/update/${selectedProduct.value.id}`, selectedProduct.value);
       } else {
         // Create new product
-        const response = await api.post(`${API_BASE_URL}/products/create`, selectedProduct.value);
+        response = await api.post(`${API_BASE_URL}/products/create`, selectedProduct.value);
         products.value.push(response.data);
       }
-      await fetchProducts();
-      selectedProduct.value = null;
+      if (response.status >= 400) {
+        $q.notify({ type: 'negative', message: 'Error saving product' });
+      } else {
+        await fetchProducts();
+        selectedProduct.value = null;
+        $q.notify({ type: 'positive', message: 'Product saved successfully' });
+      }
     }
   } catch (error) {
     console.error('Error saving product:', error);
+    $q.notify({ type: 'negative', message: 'Error saving product' });
   }
 }
-
 async function deleteProduct() {
   try {
-    await api.delete(`${API_BASE_URL}/products/delete/${selectedProduct.value?.id}`);
-    await fetchProducts();
+    const response = await api.delete(`${API_BASE_URL}/products/delete/${selectedProduct.value?.id}`);
+    if (response.status >= 400) {
+      $q.notify({ type: 'negative', message: 'Error deleting product' });
+    } else {
+      await fetchProducts();
+      // $q.notify({ type: 'positive', message: 'Product deleted successfully' });
+    }
   } catch (error) {
     console.error('Error deleting product:', error);
+    $q.notify({ type: 'negative', message: 'Error deleting product' });
   }
 }
-
 onMounted(async () => {
  await fetchCategories();
  await fetchProducts();
