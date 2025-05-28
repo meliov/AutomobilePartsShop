@@ -7,9 +7,9 @@ export type ProductRating = {
   count: number;
 };
 
-export type Category = {
+export interface Category {
   id: number;
-  name: number;
+  name: string;
 };
 
 

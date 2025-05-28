@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,10 +25,32 @@ public class CategoryService {
     public Set<String> getCategories() {
         return categoryRepository.findAll().stream().map(Category::getName).collect(Collectors.toSet());  // Assuming product categories are distinct
     }
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAll();  // Assuming product categories are distinct
+    }
+
 
     public Page<Product> getProductsByCategory(String category, int page, int limit) {
         Pageable pageable = PageRequest.of(page - 1, limit);
         Category categoryObj = categoryRepository.findByName(category);
         return productRepository.findByCategory(categoryObj, pageable);
+    }
+
+    public Category createCategory(Category category) {
+        return categoryRepository.save(category);
+    }
+
+    public Category updateCategory(Long id, Category category) {
+        Category existingCategory = categoryRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + id));
+        existingCategory.setName(category.getName());
+        return categoryRepository.save(existingCategory);
+    }
+
+    public void deleteCategory(Long id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new IllegalArgumentException("Category not found with id: " + id);
+        }
+        categoryRepository.deleteById(id);
     }
 }

@@ -71,10 +71,20 @@ const userName = computed(() => authStore.user?.username || '');
 const totalItems = computed(() => cartStore.totalItems);
 
 const menuItems = computed(() => {
-  const items = [
-    { label: t('main.home'), path: '/' },
-    { label: t('main.products'), path: '/products' },
-  ];
+  let items = [];
+  if (authStore.user?.roles?.includes("ADMIN")) {
+    items = [
+      { label: t('main.home'), path: '/' },
+      { label: 'Products Edit', path: '/products-edit' },
+      { label: 'Category Edit', path: '/category-edit' },
+    ]
+  } else {
+    items = [
+      { label: t('main.home'), path: '/' },
+      { label: t('main.products'), path: '/products' },
+    ]
+  }
+
   // if (totalItems.value > 0) {
   //   items.push({ label: t('main.cart'), path: '/cart' });
   // }
@@ -88,10 +98,19 @@ const menuItems = computed(() => {
 //   { label: userName.value.split(' ')[0] || t('main.userProfile'), path: '/profile' },
 // ]);
 const mobileMenuItems = computed(() => {
-  const items = [
-    { label: t('main.home'), path: '/' },
-    { label: t('main.products'), path: '/products' },
-  ];
+  let items = [];
+  if (authStore.user?.roles?.includes("ADMIN")) {
+    items = [
+      { label: t('main.home'), path: '/' },
+      { label: 'Products Edit', path: '/products-edit' },
+      { label: 'Category Edit', path: '/category-edit' },
+    ]
+  } else {
+    items = [
+      { label: t('main.home'), path: '/' },
+      { label: t('main.products'), path: '/products' },
+    ]
+  }
   if (totalItems.value > 0) {
     items.push({ label: t('main.cart'), path: '/cart' });
   }

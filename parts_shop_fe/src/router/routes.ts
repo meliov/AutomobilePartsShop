@@ -117,6 +117,20 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
+  {
+    path: '/products-edit',
+    component: MainLayout,
+    children: [
+      { path: '', component: loadPage('ProductsEditor'), meta: { title: 'Products Edit' } },
+    ],
+  },
+  {
+    path: '/category-edit',
+    component: MainLayout,
+    children: [
+      { path: '', component: loadPage('CategoryEditor'), meta: { title: 'Products' } },
+    ],
+  },
 
   {
     path: '/checkout',

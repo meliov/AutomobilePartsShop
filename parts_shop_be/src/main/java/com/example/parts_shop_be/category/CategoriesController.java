@@ -5,9 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,6 +23,12 @@ public class CategoriesController {
     @GetMapping("/get")
     public ResponseEntity<Set<String>> getCategories() {
         return new ResponseEntity<>(categoryService.getCategories(), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/get-all")
+    public ResponseEntity<List<Category>> getAllCategories() {
+        return  ResponseEntity.ok(categoryService.getAllCategories());
     }
 
     @GetMapping("/category/{category}")
@@ -52,5 +60,29 @@ public class CategoriesController {
         ));
 
         return ResponseEntity.ok(response);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/create")
+    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
+            return ResponseEntity.ok(categoryService.createCategory(category));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category) {
+            Category updatedCategory = categoryService.updateCategory(id, category);
+            return ResponseEntity.ok(updatedCategory);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Object> deleteCategory(@PathVariable Long id) {
+           categoryService.deleteCategory(id);
+            return ResponseEntity.ok(Map.of(
+                    "status", "success",
+                    "message", "Category deleted successfully"
+            ));
+
     }
 }

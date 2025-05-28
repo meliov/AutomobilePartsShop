@@ -19,7 +19,6 @@ public class OrderDetailsController {
     @Autowired
     private OrderDetailsService orderDetailsService;
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/save/{userId}")
     public ResponseEntity<OrderDetailsDto> createOrder(@RequestBody CreateOrderDetailsDto createOrderDetailsDto, @PathVariable String userId) {
         Long parsedUserId = "null".equals(userId) ? null : Long.valueOf(userId);
@@ -27,7 +26,7 @@ public class OrderDetailsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(orderDetailsDto);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/get")
     public ResponseEntity<List<OrderDetailsDto>> getAllOrders() {
         List<OrderDetailsDto> orders = orderDetailsService.getAllOrders();
