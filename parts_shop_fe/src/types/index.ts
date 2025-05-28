@@ -8,7 +8,7 @@ export type ProductRating = {
 };
 
 export interface Category {
-  id: number;
+  id: number | null;
   name: string;
 };
 
@@ -18,14 +18,28 @@ export interface Product {
   name: string;
   description: string;
   image: string;
-  category: Category;
+  category: Category | null;
   price: number;
   quantity: number;
   title?: string;
   discount?: boolean;
   discountedPrice?: number;
   additionalImages?: string[];
-  rating?: ProductRating;
+  rating?: ProductRating | null;
+}
+
+export interface CreateProduct {
+  name: string;
+  description: string;
+  image: string;
+  category: Category | null;
+  price: number;
+  quantity: number;
+  title?: string;
+  discount?: boolean;
+  discountedPrice?: number;
+  additionalImages?: string[];
+  rating?: ProductRating | null;
 }
 
 export interface OrderDetails {

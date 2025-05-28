@@ -3,15 +3,15 @@
     <q-card>
       <q-card-section>
         <div class="text-h6">Products</div>
-        <q-list bordered style="max-height: 300px; overflow-y: auto;">
-          <q-item v-for="product in products" :key="product.id" clickable @click="selectProduct(product)">
+        <q-list bordered style="max-height: 35vh; width: 100%; overflow-y: auto;">
+          <q-item v-for="product in products" :key="product.id!!" clickable @click="selectProduct(product)">
             <q-item-section>{{ product.name }}</q-item-section>
           </q-item>
         </q-list>
       </q-card-section>
 
       <q-separator />
-
+      <q-btn class="q-mt-md" icon="add" color="primary" @click="openProductDialog" />
       <q-card-section v-if="selectedProduct">
         <q-input v-model="selectedProduct.name" label="Name" />
         <q-input v-model="selectedProduct.description" label="Description" />
@@ -29,18 +29,87 @@
         <q-btn class="q-mt-md" label="Save" color="primary" @click="saveProduct" />
         <q-btn class="q-mt-md" label="Delete" color="primary" @click="deleteProduct" />
       </q-card-section>
+      <q-dialog v-model="isProductDialogOpen">
+        <q-card>
+          <q-card-section>
+            <div class="text-h6">Create Product</div>
+          </q-card-section>
+          <q-card-section>
+            <q-input v-model="dialogProduct.name" label="Name" />
+            <q-input v-model="dialogProduct.description" label="Description" />
+            <q-input v-model.number="dialogProduct.price" label="Price" type="number" />
+            <q-input v-model.number="dialogProduct.quantity" label="Quantity" type="number" />
+            <q-select
+              v-model="dialogProduct.category"
+              :options="categories"
+              option-label="name"
+              option-value="id"
+              emit-value
+              map-options
+              label="Category"
+            />
+          </q-card-section>
+          <q-card-actions align="right">
+            <q-btn flat label="Cancel" color="negative" @click="closeProductDialog" />
+            <q-btn flat label="Save" color="primary" @click="emitProduct" />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
     </q-card>
   </q-page>
 </template>
 
 <script lang="ts" setup>
 import {onMounted, ref} from 'vue';
-import {Category, Product} from "@/types";
+import {Category, CreateProduct, Product} from "@/types";
 import {api} from '@/boot/axios';
 import {QVueGlobals, useQuasar} from "quasar";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL.replace(/\/$/, '');
 
+// dialog start
+const isProductDialogOpen = ref(false);
+const dialogProduct = ref<CreateProduct>({
+  name: '',
+  description: '',
+  price: 0,
+  quantity: 0,
+  category: null,
+  image: '',
+  title: '',
+  discount: false,
+  discountedPrice: 0,
+  additionalImages: [],
+  rating: null,
+});
+
+function openProductDialog() {
+  dialogProduct.value = {
+    name: '',
+    description: '',
+    price: 0,
+    quantity: 0,
+    category: null,
+    image: '',
+    title: '',
+    discount: false,
+    discountedPrice: 0,
+    additionalImages: [],
+    rating: null,
+  };
+  isProductDialogOpen.value = true;
+}
+
+function closeProductDialog() {
+  isProductDialogOpen.value = false;
+}
+
+function emitProduct() {
+  selectedProduct.value = { ...dialogProduct.value, id: -1 };
+  isProductDialogOpen.value = false;
+  saveProduct();
+}
+//dialog end
 const categories = ref<Category[]>([]);
 const products = ref<Product[]>([]);
 const selectedProduct = ref<Product | null>(null);
@@ -66,7 +135,7 @@ async function fetchProducts() {
       $q.notify({ type: 'negative', message: 'Error fetching products' });
     } else {
       products.value = response.data;
-      $q.notify({ type: 'positive', message: 'Products fetched successfully' });
+      // $q.notify({ type: 'positive', message: 'Products fetched successfully' });
     }
   } catch (error) {
     console.error('Error fetching products:', error);

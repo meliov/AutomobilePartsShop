@@ -30,7 +30,7 @@
             <strong>{{ $t('checkout.items') }}:</strong>
             <div
               v-for="item in details.items"
-              :key="item.id"
+              :key="item.id!!"
               class="q-py-xs tw-grid tw-grid-cols-3 tw-gap-1 tw-w-full"
             >
               <div>{{ item.name || item.title }}</div>
