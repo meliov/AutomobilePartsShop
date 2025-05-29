@@ -128,10 +128,16 @@ const routes: RouteRecordRaw[] = [
     path: '/category-edit',
     component: MainLayout,
     children: [
-      { path: '', component: loadPage('CategoryEditor'), meta: { title: 'Products' } },
+      { path: '', component: loadPage('CategoryEditor'), meta: { title: 'Categories Editor' } },
     ],
   },
-
+  {
+    path: '/orders-edit',
+    component: MainLayout,
+    children: [
+      { path: '', component: loadPage('OrdersEditor'), meta: { title: 'Orders Editor' } },
+    ],
+  },
   {
     path: '/checkout',
     component: MainLayout,

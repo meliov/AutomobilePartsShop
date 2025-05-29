@@ -26,7 +26,7 @@ public class OrderDetailsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(orderDetailsDto);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/get")
     public ResponseEntity<List<OrderDetailsDto>> getAllOrders() {
         List<OrderDetailsDto> orders = orderDetailsService.getAllOrders();

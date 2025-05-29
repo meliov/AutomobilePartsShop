@@ -77,6 +77,7 @@ const menuItems = computed(() => {
       { label: t('main.home'), path: '/' },
       { label: 'Products Edit', path: '/products-edit' },
       { label: 'Category Edit', path: '/category-edit' },
+      { label: 'Orders Edit', path: '/orders-edit' },
     ]
   } else {
     items = [
@@ -104,6 +105,7 @@ const mobileMenuItems = computed(() => {
       { label: t('main.home'), path: '/' },
       { label: 'Products Edit', path: '/products-edit' },
       { label: 'Category Edit', path: '/category-edit' },
+      { label: 'Orders Edit', path: '/orders-edit' },
     ]
   } else {
     items = [
