@@ -12,14 +12,18 @@
           :filter="filter"
           style="max-height: 70vh; overflow-y: auto;"
         >
+          <!-- eslint-disable-next-line  -->
           <template v-slot:top-right>
+            <!-- eslint-disable-next-line  -->
             <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
+              <!-- eslint-disable-next-line  -->
               <template v-slot:append>
                 <q-icon name="search" />
               </template>
             </q-input>
           </template>
-          <template #body-cell-actions="props">
+          <!-- eslint-disable-next-line  -->
+          <template v-slot:body-cell-actions="props">
             <q-td>
               <q-btn
                 label="Accept"
@@ -44,7 +48,7 @@
 import { onMounted, ref } from 'vue';
 import { api } from '@/boot/axios';
 import { QVueGlobals, useQuasar } from 'quasar';
-import {OrderDetails} from "@/types";
+import {OrderDetails, Product} from "@/types";
 import {API_ORDER_GET} from "@/constants/routes";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL.replace(/\/$/, '');
@@ -55,7 +59,15 @@ const filter = ref<string>('');
 
 const columns = [
   { name: 'id', required: true, label: 'ID', align: 'left', field: 'id', sortable: true },
-  { name: 'items', label: 'Items', align: 'left', field: 'items', sortable: false },
+  {
+    name: 'items',
+    label: 'Items',
+    align: 'left',
+    field: 'items',
+    sortable: false,
+    format: (val: Array<Product>) =>
+      val.map(item => `${item.name} (Qty: ${item.quantity}, Total: $${(item.price * item.quantity).toFixed(2) })`).join(', ')
+  },
   { name: 'total', label: 'Total', align: 'right', field: 'total', sortable: true },
   { name: 'date', label: 'Date', align: 'left', field: 'date', sortable: true },
   { name: 'shippingAddress', label: 'Shipping Address', align: 'left', field: 'shippingAddress', sortable: false },
