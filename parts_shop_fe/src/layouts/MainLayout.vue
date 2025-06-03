@@ -74,7 +74,6 @@ const menuItems = computed(() => {
   let items = [];
   if (authStore.user?.roles?.includes("ADMIN")) {
     items = [
-      { label: t('main.home'), path: '/' },
       { label: 'Products Edit', path: '/products-edit' },
       { label: 'Category Edit', path: '/category-edit' },
       { label: 'Orders Edit', path: '/orders-edit' },

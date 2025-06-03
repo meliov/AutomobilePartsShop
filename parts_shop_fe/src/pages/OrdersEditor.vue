@@ -9,8 +9,16 @@
           row-key="id"
           flat
           bordered
+          :filter="filter"
           style="max-height: 70vh; overflow-y: auto;"
         >
+          <template v-slot:top-right>
+            <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
+              <template v-slot:append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+          </template>
           <template #body-cell-actions="props">
             <q-td>
               <q-btn
@@ -43,6 +51,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL.replace(/\/$/, '');
 const $q = useQuasar() as QVueGlobals;
 
 const orders = ref<OrderDetails[]>([]);
+const filter = ref<string>('');
 
 const columns = [
   { name: 'id', required: true, label: 'ID', align: 'left', field: 'id', sortable: true },

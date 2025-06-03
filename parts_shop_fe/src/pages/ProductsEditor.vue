@@ -3,8 +3,9 @@
     <q-card>
       <q-card-section>
         <div class="text-h6">Products</div>
+        <q-input v-model="searchQuery" label="Search Products" outlined dense class="q-mb-md" />
         <q-list bordered style="max-height: 35vh; width: 100%; overflow-y: auto;">
-          <q-item v-for="product in products" :key="product.id!!" clickable @click="selectProduct(product)">
+          <q-item v-for="product in filteredProducts" :key="product.id!!" clickable @click="selectProduct(product)">
             <q-item-section>{{ product.name }}</q-item-section>
           </q-item>
         </q-list>
@@ -61,7 +62,7 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted, ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import {Category, CreateProduct, Product} from "@/types";
 import {api} from '@/boot/axios';
 import {QVueGlobals, useQuasar} from "quasar";
@@ -114,6 +115,12 @@ function emitProduct() {
 //dialog end
 const categories = ref<Category[]>([]);
 const products = ref<Product[]>([]);
+const searchQuery = ref<string>('');
+const filteredProducts = computed(() =>
+  products.value.filter(product =>
+    product.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
+);
 const selectedProduct = ref<Product | null>(null);
 const $q = useQuasar() as QVueGlobals;
 async function fetchCategories() {

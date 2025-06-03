@@ -3,8 +3,9 @@
     <q-card>
       <q-card-section>
         <div class="text-h6">Categories</div>
+        <q-input v-model="searchQuery" label="Search Categories" outlined dense class="q-mb-md" />
         <q-list bordered style="max-height: 35vh; width: 100%; overflow-y: auto;">
-          <q-item v-for="category in categories" :key="category.id!!" clickable @click="selectCategory(category)">
+          <q-item v-for="category in filteredCategories" :key="category.id!!" clickable @click="selectCategory(category)">
             <q-item-section>{{ category.name }}</q-item-section>
           </q-item>
         </q-list>
@@ -36,7 +37,7 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted, ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import {Category} from "@/types";
 import {api} from '@/boot/axios';
 import {QVueGlobals, useQuasar} from "quasar";
@@ -44,6 +45,12 @@ const API_BASE_URL = import.meta.env.VITE_API_URL.replace(/\/$/, '');
 const $q = useQuasar() as QVueGlobals;
 
 const categories = ref<Category[]>([]);
+const searchQuery = ref<string>('');
+const filteredCategories = computed(() =>
+  categories.value.filter(category =>
+    category.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
+);
 
 
 // dialog start

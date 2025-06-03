@@ -120,6 +120,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/products-edit',
     component: MainLayout,
+    meta: { requiresAuth: true, isAdminPage: true },
     children: [
       { path: '', component: loadPage('ProductsEditor'), meta: { title: 'Products Edit' } },
     ],
@@ -127,6 +128,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/category-edit',
     component: MainLayout,
+    meta: { requiresAuth: true, isAdminPage: true },
     children: [
       { path: '', component: loadPage('CategoryEditor'), meta: { title: 'Categories Editor' } },
     ],
@@ -134,6 +136,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/orders-edit',
     component: MainLayout,
+    meta: { requiresAuth: true, isAdminPage: true },
     children: [
       { path: '', component: loadPage('OrdersEditor'), meta: { title: 'Orders Editor' } },
     ],

@@ -54,6 +54,12 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     } else {
       next();
     }
+
+    if(to.meta.isAdminPage && !authStore.user.roles?.includes('ADMIN')){
+      next('/login');
+    } else {
+      next();
+    }
   });
 
   return Router;

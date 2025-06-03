@@ -106,6 +106,10 @@ export const useAuthStore = defineStore('auth', () => {
     storage.remove('accessToken');
     storage.remove('refreshToken');
     storage.remove('user');
+    const authStore = useAuthStore();
+    // eslint-disable-next-line
+    //@ts-ignore
+    authStore.user = null;
   };
   const updateProfile = async (profileData: UpdateUserDto) => {
     try {
