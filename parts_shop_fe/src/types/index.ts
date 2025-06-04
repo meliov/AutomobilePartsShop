@@ -50,6 +50,7 @@ export interface OrderDetails {
   shippingAddress: string;
   paymentMethod: string;
   trackingNumber?: number;
+  status?: string | null;
 }
 
 export interface CardDetails {

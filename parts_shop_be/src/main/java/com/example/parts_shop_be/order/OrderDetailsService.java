@@ -48,20 +48,16 @@ public class OrderDetailsService {
                 throw new RuntimeException("User not found");
             }
         }
-        // Update product quantities
-      createOrderDetailsDto.getItems().forEach(product -> {
-            Product existingProduct = productsService.getProduct(product.getId());
-            if (existingProduct != null) {
-                existingProduct.setQuantity(existingProduct.getQuantity() - product.getQuantity());
-            }
-        });
         Long max = orderDetailsRepository.findMaxTrackingNumber();
         orderDetails.setTrackingNumber(max == null ? 1 : max + 1);
+        orderDetails.setStatus(OrderStatus.PENDING);
+        orderDetails.setUserEmail(createOrderDetailsDto.getEmail());
         OrderDetails savedOrder = orderDetailsRepository.save(orderDetails);
+
 
         // Send email notification
         if (createOrderDetailsDto.getEmail() != null) {
-            String emailContent = "Your order with tracking number " + orderDetails.getTrackingNumber() + " has been created successfully.";
+            String emailContent = "Your order with tracking number " + orderDetails.getTrackingNumber() + " has been created successfully. \nWe will notify you once it is accepted and sent.\n Thanks for shopping with us!";
             emailServiceImpl.sendMail(createOrderDetailsDto.getEmail(), "Order Confirmation", emailContent);
         }
 
@@ -78,5 +74,43 @@ public class OrderDetailsService {
         return orderDetailsRepository.findByUserId(userId).stream()
                 .map(order -> modelMapper.map(order, OrderDetailsDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void acceptOrder(Long orderId) {
+        OrderDetails orderDetails = orderDetailsRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        // Update product quantities
+        orderDetails.getItems().forEach(product -> {
+            Product existingProduct = productsService.getProduct(product.getId());
+            if (existingProduct != null) {
+                existingProduct.setQuantity(existingProduct.getQuantity() - product.getQuantity());
+            }
+        });
+
+        orderDetails.setStatus(OrderStatus.ACCEPTED);
+        orderDetailsRepository.save(orderDetails);
+
+        // Send email notification
+        if (orderDetails.getUserEmail() != null) {
+            String emailContent = "Your order with tracking number " + orderDetails.getTrackingNumber() + " has been accepted and sent. \nExpect it in the next few (1-5) days.\n Thanks for shopping with us!";
+            emailServiceImpl.sendMail(orderDetails.getUserEmail(), "Order Accepted", emailContent);
+        }
+    }
+
+    @Transactional
+    public void rejectOrder(Long orderId) {
+        OrderDetails orderDetails = orderDetailsRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        orderDetails.setStatus(OrderStatus.REJECTED);
+        orderDetailsRepository.save(orderDetails);
+
+        // Send email notification
+        if (orderDetails.getUserEmail() != null) {
+            String emailContent = "We are sorry, but your order with tracking number " + orderDetails.getTrackingNumber() + " was rejected. The products might be out of stock.";
+            emailServiceImpl.sendMail(orderDetails.getUserEmail(), "Order Rejected", emailContent);
+        }
     }
 }

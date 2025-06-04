@@ -16,14 +16,6 @@
     </div>
     <div class="col-6">
       <q-input
-        v-model="cardRef.cardDetails.cardHolderName"
-        :label="$t('checkout.cardHolderName')"
-        :rules="[required, cardHolderNameRules]"
-        @keyup="emitValues()"
-      />
-    </div>
-    <div class="col-6">
-      <q-input
         v-model="cardRef.cardDetails.expirationDate"
         label="MM/YY"
         mask="##/##"
@@ -37,6 +29,14 @@
         label="CVV"
         mask="###"
         :rules="[required, cvvRules]"
+        @keyup="emitValues()"
+      />
+    </div>
+    <div class="col-6">
+      <q-input
+        v-model="cardRef.cardDetails.cardHolderName"
+        :label="$t('checkout.cardHolderName')"
+        :rules="[required, cardHolderNameRules]"
         @keyup="emitValues()"
       />
     </div>

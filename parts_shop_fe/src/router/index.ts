@@ -51,12 +51,8 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     const authStore = useAuthStore();
     if (to.meta.requiresAuth && !authStore.isLoggedIn()) {
       next('/login');
-    } else {
-      next();
-    }
-
-    if(to.meta.isAdminPage && !authStore.user.roles?.includes('ADMIN')){
-      next('/login');
+    } if(to.meta.isAdminPage && !authStore.user.roles?.includes('ADMIN')){
+      next('/products');
     } else {
       next();
     }

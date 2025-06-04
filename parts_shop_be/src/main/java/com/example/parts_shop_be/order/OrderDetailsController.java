@@ -39,4 +39,18 @@ public class OrderDetailsController {
         return ResponseEntity.ok(orders);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/accept/{orderId}")
+    public ResponseEntity<Void> acceptOrder(@PathVariable Long orderId) {
+        orderDetailsService.acceptOrder(orderId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/reject/{orderId}")
+    public ResponseEntity<Void> rejectOrder(@PathVariable Long orderId) {
+        orderDetailsService.rejectOrder(orderId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 }

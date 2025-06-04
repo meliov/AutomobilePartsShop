@@ -1,5 +1,6 @@
 package com.example.parts_shop_be.order.dto;
 
+import com.example.parts_shop_be.order.OrderStatus;
 import com.example.parts_shop_be.product.Product;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,8 @@ public class OrderDetailsDto {
     private String paymentMethod;
 
     private Long trackingNumber;
+
+    private OrderStatus status;
 
 
     public Long getId() {
@@ -74,5 +77,13 @@ public class OrderDetailsDto {
 
     public void setTrackingNumber(Long trackingNumber) {
         this.trackingNumber = trackingNumber;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 }

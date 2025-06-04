@@ -10,7 +10,7 @@
           flat
           bordered
           :filter="filter"
-          style="max-height: 70vh; overflow-y: auto;"
+          style="height: 70vh; overflow-y: auto;"
         >
           <!-- eslint-disable-next-line  -->
           <template v-slot:top-right>
@@ -28,14 +28,18 @@
               <q-btn
                 label="Accept"
                 color="positive"
+                :disable="props.row.status !== 'PENDING'"
                 @click="acceptOrder(props.row.id)"
-              />
+              ><q-tooltip v-if="props.row.status !== 'PENDING'">Order status is not 'PENDING'</q-tooltip></q-btn>
               <q-btn
                 label="Reject"
                 color="negative"
                 class="q-ml-sm"
+                :disable="props.row.status !== 'PENDING'"
                 @click="rejectOrder(props.row.id)"
-              />
+              >
+                <q-tooltip v-if="props.row.status !== 'PENDING'">Order status is not 'PENDING'</q-tooltip>
+              </q-btn>
             </q-td>
           </template>
         </q-table>
@@ -65,14 +69,16 @@ const columns = [
     align: 'left',
     field: 'items',
     sortable: false,
+    style: 'width: 80vh; min-width: 80vh; white-space: normal; word-wrap: break-word;', // Set fixed width and wrap content
     format: (val: Array<Product>) =>
-      val.map(item => `${item.name} (Qty: ${item.quantity}, Total: $${(item.price * item.quantity).toFixed(2) })`).join(', ')
+      val.map(item => `${item.name} (Qty: ${item.quantity}, Total: $${(item.price * item.quantity).toFixed(2)})`).join(', ')
   },
   { name: 'total', label: 'Total', align: 'right', field: 'total', sortable: true },
   { name: 'date', label: 'Date', align: 'left', field: 'date', sortable: true },
   { name: 'shippingAddress', label: 'Shipping Address', align: 'left', field: 'shippingAddress', sortable: false },
   { name: 'paymentMethod', label: 'Payment Method', align: 'left', field: 'paymentMethod', sortable: true },
   { name: 'trackingNumber', label: 'Tracking Number', align: 'left', field: 'trackingNumber', sortable: true },
+  { name: 'status', label: 'Status', align: 'left', field: 'status', sortable: true },
   { name: 'actions', label: 'Actions', align: 'center', field: () => '' },
 ] as {
   name: string;
@@ -85,6 +91,7 @@ const columns = [
   format?: (val: number | string) => string;
   headerClasses?: string;
 }[];
+
 async function fetchOrders() {
   try {
     const response = await api.get(`${API_BASE_URL}${API_ORDER_GET}`);
