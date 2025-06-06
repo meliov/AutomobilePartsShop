@@ -5,7 +5,7 @@
       <PageSubtitle :subtitle="$t('home.subtitle')" />
 
       <QButton
-        v-if="!useAuthStore().getUserFromStorage().roles?.includes('ADMIN')"
+        v-if="!useAuthStore().getUserFromStorage()?.roles?.includes('ADMIN')"
         :label="$t('home.products')"
         class-name="!tw-w-full tw-mx-auto !tw-px-4 sm:!tw-w-fit sm:!tw-px-24 !tw-py-2.5"
         @click="goToProducts"

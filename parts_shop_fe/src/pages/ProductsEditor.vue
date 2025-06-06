@@ -48,14 +48,15 @@
                 <div class="col-7">
                   <div class="text-h6">Additional Images</div>
                   <div class="row"  style="max-height: 20vh; width: 100%; overflow-y: auto;">
-                    <q-card v-for="(image, index) in selectedProduct.additionalImages" :key="index" class="col-4">
+                    <q-card v-for="(image, index) in selectedProduct.additionalImages" :key="index" class="col-4 q-mb-md">
+                      <q-btn icon="delete" color="secondary" @click="selectedProduct.additionalImages?.splice(index, 1)"></q-btn>
                       <q-card-section>
                         <q-input v-model="selectedProduct.additionalImages![index]" label="Image URL" />
                         <q-img :src="selectedProduct.additionalImages![index]" alt="Main Image" style="max-width: 100%; max-height: 150px;" />
                       </q-card-section>
                     </q-card>
                   </div>
-                  <q-btn flat icon="add" color="black" @click="selectedProduct!!.additionalImages!!.push('')" />
+                  <q-btn flat icon="add" color="secondary" @click="selectedProduct!!.additionalImages!!.push('')" />
                 </div>
               </div>
 
