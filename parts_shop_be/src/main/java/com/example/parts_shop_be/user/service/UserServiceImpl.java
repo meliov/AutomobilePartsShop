@@ -198,13 +198,13 @@ public class UserServiceImpl implements UserService {
         emailContent.append(String.format("Dear %s,\n\n", user.getFirstName()));
 
         // Update the user's status if changed
-        if (user.getStatus() != newStatus) {
+        if (user.getStatus() != newStatus && newStatus != null) {
             user.setStatus(newStatus);
             emailContent.append(String.format("Your account status has been updated to: %s.\n", newStatus.name()));
         }
 
         // Update the user's role if changed
-        if (!new HashSet<>(user.getRoles()).containsAll(roles) || !new HashSet<>(roles).containsAll(user.getRoles())) {
+        if (roles != null && !new HashSet<>(user.getRoles()).containsAll(roles) || !new HashSet<>(roles).containsAll(user.getRoles())) {
             user.setRoles(roles);
             emailContent.append(String.format("Your account roles have been updated to: %s.\n", roles));
         }
@@ -223,7 +223,10 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<ClientUserDto> getUserDtos() {
-        return userRepository.findAll().stream().map(user -> modelMapper.map(user, ClientUserDto.class)).collect(Collectors.toList());
+    public List<ClientUserDto> getUserDtos(Long userId) {
+        return userRepository.findAll().stream()
+                .map(user -> modelMapper.map(user, ClientUserDto.class))
+                .filter(it -> !it.getId().equals(userId))
+                .collect(Collectors.toList());
     }
 }

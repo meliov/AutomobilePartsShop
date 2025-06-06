@@ -37,5 +37,5 @@ public interface UserService {
 
     Boolean  changeUserStatusOrRoleAndNotify(Long userId, UserStatus newStatus, List<UserRole> roles)  throws UserNotFoundException;
 
-    List<ClientUserDto> getUserDtos();
+    List<ClientUserDto> getUserDtos(Long userId);
 }

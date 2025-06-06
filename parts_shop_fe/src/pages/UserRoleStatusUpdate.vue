@@ -4,7 +4,7 @@
       <q-card flat bordered class="tw-max-w-screen-lg tw-mx-auto">
         <q-card-section>
           <div class="tw-text-2xl tw-mb-4 tw-font-serif">
-            {{ $t('users.userManagement') }}
+            {{ 'Users Management' }}
           </div>
           <q-separator class="q-my-md" />
           <q-table
@@ -15,24 +15,31 @@
           >
             <!-- eslint-disable-next-line  -->
             <template v-slot:body-cell-roles="props" >
+              <q-td :props="props">
               <q-select
                 v-model="props.row.roles"
                 :options="roles"
                 multiple
-
-                @update:model-value="updateUserStatusAndRole(props.row.id, props.row.status, props.row.roles)"
+                outlined
+                dense
+                @update:model-value="changesDone = true"
               />
+              </q-td>
             </template>
             <!-- eslint-disable-next-line  -->
             <template v-slot:body-cell-status="props">
+              <q-td :props="props">
               <q-select
                 v-model="props.row.userStatus"
                 :options="statuses"
-
-                @update:model-value="updateUserStatusAndRole(props.row.id, props.row.status, props.row.roles)"
+                outlined
+                dense
+                @update:model-value="changesDone = true"
               />
+              </q-td>
             </template>
           </q-table>
+          <q-btn v-if="changesDone" class="q-mt-md" label="Save" color="primary" @click="saveChanges" />
         </q-card-section>
       </q-card>
     </div>
@@ -44,18 +51,22 @@ import { ref, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
 import { api } from '@/boot/axios';
 import { User} from "@/types";
+import {useAuthStore} from "@/stores/auth";
 
 const $q = useQuasar();
 const API_BASE_URL = import.meta.env.VITE_API_URL.replace(/\/$/, '');
 const users = ref<User[]>([]);
 const statuses = ref([
-  { label: 'Active', value: 'ACTIVE' },
-  { label: 'Banned', value: 'BANNED' },
+  'ACTIVE',
+  'BANNED',
+  'PENDING',
 ]);
 const roles = ref([
-  { label: 'Admin', value: 'admin' },
-  { label: 'User', value: 'user' },
+  'ADMIN',
+  'USER'
 ]);
+
+const userAtuh = useAuthStore();
 
 const columns = ref([
   { name: 'email', label: 'Email', field: 'email', align: 'left' },
@@ -75,7 +86,7 @@ const columns = ref([
 
 const fetchUsers = async () => {
   try {
-    const response = await api.get(`${API_BASE_URL}/user/all`);
+    const response = await api.get(`${API_BASE_URL}/user/all/${userAtuh.getUserFromStorage()?.id}`);
     users.value = response.data as User[];
   } catch {
     $q.notify({
@@ -87,21 +98,31 @@ const fetchUsers = async () => {
 };
 
 const updateUserStatusAndRole = async (id: number, status: string | null, roles: string[] | null) => {
-  try {
+
     const payload = {
       newStatus: status,
       roles: roles,
     };
     await api.put(`${API_BASE_URL}/user/change-status-role/${id}`, payload);
+};
+
+const changesDone = ref( false);
+
+const saveChanges = async () => {
+  try {
+    await Promise.all(users.value.map(user =>
+      updateUserStatusAndRole(user.id, user.userStatus, user.roles)
+    ));
+    changesDone.value = false;
     $q.notify({
       color: 'positive',
       message: 'User status and role updated successfully',
       icon: 'check_circle',
     });
-  } catch  {
+  } catch {
     $q.notify({
       color: 'negative',
-      message: 'Failed to update user status and role',
+      message: 'Failed to save changes',
       icon: 'error',
     });
   }

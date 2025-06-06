@@ -114,7 +114,7 @@ const mobileMenuItems = computed(() => {
       { label: t('main.products'), path: '/products' },
     ]
   }
-  if (totalItems.value > 0) {
+  if (totalItems.value > 0 && !authStore.user?.roles?.includes("ADMIN")) {
     items.push({ label: t('main.cart'), path: '/cart' });
   }
   if (authStore.isLoggedIn()) {

@@ -163,11 +163,11 @@ class UserController {
         }
     }
 
-    @GetMapping("/all")
+    @GetMapping("/all/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Object> getAllUsers() {
+    public ResponseEntity<Object> getAllUsers(@PathVariable Long userId) {
         return ResponseEntity.ok(
-                userService.getUserDtos()
+                userService.getUserDtos(userId)
         );
     }
 
