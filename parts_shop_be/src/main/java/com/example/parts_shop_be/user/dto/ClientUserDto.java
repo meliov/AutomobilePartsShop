@@ -1,6 +1,7 @@
 package com.example.parts_shop_be.user.dto;
 
 import com.example.parts_shop_be.user.UserGender;
+import com.example.parts_shop_be.user.UserStatus;
 import com.example.parts_shop_be.user.card_details.CardDetailsDto;
 import com.example.parts_shop_be.user.role.UserRole;
 
@@ -21,6 +22,8 @@ public class ClientUserDto {
 
     private List<UserRole> roles;
     private CardDetailsDto cardDetails;
+
+    private UserStatus userStatus;
     public ClientUserDto() {
     }
 
@@ -87,6 +90,14 @@ public class ClientUserDto {
 
     public void setRoles(List<UserRole> roles) {
         this.roles = roles;
+    }
+
+    public UserStatus getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
     }
 
     @Override

@@ -142,6 +142,14 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/users-edit',
+    component: MainLayout,
+    meta: { requiresAuth: true, isAdminPage: true },
+    children: [
+      { path: '', component: loadPage('UserRoleStatusUpdate'), meta: { title: 'Users Editor' } },
+    ],
+  },
+  {
     path: '/checkout',
     component: MainLayout,
     children: [

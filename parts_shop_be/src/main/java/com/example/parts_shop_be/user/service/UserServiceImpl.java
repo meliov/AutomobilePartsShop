@@ -9,6 +9,7 @@ import com.example.parts_shop_be.user.forgot_password_object.ForgotPasswordObjec
 import com.example.parts_shop_be.user.role.UserRole;
 import com.example.parts_shop_be.user.signup_object.SignupObject;
 import com.example.parts_shop_be.user.signup_object.SignupObjectService;
+import com.example.parts_shop_be.utils.email.EmailService;
 import com.example.parts_shop_be.utils.exception.UserAlreadyPresentException;
 import com.example.parts_shop_be.utils.exception.UserNotFoundException;
 import org.modelmapper.ModelMapper;
@@ -19,8 +20,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -42,6 +45,9 @@ public class UserServiceImpl implements UserService {
 
     @Value("${host.and.port.for.email}")
     private String hostAndPort;
+
+    @Autowired
+    private EmailService emailServiceImpl;
     @Override
     public ClientUserDto updateUser(UpdateUserDto updateUserDto) {
         User user = userRepository.findById(updateUserDto.getId()).get();
@@ -180,4 +186,44 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @Transactional
+    @Override
+    public Boolean changeUserStatusOrRoleAndNotify(Long userId, UserStatus newStatus, List<UserRole> roles) throws UserNotFoundException {
+        // Fetch the user by ID
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        // Prepare email content
+        StringBuilder emailContent = new StringBuilder();
+        emailContent.append(String.format("Dear %s,\n\n", user.getFirstName()));
+
+        // Update the user's status if changed
+        if (user.getStatus() != newStatus) {
+            user.setStatus(newStatus);
+            emailContent.append(String.format("Your account status has been updated to: %s.\n", newStatus.name()));
+        }
+
+        // Update the user's role if changed
+        if (!new HashSet<>(user.getRoles()).containsAll(roles) || !new HashSet<>(roles).containsAll(user.getRoles())) {
+            user.setRoles(roles);
+            emailContent.append(String.format("Your account roles have been updated to: %s.\n", roles));
+        }
+
+        // Save the updated user
+        userRepository.save(user);
+
+        // Complete email content
+        emailContent.append("\nPlease contact support if you have any questions.\n\nBest regards,\nThe Parts Shop Team");
+
+        // Send notification email
+        emailServiceImpl.sendMail(user.getEmail(), "Account Update Notification", emailContent.toString());
+
+        return true;
+    }
+
+
+    @Override
+    public List<ClientUserDto> getUserDtos() {
+        return userRepository.findAll().stream().map(user -> modelMapper.map(user, ClientUserDto.class)).collect(Collectors.toList());
+    }
 }

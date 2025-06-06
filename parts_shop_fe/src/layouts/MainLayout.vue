@@ -77,6 +77,7 @@ const menuItems = computed(() => {
       { label: 'Products Edit', path: '/products-edit' },
       { label: 'Category Edit', path: '/category-edit' },
       { label: 'Orders Edit', path: '/orders-edit' },
+      { label: 'Users Edit', path: '/users-edit' },
     ]
   } else {
     items = [
@@ -105,6 +106,7 @@ const mobileMenuItems = computed(() => {
       { label: 'Products Edit', path: '/products-edit' },
       { label: 'Category Edit', path: '/category-edit' },
       { label: 'Orders Edit', path: '/orders-edit' },
+      { label: 'Users Edit', path: '/users-edit' },
     ]
   } else {
     items = [

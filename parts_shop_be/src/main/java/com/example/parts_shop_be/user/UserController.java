@@ -2,6 +2,7 @@ package com.example.parts_shop_be.user;
 
 import com.example.parts_shop_be.user.card_details.CardDetailsDto;
 import com.example.parts_shop_be.user.dto.*;
+import com.example.parts_shop_be.user.role.UserRole;
 import com.example.parts_shop_be.user.service.UserService;
 import com.example.parts_shop_be.utils.exception.UserAlreadyPresentException;
 import com.example.parts_shop_be.utils.exception.UserNotFoundException;
@@ -10,7 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -143,5 +147,28 @@ class UserController {
     }
 
 
+    @PutMapping("/change-status-role/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Object> changeUserStatusAndRole(@PathVariable Long userId, @RequestBody ChangeStatusRoleDto changeStatusRoleDto) {
+        logger.debug("in changeUserStatusAndRole for userId:" + userId);
+        try {
+            return ResponseEntity.ok(
+                    userService.changeUserStatusOrRoleAndNotify(userId, changeStatusRoleDto.getNewStatus(), changeStatusRoleDto.getRoles().stream().map(UserRole::valueOf).collect(Collectors.toList()))
+            );
+        } catch (UserNotFoundException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("User not found.");
+        }
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Object> getAllUsers() {
+        return ResponseEntity.ok(
+                userService.getUserDtos()
+        );
+    }
 
 }

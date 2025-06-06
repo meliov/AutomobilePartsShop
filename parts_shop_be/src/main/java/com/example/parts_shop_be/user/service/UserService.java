@@ -3,8 +3,12 @@ package com.example.parts_shop_be.user.service;
 import com.example.parts_shop_be.user.UserStatus;
 import com.example.parts_shop_be.user.card_details.CardDetailsDto;
 import com.example.parts_shop_be.user.dto.*;
+import com.example.parts_shop_be.user.role.UserRole;
 import com.example.parts_shop_be.utils.exception.UserAlreadyPresentException;
 import com.example.parts_shop_be.utils.exception.UserNotFoundException;
+
+import javax.transaction.Transactional;
+import java.util.List;
 
 public interface UserService {
 
@@ -30,4 +34,8 @@ public interface UserService {
 
 
     boolean updatePassword(ChangePasswordDto changePasswordDto) throws UserNotFoundException;
+
+    Boolean  changeUserStatusOrRoleAndNotify(Long userId, UserStatus newStatus, List<UserRole> roles)  throws UserNotFoundException;
+
+    List<ClientUserDto> getUserDtos();
 }

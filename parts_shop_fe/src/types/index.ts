@@ -124,6 +124,7 @@ export interface User {
      address: string,
      cardDetails: CardDetails | null,
      roles: string[] | null,
+     userStatus: string
 }
 export interface UpdateUserDto {
      id: number,
