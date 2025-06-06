@@ -163,8 +163,13 @@ const isInCart = computed(() => {
 const getImageUrl = (imagePath: string | undefined): string => {
   if (!imagePath) return '';
 
-  const fullUrl = `${baseUrl}${imagePath}`;
+  // If the imagePath is already a full URL, return it directly
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath;
+  }
 
+  // Otherwise, treat it as a relative path and prepend the base URL
+  const fullUrl = `${baseUrl}${imagePath}`;
   const cached = imageStore.getCachedImageUrl(fullUrl);
   if (cached) return cached;
 
@@ -198,7 +203,6 @@ const openImageOverlay = (mainImage: string) => {
     }));
     previewImages.push(...additionalPreviewImages);
   }
-
   imageStore.openPreview(previewImages);
 };
 

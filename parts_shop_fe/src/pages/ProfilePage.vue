@@ -43,6 +43,7 @@
       </q-card-section>
 
       <div
+        v-if="!useAuthStore().getUserFromStorage().roles?.includes('ADMIN')"
         class="tw-w-full tw-flex tw-flex-col sm:tw-flex-row sm:tw-justify-between tw-gap-4 tw-py-4"
       >
         <q-card-section>
@@ -154,6 +155,10 @@ const logout = () => {
 
 const getImageUrl = (imagePath: string) => {
   if (!imagePath) return '';
+  // If the imagePath is already a full URL, return it directly
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath;
+  }
 
   const fullUrl = `${baseUrl}${imagePath}`;
 

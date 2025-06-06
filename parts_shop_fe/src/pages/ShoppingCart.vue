@@ -190,6 +190,10 @@ const text = computed(() => (isDark.value ? 'dark' : 'white'));
 
 const getImageUrl = (imagePath: string) => {
   if (!imagePath) return '';
+  // If the imagePath is already a full URL, return it directly
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath;
+  }
 
   const fullUrl = `${baseUrl}${imagePath}`;
 

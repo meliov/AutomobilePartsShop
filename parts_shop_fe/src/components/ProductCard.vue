@@ -89,6 +89,10 @@ const viewProduct = (product: Product) => {
 };
 
 const imageUrl = (imagePath: string) => {
+  // If the imagePath is already a full URL, return it directly
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath;
+  }
   return `${apiUrl}${imagePath}`;
 };
 

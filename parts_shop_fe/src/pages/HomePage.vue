@@ -5,6 +5,7 @@
       <PageSubtitle :subtitle="$t('home.subtitle')" />
 
       <QButton
+        v-if="!useAuthStore().getUserFromStorage().roles?.includes('ADMIN')"
         :label="$t('home.products')"
         class-name="!tw-w-full tw-mx-auto !tw-px-4 sm:!tw-w-fit sm:!tw-px-24 !tw-py-2.5"
         @click="goToProducts"
@@ -18,6 +19,7 @@ import PageTitle from '@/components/base/PageTitle.vue';
 import PageSubtitle from '@/components/base/PageSubtitle.vue';
 import { useRouter } from 'vue-router';
 import QButton from '@/components/base/QButton.vue';
+import {useAuthStore} from "@/stores/auth";
 
 const router = useRouter();
 

@@ -81,6 +81,7 @@ public class ProductService {
             existingProduct.setDiscountedPrice(updatedProduct.getDiscountedPrice());
             existingProduct.setRating(updatedProduct.getRating());
             existingProduct.setQuantity(updatedProduct.getQuantity());
+            existingProduct.setAdditionalImages(updatedProduct.getAdditionalImages());
             return productRepository.save(existingProduct);
         }
         return null;
