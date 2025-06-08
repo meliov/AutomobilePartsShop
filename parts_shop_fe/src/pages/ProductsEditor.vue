@@ -47,7 +47,7 @@
                 <div class="col-1"></div>
                 <div class="col-7">
                   <div class="text-h6">Additional Images</div>
-                  <div class="row"  style="max-height: 20vh; width: 100%; overflow-y: auto;">
+                  <div class="row"  style="max-height: 30vh; width: 100%; overflow-y: auto;">
                     <q-card v-for="(image, index) in selectedProduct.additionalImages" :key="index" class="col-4 q-mb-md">
                       <q-btn icon="delete" color="secondary" @click="selectedProduct.additionalImages?.splice(index, 1)"></q-btn>
                       <q-card-section>
@@ -125,6 +125,7 @@ import {computed, onMounted, ref} from 'vue';
 import {Category, CreateProduct, Product} from "@/types";
 import {api} from '@/boot/axios';
 import {QVueGlobals, useQuasar} from "quasar";
+import {useI18n} from "vue-i18n";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL.replace(/\/$/, '');
 
@@ -260,7 +261,7 @@ onMounted(async () => {
  await fetchCategories();
  await fetchProducts();
 });
-
+const { t } = useI18n();
 const getImageUrl = (imagePath: string) => {
   if (!imagePath) return '';
   // If the imagePath is already a full URL, return it directly
