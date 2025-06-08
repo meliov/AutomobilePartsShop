@@ -5,4 +5,7 @@ export const passwordReset = {
   reset: 'Reset Password',
   cancel: 'Cancel',
   errorMessage: 'An error occurred. Please try again.',
+  emailVerification: 'Email Verification',
+  insert: 'Insert your email address',
+  submit: 'Submit',
 };

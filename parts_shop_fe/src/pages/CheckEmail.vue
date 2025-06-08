@@ -4,18 +4,18 @@
     <div class="tw-w-full sm:tw-max-w-72 tw-mx-auto">
       <q-card flat bordered class="!tw-w-full !tw-max-w-54 tw-p-4 !tw-bg-transparent">
         <h4 class="tw-text-3xl tw-text-center tw-mb-8 tw-font-semibold tw-font-serif">
-          {{'Email Verification'}}
+          {{$t('passwordReset.emailVerification')}}
         </h4>
         <q-form @submit.prevent="handleSubmit">
           <q-input
             v-model="email"
-            label="Insert your account email"
+            :label="$t('passwordReset.insert')"
             type="email"
             lazy-rules
             :rules="[required, emailRules]"
           />
           <div class="q-mt-md">
-            <q-btn type="submit" label="Submit" color="primary" />
+            <q-btn type="submit" :label="$t('passwordReset.submit')" color="primary" />
           </div>
         </q-form>
 

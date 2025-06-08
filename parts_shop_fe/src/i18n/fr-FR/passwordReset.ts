@@ -6,4 +6,7 @@ export const passwordReset = {
   reset: 'Réinitialiser le mot de passe',
   cancel: 'Annuler',
   errorMessage: "Une erreur s'est produite. Veuillez réessayer.",
+  emailVerification: 'Vérification de l\'e-mail',
+  insert: 'Insérez votre adresse e-mail',
+  submit: 'Soumettre',
 };
