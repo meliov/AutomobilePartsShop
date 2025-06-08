@@ -2,12 +2,14 @@
   <q-page padding class="!tw-pb-16 !tw-px-3 tw-flex tw-justify-center tw-items-center">
     <div class="tw-w-full sm:tw-max-w-72 tw-mx-auto">
       <q-card flat bordered class="!tw-w-full !tw-max-w-54 tw-p-4 !tw-bg-transparent">
-        <h4 class="tw-text-3xl tw-text-center tw-mb-8 tw-font-semibold tw-font-serif">Register</h4>
+        <h4 class="tw-text-3xl tw-text-center tw-mb-8 tw-font-semibold tw-font-serif">
+          {{ $t('register.title') }}
+        </h4>
         <q-form class="!tw-w-full" @submit.prevent="handleRegister">
           <q-card-section class="tw-flex tw-flex-col tw-gap-4 tw-w-full !tw-p-0 tw-mb-4">
             <q-input
               v-model="name"
-              label="Name"
+              :label="$t('register.name')"
               type="text"
               dense
               lazy-rules
@@ -16,7 +18,7 @@
             />
             <q-input
               v-model="email"
-              label="Email"
+              :label="$t('register.email')"
               type="email"
               dense
               lazy-rules
@@ -25,7 +27,7 @@
             />
             <q-input
               v-model="password"
-              label="Password"
+              :label="$t('register.password')"
               type="password"
               dense
               lazy-rules
@@ -34,7 +36,7 @@
             />
             <q-input
               v-model="confirmPassword"
-              label="Confirm Password"
+              :label="$t('register.confirmPassword')"
               type="password"
               dense
               lazy-rules
@@ -43,8 +45,8 @@
             />
           </q-card-section>
           <div class="tw-flex tw-flex-col tw-gap-2">
-            <QButton type="submit" label="Register" class="!tw-w-full !tw-py-2.5" />
-            <q-btn secondary label="Cancel" class="!tw-w-full !tw-py-2.5" @click="goHome()"/>
+            <QButton type="submit" :label="$t('register.submit')" class="!tw-w-full !tw-py-2.5" />
+            <q-btn secondary :label="$t('register.cancel')" class="!tw-w-full !tw-py-2.5" @click="goHome()" />
           </div>
         </q-form>
       </q-card>

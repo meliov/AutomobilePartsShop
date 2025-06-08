@@ -1,10 +1,10 @@
 import enUS from './en-US';
-import srRS from './sr-RS';
+import bgBG from './bg-BG';
 import frFR from './fr-FR';
 
 export default {
   'en-US': enUS,
-  'sr-RS': srRS,
+  'bg-BG': bgBG,
   'fr-FR': frFR,
 };
 

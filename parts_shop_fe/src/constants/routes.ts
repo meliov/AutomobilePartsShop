@@ -1,4 +1,4 @@
-export const PAGE_TITLE = 'E-Comm Shop';
+export const PAGE_TITLE = 'Auto-Parts Shop';
 export const HOME_PATH = '/';
 export const LOGIN_PATH = '/login';
 export const REGISTER_PATH = '/register';

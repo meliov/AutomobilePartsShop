@@ -1,0 +1,18 @@
+export const productsEditor = {
+  title: 'Éditeur de produits',
+  search: 'Recherche',
+  add: 'Ajouter un produit',
+  name: 'Nom du produit',
+  description: 'Description',
+  price: 'Prix',
+  quantity: 'Quantité',
+  category: 'Catégorie',
+  images: 'Images',
+  mainImage: 'Image principale',
+  additionalImages: 'Images supplémentaires',
+  imageUrl: 'URL de l\'image',
+  addImage: 'Ajouter une image',
+  save: 'Enregistrer',
+  delete: 'Supprimer',
+  create: 'Créer un produit',
+};

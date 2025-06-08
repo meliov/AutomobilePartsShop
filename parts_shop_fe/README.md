@@ -1,10 +1,9 @@
-# E-Comm Shop
+# Auto-Parts Shop Shop
 
-This project is a simple client application for an e-commerce platform, built using the Quasar Framework and Vue 3. It forms the API layer of a three-tier system, providing a modern, responsive, and user-friendly interface for managing products and their categories. This client app ensures efficient interaction with the backend API and delivers a seamless shopping experience. 🚀 [Live Demo](https://shop.nenadbursac.com)
+This project is a simple client application for an Auto-Parts Shop platform, built using the Quasar Framework and Vue 3. It forms the API layer of a three-tier system, providing a modern, responsive, and user-friendly interface for managing products and their categories. This client app ensures efficient interaction with the backend API and delivers a seamless shopping experience. 🚀 [Live Demo](https://shop.nenadbursac.com)
 
 ## Backend
 
-The backend for this application is built using the Gin framework in Go. It provides a simple API for managing products and their categories. Repository can be found at: [E-commerce Platform API](https://github.com/nbursa/e-comm-api)
 
 ## Features
 

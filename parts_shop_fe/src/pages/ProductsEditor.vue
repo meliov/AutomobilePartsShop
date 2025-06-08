@@ -2,8 +2,8 @@
   <q-page class="q-pa-md">
     <q-card>
       <q-card-section>
-        <div class="text-h6">Products</div>
-        <q-input v-model="searchQuery" label="Search Products" outlined dense class="q-mb-md" />
+        <div class="text-h6">{{ t('productsEditor.title') }}</div>
+        <q-input v-model="searchQuery" :label="t('productsEditor.search')" outlined dense class="q-mb-md" />
         <q-list bordered style="max-height: 35vh; width: 100%; overflow-y: auto;">
           <q-item v-for="product in filteredProducts" :key="product.id!!" clickable @click="selectProduct(product)">
             <q-item-section class="col-1">{{ product.name }}</q-item-section>
@@ -16,14 +16,14 @@
       </q-card-section>
 
       <q-separator />
-      <q-btn class="q-mt-md" icon="add" color="primary" @click="openProductDialog" />
+      <q-btn class="q-mt-md" icon="add" color="primary" :label="t('productsEditor.add')" @click="openProductDialog" />
       <q-card-section v-if="selectedProduct">
         <div class="row" style="width: 100%">
           <div class="col-3">
-            <q-input v-model="selectedProduct.name" label="Name" />
-            <q-input v-model="selectedProduct.description" label="Description" autogrow />
-            <q-input v-model.number="selectedProduct.price" label="Price" type="number" />
-            <q-input v-model.number="selectedProduct.quantity" label="Quantity" type="number" />
+            <q-input v-model="selectedProduct.name" :label="t('productsEditor.name')" />
+            <q-input v-model="selectedProduct.description" :label="t('productsEditor.description')" autogrow />
+            <q-input v-model.number="selectedProduct.price" :label="t('productsEditor.price')" type="number" />
+            <q-input v-model.number="selectedProduct.quantity" :label="t('productsEditor.quantity')" type="number" />
             <q-select
               v-model="selectedProduct.category"
               :options="categories"
@@ -31,32 +31,32 @@
               option-value="id"
               emit-value
               map-options
-              label="Category"
+              :label="t('productsEditor.category')"
             />
-         </div>
+          </div>
           <div class="col-9">
             <q-card-section >
               <div class="row" style="width: 100%">
                 <div class="col-4">
-                <div class="text-h6">Images</div>
+                  <div class="text-h6">{{ t('productsEditor.images') }}</div>
                   <q-card>
-                    <q-input v-model="selectedProduct.image" label="Main Image URL" />
+                    <q-input v-model="selectedProduct.image" :label="t('productsEditor.mainImage')" />
                     <q-img :src="selectedProduct.image" alt="Main Image" style="max-width: 100%; max-height: 150px;" />
                   </q-card>
                 </div>
                 <div class="col-1"></div>
                 <div class="col-7">
-                  <div class="text-h6">Additional Images</div>
+                  <div class="text-h6">{{ t('productsEditor.additionalImages') }}</div>
                   <div class="row"  style="max-height: 30vh; width: 100%; overflow-y: auto;">
                     <q-card v-for="(image, index) in selectedProduct.additionalImages" :key="index" class="col-4 q-mb-md">
                       <q-btn icon="delete" color="secondary" @click="selectedProduct.additionalImages?.splice(index, 1)"></q-btn>
                       <q-card-section>
-                        <q-input v-model="selectedProduct.additionalImages![index]" label="Image URL" />
+                        <q-input v-model="selectedProduct.additionalImages![index]" :label="t('productsEditor.imageUrl')" />
                         <q-img :src="selectedProduct.additionalImages![index]" alt="Main Image" style="max-width: 100%; max-height: 150px;" />
                       </q-card-section>
                     </q-card>
                   </div>
-                  <q-btn flat icon="add" color="secondary" @click="selectedProduct!!.additionalImages!!.push('')" />
+                  <q-btn flat icon="add" color="secondary" :label="t('productsEditor.addImage')" @click="selectedProduct!!.additionalImages!!.push('')" />
                 </div>
               </div>
 
@@ -65,22 +65,22 @@
         </div>
         <div class="row" style="width: 100%">
           <div class="col-3"></div>
-        <q-btn class="q-mt-md col-2" label="Save" color="primary" @click="saveProduct" />
+          <q-btn class="q-mt-md col-2" :label="t('productsEditor.save')" color="primary" @click="saveProduct" />
           <div class="col-2"></div>
-        <q-btn class="q-mt-md col-2" label="Delete" color="primary" @click="deleteProduct" />
+          <q-btn class="q-mt-md col-2" :label="t('productsEditor.delete')" color="primary" @click="deleteProduct" />
           <div class="col-3"></div>
         </div>
       </q-card-section>
       <q-dialog v-model="isProductDialogOpen" >
         <q-card style="width: 35vh">
           <q-card-section>
-            <div class="text-h6">Create Product</div>
+            <div class="text-h6">{{ t('productsEditor.create') }}</div>
           </q-card-section>
           <q-card-section>
-            <q-input v-model="dialogProduct.name" label="Name" />
-            <q-input v-model="dialogProduct.description" label="Description" autogrow />
-            <q-input v-model.number="dialogProduct.price" label="Price" type="number" />
-            <q-input v-model.number="dialogProduct.quantity" label="Quantity" type="number" />
+            <q-input v-model="dialogProduct.name" :label="t('productsEditor.name')" />
+            <q-input v-model="dialogProduct.description" :label="t('productsEditor.description')" autogrow />
+            <q-input v-model.number="dialogProduct.price" :label="t('productsEditor.price')" type="number" />
+            <q-input v-model.number="dialogProduct.quantity" :label="t('productsEditor.quantity')" type="number" />
             <q-select
               v-model="dialogProduct.category"
               :options="categories"
@@ -88,19 +88,19 @@
               option-value="id"
               emit-value
               map-options
-              label="Category"
+              :label="t('productsEditor.category')"
               autogrow
             />
           </q-card-section>
           <q-card-section>
-            <div class="text-h6">Images</div>
-            <q-input v-model="dialogProduct.image" label="Main Image URL" />
+            <div class="text-h6">{{ t('productsEditor.images') }}</div>
+            <q-input v-model="dialogProduct.image" :label="t('productsEditor.mainImage')" />
             <q-img :src="dialogProduct.image" alt="Main Image" style="max-width: 100%; max-height: 150px;" />
-            <div class="text-subtitle2 q-mt-md">Additional Images</div>
+            <div class="text-subtitle2 q-mt-md">{{ t('productsEditor.additionalImages') }}</div>
             <q-list bordered style="max-height: 20vh; overflow-y: auto;">
               <q-item v-for="(image, index) in dialogProduct.additionalImages" :key="index">
                 <q-item-section>
-                  <q-input v-model="dialogProduct.additionalImages![index]" label="Image URL" />
+                  <q-input v-model="dialogProduct.additionalImages![index]" :label="t('productsEditor.imageUrl')" />
                   <q-img :src="dialogProduct.additionalImages![index]" alt="Main Image" style="max-width: 100%; max-height: 150px;" />
                 </q-item-section>
                 <q-item-section side>
@@ -108,11 +108,11 @@
                 </q-item-section>
               </q-item>
             </q-list>
-            <q-btn flat label="Add Image" color="primary" @click="dialogProduct!!.additionalImages!!.push('')" />
+            <q-btn flat :label="t('productsEditor.addImage')" color="primary" @click="dialogProduct!!.additionalImages!!.push('')" />
           </q-card-section>
           <q-card-actions align="right">
-            <q-btn flat label="Cancel" color="negative" @click="closeProductDialog" />
-            <q-btn flat label="Save" color="primary" @click="emitProduct" />
+            <q-btn flat :label="t('productsEditor.cancel')" color="negative" @click="closeProductDialog" />
+            <q-btn flat :label="t('productsEditor.save')" color="primary" @click="emitProduct" />
           </q-card-actions>
         </q-card>
       </q-dialog>

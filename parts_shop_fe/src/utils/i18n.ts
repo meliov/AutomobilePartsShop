@@ -4,7 +4,7 @@ export const STORAGE_LANGUAGE_KEY = 'language';
 
 export const languages: LanguageOption[] = [
   { value: 'en-US', label: 'English' },
-  { value: 'sr-RS', label: 'Serbian' },
+  { value: 'bg-BG', label: 'Bulgarian' },
   { value: 'fr-FR', label: 'French' },
 ];
 
@@ -30,7 +30,7 @@ export const i18nConfig = {
         day: 'numeric' as const,
       },
     },
-    'sr-RS': {
+    'bg-BG': {
       short: {
         year: 'numeric' as const,
         month: 'short' as const,
@@ -51,10 +51,10 @@ export const i18nConfig = {
         currency: 'EUR',
       },
     },
-    'sr-RS': {
+    'bg-BG': {
       currency: {
         style: 'currency' as const,
-        currency: 'RSD',
+        currency: 'BGN',
       },
     },
   },

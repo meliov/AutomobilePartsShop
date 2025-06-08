@@ -2,8 +2,8 @@
   <q-page class="q-pa-md">
     <q-card>
       <q-card-section>
-        <div class="text-h6">Categories</div>
-        <q-input v-model="searchQuery" label="Search Categories" outlined dense class="q-mb-md" />
+        <div class="text-h6">{{ t('categoriesEditor.title') }}</div>
+        <q-input v-model="searchQuery" :label="t('categoriesEditor.search')" outlined dense class="q-mb-md" />
         <q-list bordered style="max-height: 35vh; width: 100%; overflow-y: auto;">
           <q-item v-for="category in filteredCategories" :key="category.id!!" clickable @click="selectCategory(category)">
             <q-item-section>{{ category.name }}</q-item-section>
@@ -12,23 +12,23 @@
       </q-card-section>
 
       <q-separator />
-      <q-btn class="q-mt-md" icon="add" color="primary" @click="openCategoryDialog" />
+      <q-btn class="q-mt-md" icon="add" color="primary" :label="t('categoriesEditor.add')" @click="openCategoryDialog" />
       <q-card-section v-if="selectedCategory" >
-        <q-input v-model="selectedCategory.name" label="Edit Category Name" />
-        <q-btn class="q-mt-md" label="Save" color="primary" @click="saveCategory" />
-        <q-btn class="q-mt-md" label="Delete" color="primary" @click="deleteCategory" />
+        <q-input v-model="selectedCategory.name" :label="t('categoriesEditor.editName')" />
+        <q-btn class="q-mt-md" :label="t('categoriesEditor.save')" color="primary" @click="saveCategory" />
+        <q-btn class="q-mt-md" :label="t('categoriesEditor.delete')" color="primary" @click="deleteCategory" />
       </q-card-section>
       <q-dialog v-model="isCategoryDialogOpen">
         <q-card>
           <q-card-section>
-            <div class="text-h6">Select or Create Category</div>
+            <div class="text-h6">{{ t('categoriesEditor.dialogTitle') }}</div>
           </q-card-section>
           <q-card-section>
-            <q-input v-model="dialogCategory.name" label="Category Name" />
+            <q-input v-model="dialogCategory.name" :label="t('categoriesEditor.dialogName')" />
           </q-card-section>
           <q-card-actions align="right">
-            <q-btn flat label="Cancel" color="negative" @click="closeCategoryDialog" />
-            <q-btn flat label="Save" color="primary" @click="emitCategory" />
+            <q-btn flat :label="t('categoriesEditor.cancel')" color="negative" @click="closeCategoryDialog" />
+            <q-btn flat :label="t('categoriesEditor.save')" color="primary" @click="emitCategory" />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -41,6 +41,7 @@ import {computed, onMounted, ref} from 'vue';
 import {Category} from "@/types";
 import {api} from '@/boot/axios';
 import {QVueGlobals, useQuasar} from "quasar";
+import {useI18n} from "vue-i18n";
 const API_BASE_URL = import.meta.env.VITE_API_URL.replace(/\/$/, '');
 const $q = useQuasar() as QVueGlobals;
 
@@ -125,4 +126,6 @@ function selectCategory(category: Category) {
 onMounted(async () =>{
  await fetchCategories()
 })
+
+const { t } = useI18n();
 </script>

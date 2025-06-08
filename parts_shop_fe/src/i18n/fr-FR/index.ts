@@ -14,6 +14,11 @@ import { login } from './login';
 import { changePassword } from './changePassword';
 import { passwordReset } from './passwordReset';
 import { profilePage } from './profilePage';
+import {categoriesEditor} from './categoriesEditor';
+import {ordersEditor} from './ordersEditor';
+import {productsEditor} from './productsEditor';
+import {register} from './register';
+import {userManagement} from './userManagement';
 
 export default {
   orderOverview,
@@ -32,4 +37,10 @@ export default {
   changePassword,
   passwordReset,
   profilePage,
+  categoriesEditor,
+  ordersEditor,
+  productsEditor,
+  register,
+  userManagement,
 };
+

@@ -2,7 +2,7 @@ export const common = {
   currency: 'EUR',
   language: {
     'en-US': 'Anglais',
-    'sr-RS': 'Serbe',
+    'bg-BG': 'Bulgare',
     'fr-FR': 'Français',
   },
   theme: {

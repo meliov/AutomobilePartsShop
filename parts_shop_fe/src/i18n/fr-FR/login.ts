@@ -7,5 +7,6 @@ export const login = {
   or: 'ou',
   errorMessage: "Une erreur s'est produite. Veuillez réessayer.",
   successMessage: 'Vous êtes connecté avec succès !',
-  goHome: 'Accueil'
+  goHome: 'Accueil',
+  forgotPassword: 'Mot de passe oublié ?',
 };

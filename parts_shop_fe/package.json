@@ -1,8 +1,8 @@
 {
-  "name": "e-commerce-platform",
+  "name": "Auto-Parts-Shop",
   "version": "0.0.1",
-  "description": "E-Commerce Platform Client",
-  "productName": "E-Comm Shop",
+  "description": "Auto-Parts Shop Platform Client",
+  "productName": "Auto-Parts Shop",
   "author": "Nenad <nbursa@gmail.com>",
   "private": true,
   "type": "module",

@@ -1,0 +1,18 @@
+export const productsEditor = {
+  title: 'Редактор на продукти',
+  search: 'Търсене',
+  add: 'Добавяне на продукт',
+  name: 'Име на продукт',
+  description: 'Описание',
+  price: 'Цена',
+  quantity: 'Количество',
+  category: 'Категория',
+  images: 'Изображения',
+  mainImage: 'Основно изображение',
+  additionalImages: 'Допълнителни изображения',
+  imageUrl: 'URL на изображение',
+  addImage: 'Добавяне на изображение',
+  save: 'Запазване',
+  delete: 'Изтриване',
+  create: 'Създаване на продукт',
+};

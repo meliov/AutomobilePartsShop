@@ -74,10 +74,10 @@ const menuItems = computed(() => {
   let items = [];
   if (authStore.user?.roles?.includes("ADMIN")) {
     items = [
-      { label: 'Products Edit', path: '/products-edit' },
-      { label: 'Category Edit', path: '/category-edit' },
-      { label: 'Orders Edit', path: '/orders-edit' },
-      { label: 'Users Edit', path: '/users-edit' },
+      { label: t('main.productsEdit'), path: '/products-edit' },
+      { label: t('main.categoryEdit'), path: '/category-edit' },
+      { label: t('main.ordersEdit'), path: '/orders-edit' },
+      { label: t('main.usersEdit'), path: '/users-edit' },
     ]
   } else {
     items = [
@@ -103,10 +103,10 @@ const mobileMenuItems = computed(() => {
   if (authStore.user?.roles?.includes("ADMIN")) {
     items = [
       { label: t('main.home'), path: '/' },
-      { label: 'Products Edit', path: '/products-edit' },
-      { label: 'Category Edit', path: '/category-edit' },
-      { label: 'Orders Edit', path: '/orders-edit' },
-      { label: 'Users Edit', path: '/users-edit' },
+      { label: t('main.productsEdit'), path: '/products-edit' },
+      { label: t('main.categoryEdit'), path: '/category-edit' },
+      { label: t('main.ordersEdit'), path: '/orders-edit' },
+      { label: t('main.usersEdit'), path: '/users-edit' },
     ]
   } else {
     items = [

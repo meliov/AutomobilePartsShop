@@ -1,0 +1,16 @@
+export const ordersEditor = {
+  title: 'Éditeur de commandes',
+  search: 'Recherche',
+  accept: 'Accepter',
+  tooltipNotPending: 'Cette action est uniquement disponible pour les commandes en attente.',
+  reject: 'Rejeter',
+  id: 'ID de commande',
+  items: 'Articles',
+  total: 'Montant total',
+  date: 'Date de commande',
+  shippingAddress: 'Adresse de livraison',
+  paymentMethod: 'Méthode de paiement',
+  trackingNumber: 'Numéro de suivi',
+  status: 'Statut de la commande',
+  actions: 'Actions',
+};

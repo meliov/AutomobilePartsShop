@@ -1,0 +1,16 @@
+export const ordersEditor = {
+  title: 'Orders Editor',
+  search: 'Search',
+  accept: 'Accept',
+  tooltipNotPending: 'This action is only available for pending orders.',
+  reject: 'Reject',
+  id: 'Order ID',
+  items: 'Items',
+  total: 'Total Amount',
+  date: 'Order Date',
+  shippingAddress: 'Shipping Address',
+  paymentMethod: 'Payment Method',
+  trackingNumber: 'Tracking Number',
+  status: 'Order Status',
+  actions: 'Actions',
+};

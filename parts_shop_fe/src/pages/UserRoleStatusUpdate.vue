@@ -4,7 +4,7 @@
       <q-card flat bordered class="tw-max-w-screen-lg tw-mx-auto">
         <q-card-section>
           <div class="tw-text-2xl tw-mb-4 tw-font-serif">
-            {{ 'Users Management' }}
+            {{ t('userManagement.title') }}
           </div>
           <q-separator class="q-my-md" />
           <q-table
@@ -16,30 +16,30 @@
             <!-- eslint-disable-next-line  -->
             <template v-slot:body-cell-roles="props" >
               <q-td :props="props">
-              <q-select
-                v-model="props.row.roles"
-                :options="roles"
-                multiple
-                outlined
-                dense
-                @update:model-value="changesDone = true"
-              />
+                <q-select
+                  v-model="props.row.roles"
+                  :options="roles"
+                  multiple
+                  outlined
+                  dense
+                  @update:model-value="changesDone = true"
+                />
               </q-td>
             </template>
             <!-- eslint-disable-next-line  -->
             <template v-slot:body-cell-status="props">
               <q-td :props="props">
-              <q-select
-                v-model="props.row.userStatus"
-                :options="statuses"
-                outlined
-                dense
-                @update:model-value="changesDone = true"
-              />
+                <q-select
+                  v-model="props.row.userStatus"
+                  :options="statuses"
+                  outlined
+                  dense
+                  @update:model-value="changesDone = true"
+                />
               </q-td>
             </template>
           </q-table>
-          <q-btn v-if="changesDone" class="q-mt-md" label="Save" color="primary" @click="saveChanges" />
+          <q-btn v-if="changesDone" class="q-mt-md" :label="t('userManagement.save')" color="primary" @click="saveChanges" />
         </q-card-section>
       </q-card>
     </div>
@@ -52,6 +52,7 @@ import { useQuasar } from 'quasar';
 import { api } from '@/boot/axios';
 import { User} from "@/types";
 import {useAuthStore} from "@/stores/auth";
+import {useI18n} from "vue-i18n";
 
 const $q = useQuasar();
 const API_BASE_URL = import.meta.env.VITE_API_URL.replace(/\/$/, '');
@@ -65,13 +66,13 @@ const roles = ref([
   'ADMIN',
   'USER'
 ]);
-
+const { t } = useI18n();
 const userAtuh = useAuthStore();
 
 const columns = ref([
-  { name: 'email', label: 'Email', field: 'email', align: 'left' },
-  { name: 'roles', label: 'Roles', field: 'roles', align: 'left', sortable: true },
-  { name: 'status', label: 'Status', field: 'userStatus', align: 'left', sortable: true },
+  { name: 'email', label: t('userManagement.email'), field: 'email', align: 'left' },
+  { name: 'roles', label: t('userManagement.roles'), field: 'roles', align: 'left', sortable: true },
+  { name: 'status', label: t('userManagement.status'), field: 'userStatus', align: 'left', sortable: true },
 ] as {
   name: string;
   label: string;
@@ -83,7 +84,6 @@ const columns = ref([
   format?: (val: number | string) => string;
   headerClasses?: string;
 }[]);
-
 const fetchUsers = async () => {
   try {
     const response = await api.get(`${API_BASE_URL}/user/all/${userAtuh.getUserFromStorage()?.id}`);

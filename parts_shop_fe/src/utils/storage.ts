@@ -1,6 +1,6 @@
 import {useAuthStore} from "@/stores/auth";
 
-const STORAGE_KEY = 'e-comm-shop';
+const STORAGE_KEY = 'auto-parts-shop';
 const CACHE_KEYS = ['cart', 'exchange_rates', 'products'] as const;
 const SETTINGS_KEYS = ['user_settings'] as const;
 

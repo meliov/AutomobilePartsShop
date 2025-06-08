@@ -135,7 +135,7 @@ export default defineConfig((ctx) => {
       bundler: 'builder',
       inspectPort: 5858,
       builder: {
-        appId: 'e-comm-shop',
+        appId: 'auto-parts-shop',
       },
     },
   };

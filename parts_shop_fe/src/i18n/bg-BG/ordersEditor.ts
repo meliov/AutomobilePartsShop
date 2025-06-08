@@ -1,0 +1,16 @@
+export const ordersEditor = {
+  title: 'Редактор на поръчки',
+  search: 'Търсене',
+  accept: 'Приемане',
+  tooltipNotPending: 'Това действие е достъпно само за чакащи поръчки.',
+  reject: 'Отказ',
+  id: 'ID на поръчка',
+  items: 'Артикули',
+  total: 'Обща сума',
+  date: 'Дата на поръчка',
+  shippingAddress: 'Адрес за доставка',
+  paymentMethod: 'Метод на плащане',
+  trackingNumber: 'Номер за проследяване',
+  status: 'Статус на поръчка',
+  actions: 'Действия',
+};
