@@ -15,4 +15,5 @@ export const productsEditor = {
   save: 'Enregistrer',
   delete: 'Supprimer',
   create: 'Créer un produit',
+  discountedPrice: 'Prix remisé',
 };

@@ -24,6 +24,7 @@
             <q-input v-model="selectedProduct.description" :label="t('productsEditor.description')" autogrow />
             <q-input v-model.number="selectedProduct.price" :label="t('productsEditor.price')" type="number" />
             <q-input v-model.number="selectedProduct.quantity" :label="t('productsEditor.quantity')" type="number" />
+            <q-input v-model.number="selectedProduct.discountedPrice" :label="t('productsEditor.discountedPrice')" type="number" />
             <q-select
               v-model="selectedProduct.category"
               :options="categories"
@@ -81,6 +82,7 @@
             <q-input v-model="dialogProduct.description" :label="t('productsEditor.description')" autogrow />
             <q-input v-model.number="dialogProduct.price" :label="t('productsEditor.price')" type="number" />
             <q-input v-model.number="dialogProduct.quantity" :label="t('productsEditor.quantity')" type="number" />
+            <q-input v-model.number="dialogProduct.discountedPrice" :label="t('productsEditor.discountedPrice')" type="number" />
             <q-select
               v-model="dialogProduct.category"
               :options="categories"

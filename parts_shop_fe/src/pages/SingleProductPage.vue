@@ -227,17 +227,18 @@ const fetchProduct = async () => {
   $q.loading.show();
 
   try {
-    productCache.initViewedCache();
-    const viewedCache = productCache.getViewedCache();
-
-    if (viewedCache) {
-      const found = viewedCache.products.find((p: { id: number }) => p.id === Number(slug));
-      if (found) {
-        product.value = found;
-        loading.value = false;
-        return;
-      }
-    }
+    //temporariliy disable cache
+    // productCache.initViewedCache();
+    // const viewedCache = productCache.getViewedCache();
+    //
+    // if (viewedCache) {
+    //   const found = viewedCache.products.find((p: { id: number }) => p.id === Number(slug));
+    //   if (found) {
+    //     product.value = found;
+    //     loading.value = false;
+    //     return;
+    //   }
+    // }
 
     const response = await api.get<Promise<Product>>(`${baseUrl}${PRODUCTS_PATH}/${slug}`).then(r => r.data).catch(() =>{
       throw new Error('Failed to fetch product');

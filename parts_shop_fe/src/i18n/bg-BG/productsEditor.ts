@@ -15,4 +15,5 @@ export const productsEditor = {
   save: 'Запазване',
   delete: 'Изтриване',
   create: 'Създаване на продукт',
+  discountedPrice: 'Промоционална цена',
 };
