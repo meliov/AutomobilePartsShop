@@ -16,4 +16,5 @@ export const productsEditor = {
   delete: 'Delete',
   create: 'Create Product',
   discountedPrice: 'Discounted Price',
+  cancel: 'Cancel'
 };

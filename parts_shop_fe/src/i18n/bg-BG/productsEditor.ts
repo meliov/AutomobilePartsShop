@@ -16,4 +16,5 @@ export const productsEditor = {
   delete: 'Изтриване',
   create: 'Създаване на продукт',
   discountedPrice: 'Промоционална цена',
+  cancel: 'Отказ'
 };
