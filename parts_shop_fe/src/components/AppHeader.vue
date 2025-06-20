@@ -20,7 +20,7 @@
       </div>
 
       <CartButton
-        v-if="!!totalItems"
+        v-if="!!totalItems && isNotAdmin"
         :button-size="buttonSize"
         :text-color="color"
         :is-animating="isAnimating"
@@ -117,6 +117,7 @@ const router = useRouter();
 
 const isAnimating = ref(false);
 const totalItems = computed(() => cartStore.totalItems);
+const isNotAdmin = computed(() => !authStore.user?.roles?.includes("ADMIN"))
 const color = computed(() => (darkMode.value ? 'white' : 'black'));
 const isMobile = computed(() => $q.screen.lt.sm);
 const menuOpen = ref(false);

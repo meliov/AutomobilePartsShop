@@ -27,6 +27,7 @@
             />
             <q-input
               v-model="updatedEmail"
+              disable
               :label="$t('profile.email')"
               type="email"
               dense
