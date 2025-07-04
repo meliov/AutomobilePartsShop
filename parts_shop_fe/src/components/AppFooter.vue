@@ -9,7 +9,7 @@
       <PageInfoText
         class="!tw-m-0 tw-p-0 !tw-text-xs"
         :color="isDark ? 'white' : 'black'"
-        :description="$t('home.description')"
+        description="Contact us at: demo@demo.demo or call us at: +359 123 456 789"
       />
       <q-btn
         v-if="isScrolledBtn"

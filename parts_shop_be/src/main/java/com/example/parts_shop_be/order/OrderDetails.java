@@ -3,7 +3,6 @@ package com.example.parts_shop_be.order;
 import com.example.parts_shop_be.order.order_product.OrderProductConverter;
 import com.example.parts_shop_be.product.Product;
 import com.example.parts_shop_be.user.User;
-import com.example.parts_shop_be.user.UserStatus;
 import com.example.parts_shop_be.utils.BaseEntity;
 
 import javax.persistence.*;
@@ -34,7 +33,7 @@ public class OrderDetails extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    private String userEmail;
+    private String customerEmail;
 
     public List<Product> getItems() {
         return items;
@@ -100,12 +99,12 @@ public class OrderDetails extends BaseEntity {
         this.status = status;
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public String getCustomerEmail() {
+        return customerEmail;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
     }
 
     // Getters and Setters

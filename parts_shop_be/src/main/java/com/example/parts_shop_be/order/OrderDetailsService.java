@@ -7,7 +7,6 @@ import com.example.parts_shop_be.product.ProductService;
 import com.example.parts_shop_be.user.User;
 import com.example.parts_shop_be.user.UserRepository;
 import com.example.parts_shop_be.utils.email.EmailService;
-import com.example.parts_shop_be.utils.email.EmailServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,7 +50,7 @@ public class OrderDetailsService {
         Long max = orderDetailsRepository.findMaxTrackingNumber();
         orderDetails.setTrackingNumber(max == null ? 1 : max + 1);
         orderDetails.setStatus(OrderStatus.PENDING);
-        orderDetails.setUserEmail(createOrderDetailsDto.getEmail());
+        orderDetails.setCustomerEmail(createOrderDetailsDto.getEmail());
         OrderDetails savedOrder = orderDetailsRepository.save(orderDetails);
 
 
@@ -93,9 +92,9 @@ public class OrderDetailsService {
         orderDetailsRepository.save(orderDetails);
 
         // Send email notification
-        if (orderDetails.getUserEmail() != null) {
+        if (orderDetails.getCustomerEmail() != null) {
             String emailContent = "Your order with tracking number " + orderDetails.getTrackingNumber() + " has been accepted and sent. \nExpect it in the next few (1-5) days.\n Thanks for shopping with us!";
-            emailServiceImpl.sendMail(orderDetails.getUserEmail(), "Order Accepted", emailContent);
+            emailServiceImpl.sendMail(orderDetails.getCustomerEmail(), "Order Accepted", emailContent);
         }
     }
 
@@ -108,9 +107,9 @@ public class OrderDetailsService {
         orderDetailsRepository.save(orderDetails);
 
         // Send email notification
-        if (orderDetails.getUserEmail() != null) {
+        if (orderDetails.getCustomerEmail() != null) {
             String emailContent = "We are sorry, but your order with tracking number " + orderDetails.getTrackingNumber() + " was rejected. The products might be out of stock.";
-            emailServiceImpl.sendMail(orderDetails.getUserEmail(), "Order Rejected", emailContent);
+            emailServiceImpl.sendMail(orderDetails.getCustomerEmail(), "Order Rejected", emailContent);
         }
     }
 }

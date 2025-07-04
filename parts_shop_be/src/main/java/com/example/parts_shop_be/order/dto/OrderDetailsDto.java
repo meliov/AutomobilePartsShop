@@ -22,6 +22,7 @@ public class OrderDetailsDto {
 
     private OrderStatus status;
 
+    private String customerEmail;
 
     public Long getId() {
         return id;
@@ -86,4 +87,13 @@ public class OrderDetailsDto {
     public void setStatus(OrderStatus status) {
         this.status = status;
     }
+
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
+    }
+
 }

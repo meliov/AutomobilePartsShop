@@ -88,13 +88,13 @@
               @click="goBack"
             />
             <q-expansion-item
-              v-if="!success"
+              v-if="!authStore.getUserFromStorage()?.roles?.includes('ADMIN')"
               v-model="isCardDetailsVisible"
               :label="$t('profile.cardDetails')"
               expand-separator
               class="q-mt-lg"
             >
-              <CardDetailsForm v-model:model-value="updatedCardDetails"/>
+              <CardDetailsForm  v-model:model-value="updatedCardDetails"/>
             </q-expansion-item>
           </div>
         </q-form>
@@ -118,6 +118,7 @@ const authStore = useAuthStore();
 const $q = useQuasar();
 const router = useRouter();
 const { t } = useI18n();
+
 
 const updatedName = ref(authStore.user?.username || '');
 const updatedEmail = ref(authStore.user?.email || '');

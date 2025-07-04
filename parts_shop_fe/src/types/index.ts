@@ -51,6 +51,7 @@ export interface OrderDetails {
   paymentMethod: string;
   trackingNumber?: number;
   status?: string | null;
+  customerEmail?: string | null
 }
 
 export interface CardDetails {

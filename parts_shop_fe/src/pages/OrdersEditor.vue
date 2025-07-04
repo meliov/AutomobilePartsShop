@@ -66,6 +66,7 @@ const filter = ref<string>('');
 const { t } = useI18n();
 const columns = [
   { name: 'id', required: true, label: t('ordersEditor.id'), align: 'left', field: 'id', sortable: true },
+  { name: 'customerEmail', required: true, label: t('login.email'), align: 'left', field: 'customerEmail', sortable: true ,style: 'width: 35vh;'},
   {
     name: 'items',
     label: t('ordersEditor.items'),
