@@ -49,26 +49,18 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, onMounted, inject, watch } from 'vue';
-import { useQuasar } from 'quasar';
-import { useRouter } from 'vue-router';
-import { useProductStore } from '@/stores/products';
-import { useI18n } from 'vue-i18n';
+import {computed, inject, onMounted, ref, watch} from 'vue';
+import {QVueGlobals, useQuasar} from 'quasar';
+import {useRouter} from 'vue-router';
+import {useProductStore} from '@/stores/products';
+import {useI18n} from 'vue-i18n';
 import ProductCard from '@/components/ProductCard.vue';
-import { useCartStore } from '@/stores/cart';
-import {
-  Product,
-  ProductResponse,
-  ProductFilters,
-  FetchParams,
-  ISortOptions,
-  IOrderOptions,
-} from '@/types';
-import { QVueGlobals } from 'quasar';
+import {useCartStore} from '@/stores/cart';
+import {FetchParams, IOrderOptions, ISortOptions, Product, ProductFilters, ProductResponse,} from '@/types';
 import ProductTabs from '@/components/ProductTabs.vue';
-import { CATEGORIES_PATH, CATEGORY_PATH, PRODUCTS_PATH } from '@/constants/routes';
-import { api } from '@/boot/axios';
-import { AxiosResponse } from 'axios';
+import {CATEGORIES_PATH, PRODUCTS_PATH} from '@/constants/routes';
+import {api} from '@/boot/axios';
+import {AxiosResponse} from 'axios';
 
 const scrollToTop = inject('scrollToTop') as () => void;
 

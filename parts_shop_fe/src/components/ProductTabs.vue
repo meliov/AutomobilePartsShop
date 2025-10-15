@@ -92,6 +92,7 @@ import { ref, computed, watch, PropType, inject } from 'vue';
 import CategorySelect from './CategorySelect.vue';
 import FiltersForm from './FiltersForm.vue';
 import { IOrderOptions, ISortOptions, ProductFilters } from '@/types';
+import {useI18n} from "vue-i18n";
 
 const scrollToTop = inject('scrollToTop') as () => void;
 
@@ -183,11 +184,26 @@ const updateFilters = (newFilters: ProductFilters) => {
   emit('update:filters', newFilters);
 };
 
+
+
+const { t } = useI18n();
 const formatCategoryLabel = (category: string) => {
-  return category
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+  if (category === 'all') {
+    return t('categoriesLabels.all_products');
+  }
+
+  const translationKey = `categoriesLabels.${category.toLowerCase().trim().replace(/\s+/g, '_')}`;
+  const translated = t(translationKey);
+
+  // If no translation found (returns the key itself), use the capitalization fallback
+  if (translated.includes('categoriesLabels.')) {
+    return category
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
+
+  return translated;
 };
 </script>
 
