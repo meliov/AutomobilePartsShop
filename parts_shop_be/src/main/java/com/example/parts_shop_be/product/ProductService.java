@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +29,20 @@ public class ProductService {
         this.categoryRepository =categoryRepository;
     }
 
-    public Page<Product> getProducts(int page, int limit, String search, Double minPrice, Double maxPrice, String sortBy, String sortOrder, String category) {
-        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
+    public Page<Product> getProducts(int page, int limit, String search,
+                                     Double minPrice, Double maxPrice,
+                                     String sortBy, String sortOrder,
+                                     String category) {
+        Sort sort;
+
+        if (sortBy.equals("price")) {
+            // We'll handle sorting manually via criteria
+            sort = Sort.unsorted();
+        } else {
+            sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
+        }
+
+        Pageable pageable = PageRequest.of(page - 1, limit, sort);
 
         Specification<Product> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -46,13 +59,22 @@ public class ProductService {
             predicates.add(cb.between(root.get("price"), minPrice, maxPrice));
             predicates.add(cb.greaterThanOrEqualTo(root.get("quantity"), 1));
 
-            predicates.add(cb.between(root.get("price"), minPrice, maxPrice));
+            // 🔑 Handle sorting by "discountedPrice if present, else price"
+            if (sortBy.equals("price")) {
+                Expression<Number> priceExpr = cb.coalesce(root.get("discountedPrice"), root.get("price"));
+                if (sortOrder.equalsIgnoreCase("asc")) {
+                    query.orderBy(cb.asc(priceExpr));
+                } else {
+                    query.orderBy(cb.desc(priceExpr));
+                }
+            }
 
             return cb.and(predicates.toArray(new Predicate[0]));
         };
 
         return productRepository.findAll(spec, pageable);
     }
+
 
     public Product getProduct(Long id) {
         return productRepository.findById(id).orElse(null);

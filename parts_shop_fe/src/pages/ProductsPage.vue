@@ -227,6 +227,7 @@ const fetchProducts = async (category = 'all') => {
       search: filters.value.search,
       sortBy: filters.value.sortBy.value,
       sortOrder: filters.value.sortOrder.value,
+      category: category
     });
 
     if (filters.value.minPrice !== null) {
@@ -237,9 +238,7 @@ const fetchProducts = async (category = 'all') => {
       queryParams.append('maxPrice', filters.value.maxPrice.toString());
     }
 
-    const url = `${import.meta.env.VITE_API_URL}${
-      category !== 'all' ? `${CATEGORY_PATH}/${category}` : PRODUCTS_PATH
-    }?${queryParams}`;//
+    const url = `${import.meta.env.VITE_API_URL}${PRODUCTS_PATH}?${queryParams}`;//
 
     const response: AxiosResponse<ProductResponse> = await api.get(url);
 
