@@ -59,9 +59,16 @@ public class ProductService {
             predicates.add(cb.between(root.get("price"), minPrice, maxPrice));
             predicates.add(cb.greaterThanOrEqualTo(root.get("quantity"), 1));
 
-            // 🔑 Handle sorting by "discountedPrice if present, else price"
+            // Handle sorting by "discountedPrice if present, else price"
             if (sortBy.equals("price")) {
-                Expression<Number> priceExpr = cb.coalesce(root.get("discountedPrice"), root.get("price"));
+                Expression<Object> priceExpr = cb.selectCase()
+                        .when(cb.and(
+                                cb.isTrue(root.get("discount")),                          // discount flag must be true
+                                cb.isNotNull(root.get("discountedPrice")),                 // discountedPrice not null
+                                cb.notEqual(root.get("discountedPrice"), 0)                // discountedPrice not 0
+                        ), root.get("discountedPrice"))
+                        .otherwise(root.get("price"));
+
                 if (sortOrder.equalsIgnoreCase("asc")) {
                     query.orderBy(cb.asc(priceExpr));
                 } else {
