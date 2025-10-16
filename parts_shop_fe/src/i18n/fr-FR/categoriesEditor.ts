@@ -8,4 +8,6 @@ export const categoriesEditor = {
   dialogTitle: 'Modifier la catégorie',
   dialogName: 'Nom de la catégorie',
   cancel: 'Annuler',
+  editNameBg: 'Nom en BG',
+  editNameFr: 'Nom en FR',
 };

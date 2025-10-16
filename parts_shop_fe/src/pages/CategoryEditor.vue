@@ -6,7 +6,11 @@
         <q-input v-model="searchQuery" :label="t('categoriesEditor.search')" outlined dense class="q-mb-md" />
         <q-list bordered style="max-height: 35vh; width: 100%; overflow-y: auto;">
           <q-item v-for="category in filteredCategories" :key="category.id!!" clickable @click="selectCategory(category)">
-            <q-item-section>{{ category.name }}</q-item-section>
+            <q-item-section>
+              <div>{{ category.name }}</div>
+              <div class="text-caption">BG: {{ category.nameBg }}</div>
+              <div class="text-caption">FR: {{ category.nameFr }}</div>
+            </q-item-section>
           </q-item>
         </q-list>
       </q-card-section>
@@ -14,7 +18,9 @@
       <q-separator />
       <q-btn class="q-mt-md" icon="add" color="primary" :label="t('categoriesEditor.add')" @click="openCategoryDialog" />
       <q-card-section v-if="selectedCategory" >
-        <q-input v-model="selectedCategory.name" :label="t('categoriesEditor.editName')" />
+        <q-input v-model="selectedCategory.name" :label="t('categoriesEditor.editName')" class="q-mb-sm" />
+        <q-input v-model="selectedCategory.nameBg" :label="t('categoriesEditor.editNameBg')" class="q-mb-sm" />
+        <q-input v-model="selectedCategory.nameFr" :label="t('categoriesEditor.editNameFr')" class="q-mb-sm" />
         <q-btn class="q-mt-md" :label="t('categoriesEditor.save')" color="primary" @click="saveCategory" />
         <q-btn class="q-mt-md" :label="t('categoriesEditor.delete')" color="primary" @click="deleteCategory" />
       </q-card-section>
@@ -24,7 +30,9 @@
             <div class="text-h6">{{ t('categoriesEditor.dialogTitle') }}</div>
           </q-card-section>
           <q-card-section>
-            <q-input v-model="dialogCategory.name" :label="t('categoriesEditor.dialogName')" />
+            <q-input v-model="dialogCategory.name" :label="t('categoriesEditor.dialogName')" class="q-mb-sm" />
+            <q-input v-model="dialogCategory.nameBg" :label="t('categoriesEditor.dialogNameBg')" class="q-mb-sm" />
+            <q-input v-model="dialogCategory.nameFr" :label="t('categoriesEditor.dialogNameFr')" class="q-mb-sm" />
           </q-card-section>
           <q-card-actions align="right">
             <q-btn flat :label="t('categoriesEditor.cancel')" color="negative" @click="closeCategoryDialog" />
@@ -49,17 +57,18 @@ const categories = ref<Category[]>([]);
 const searchQuery = ref<string>('');
 const filteredCategories = computed(() =>
   categories.value.filter(category =>
-    category.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+    category.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    category.nameBg.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    category.nameFr.toLowerCase().includes(searchQuery.value.toLowerCase())
   )
 );
 
-
 // dialog start
 const isCategoryDialogOpen = ref(false);
-const dialogCategory = ref<Category>({ id: null, name: '' });
+const dialogCategory = ref<Category>({ id: null, name: '', nameBg: '', nameFr: '' });
 
 function openCategoryDialog() {
-  dialogCategory.value = { id: null, name: '' };
+  dialogCategory.value = { id: null, name: '', nameBg: '', nameFr: '' };
   isCategoryDialogOpen.value = true;
 }
 
@@ -77,7 +86,6 @@ async function fetchCategories() {
   try {
     const response = await api.get(`${API_BASE_URL}/categories/get-all`);
     categories.value = response.data;
-    // $q.notify({ type: 'positive', message: 'Categories fetched successfully!' });
   } catch (error) {
     console.error('Error fetching categories:', error);
     $q.notify({ type: 'negative', message: 'Failed to fetch categories.' });
@@ -124,7 +132,7 @@ function selectCategory(category: Category) {
 }
 
 onMounted(async () =>{
- await fetchCategories()
+  await fetchCategories()
 })
 
 const { t } = useI18n();

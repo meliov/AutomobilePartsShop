@@ -61,6 +61,7 @@ import ProductTabs from '@/components/ProductTabs.vue';
 import {CATEGORIES_PATH, PRODUCTS_PATH} from '@/constants/routes';
 import {api} from '@/boot/axios';
 import {AxiosResponse} from 'axios';
+import {fetchCategoryObjects} from "@/utils/categoryLabels";
 
 const scrollToTop = inject('scrollToTop') as () => void;
 
@@ -270,6 +271,6 @@ const fetchProducts = async (category = 'all') => {
 };
 
 onMounted(async () => {
-  await Promise.all([fetchCategories(), fetchProducts()]);
+  await Promise.all([fetchCategories(), fetchProducts(), fetchCategoryObjects()]);
 });
 </script>

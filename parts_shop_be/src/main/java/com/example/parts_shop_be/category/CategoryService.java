@@ -44,6 +44,8 @@ public class CategoryService {
         Category existingCategory = categoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + id));
         existingCategory.setName(category.getName());
+        existingCategory.setNameFr(category.getNameFr());
+        existingCategory.setNameBg(category.getNameBg());
         return categoryRepository.save(existingCategory);
     }
 

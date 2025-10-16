@@ -86,13 +86,12 @@
 </template>
 
 <script setup lang="ts">
-import { useQuasar } from 'quasar';
-import { QVueGlobals } from 'quasar';
-import { ref, computed, watch, PropType, inject } from 'vue';
+import {QVueGlobals, useQuasar} from 'quasar';
+import {computed, inject, PropType, ref, watch} from 'vue';
 import CategorySelect from './CategorySelect.vue';
 import FiltersForm from './FiltersForm.vue';
-import { IOrderOptions, ISortOptions, ProductFilters } from '@/types';
-import {useI18n} from "vue-i18n";
+import {IOrderOptions, ISortOptions, ProductFilters} from '@/types';
+import {formatCategoryLabel} from "@/utils/categoryLabels";
 
 const scrollToTop = inject('scrollToTop') as () => void;
 
@@ -185,26 +184,6 @@ const updateFilters = (newFilters: ProductFilters) => {
 };
 
 
-
-const { t } = useI18n();
-const formatCategoryLabel = (category: string) => {
-  if (category === 'all') {
-    return t('categoriesLabels.all_products');
-  }
-
-  const translationKey = `categoriesLabels.${category.toLowerCase().trim().replace(/\s+/g, '_')}`;
-  const translated = t(translationKey);
-
-  // If no translation found (returns the key itself), use the capitalization fallback
-  if (translated.includes('categoriesLabels.')) {
-    return category
-      .split(' ')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
-  }
-
-  return translated;
-};
 </script>
 
 <style lang="scss" scoped>

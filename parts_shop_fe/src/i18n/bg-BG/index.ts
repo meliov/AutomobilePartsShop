@@ -19,7 +19,6 @@ import {ordersEditor} from './ordersEditor';
 import {productsEditor} from './productsEditor';
 import {register} from './register';
 import {userManagement} from './userManagement';
-import {categoriesLabels} from "@/i18n/bg-BG/categoriesLabels";
 export default {
   orderOverview,
   common,
@@ -42,5 +41,4 @@ export default {
   productsEditor,
   register,
   userManagement,
-  categoriesLabels
 };

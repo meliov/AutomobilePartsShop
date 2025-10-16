@@ -10,6 +10,8 @@ export type ProductRating = {
 export interface Category {
   id: number | null;
   name: string;
+  nameBg: string;
+  nameFr: string
 };
 
 

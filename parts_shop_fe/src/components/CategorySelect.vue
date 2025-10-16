@@ -36,6 +36,7 @@
 
 <script lang="ts" setup>
 import { computed, PropType } from 'vue';
+import {formatCategoryLabel} from "@/utils/categoryLabels";
 
 const props = defineProps({
   selectedCategory: {
@@ -65,11 +66,11 @@ const localSelectedCategory = computed({
   },
 });
 
-const formatCategoryLabel = (category: string) => {
-  if (!category) return '';
-  return category
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-};
+// const formatCategoryLabel = (category: string) => {
+//   if (!category) return '';
+//   return category
+//     .split(' ')
+//     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+//     .join(' ');
+// };
 </script>

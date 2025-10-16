@@ -19,7 +19,7 @@
         <span class="tw-text-3xl tw-mt-4 tw-font-semibold tw-font-serif tw-mr-4">
           {{ product?.name }}
         </span>
-        <span class="tw-text-base">{{ product?.category?.name }}</span>
+        <span class="tw-text-base">{{ formatCategoryLabel(product!!.category!!.name) }}</span>
       </div>
 
       <q-separator />
@@ -130,6 +130,7 @@ import { useImageStore } from '@/stores/images';
 import { PAGE_TITLE, PRODUCTS_PATH, CART_PATH } from '@/constants/routes';
 import { api } from '@/boot/axios';
 import QButton from '@/components/base/QButton.vue';
+import {formatCategoryLabel} from "../utils/categoryLabels";
 
 const scrollToTop = inject('scrollToTop') as () => void;
 
