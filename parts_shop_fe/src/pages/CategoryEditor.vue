@@ -30,9 +30,9 @@
             <div class="text-h6">{{ t('categoriesEditor.dialogTitle') }}</div>
           </q-card-section>
           <q-card-section>
-            <q-input v-model="dialogCategory.name" :label="t('categoriesEditor.dialogName')" class="q-mb-sm" />
-            <q-input v-model="dialogCategory.nameBg" :label="t('categoriesEditor.dialogNameBg')" class="q-mb-sm" />
-            <q-input v-model="dialogCategory.nameFr" :label="t('categoriesEditor.dialogNameFr')" class="q-mb-sm" />
+            <q-input v-model="dialogCategory.name" :label="t('categoriesEditor.editName')" class="q-mb-sm" />
+            <q-input v-model="dialogCategory.nameBg" :label="t('categoriesEditor.editNameBg')" class="q-mb-sm" />
+            <q-input v-model="dialogCategory.nameFr" :label="t('categoriesEditor.editNameFr')" class="q-mb-sm" />
           </q-card-section>
           <q-card-actions align="right">
             <q-btn flat :label="t('categoriesEditor.cancel')" color="negative" @click="closeCategoryDialog" />
